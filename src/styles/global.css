@@ -74,19 +74,31 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .skip:focus { top: 16px; color: #04101c; }
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
 
-/* ---------- Fundo vivo: blobs de luz azul atrás do vidro (efeito A) ---------- */
-.aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background:
-  radial-gradient(1200px 700px at 80% -10%, rgba(22, 49, 95, 0.55), transparent 60%),
-  radial-gradient(900px 600px at 0% 40%, rgba(11, 20, 38, 0.9), transparent 70%), var(--bg); }
-.aurora i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; will-change: transform; }
-.aurora i:nth-child(1) { width: 56vmax; height: 56vmax; left: -18vmax; top: 6vmax; background: radial-gradient(circle, rgba(42, 99, 214, 0.9), transparent 65%); animation: drift1 26s var(--ease) infinite alternate; }
-.aurora i:nth-child(2) { width: 46vmax; height: 46vmax; right: -14vmax; top: 34vmax; background: radial-gradient(circle, rgba(92, 200, 255, 0.5), transparent 65%); animation: drift2 32s var(--ease) infinite alternate; }
-.aurora i:nth-child(3) { width: 40vmax; height: 40vmax; left: 20vmax; bottom: -16vmax; background: radial-gradient(circle, rgba(22, 49, 95, 1), transparent 65%); animation: drift3 38s var(--ease) infinite alternate; }
+/* ---------- Fundo: paisagem desfocada atrás de vidro fosco (como o fundo de tela do iPhone) ---------- */
+.aurora { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--bg); }
+.scene { position: absolute; inset: -4% -4% -4% -4%; filter: blur(2px) saturate(1.05) brightness(0.62); transform: translate3d(0, calc(var(--sy, 0) * -26px), 0); will-change: transform; }
+.scene svg { width: 100%; height: 100%; }
+.scene .s1 { transform: translate3d(calc(var(--sy, 0) * -18px), 0, 0); }
+.scene .s2 { transform: translate3d(calc(var(--sy, 0) * 26px), 0, 0); }
+.scene .s3 { transform: translate3d(calc(var(--sy, 0) * -36px), 0, 0); }
+.scene .stars { animation: pisca 7s ease-in-out infinite alternate; }
+@keyframes pisca { from { opacity: 0.35; } to { opacity: 0.95; } }
+.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.5; will-change: transform; }
+.b1 { width: 52vmax; height: 52vmax; left: -16vmax; top: 4vmax; background: radial-gradient(circle, rgba(60, 72, 220, 0.85), transparent 65%); animation: drift1 26s var(--ease) infinite alternate; }
+.b2 { width: 42vmax; height: 42vmax; right: -12vmax; top: 30vmax; background: radial-gradient(circle, rgba(20, 170, 190, 0.6), transparent 65%); animation: drift2 32s var(--ease) infinite alternate; }
+.b3 { width: 36vmax; height: 36vmax; left: 24vmax; bottom: -14vmax; background: radial-gradient(circle, rgba(34, 110, 230, 0.7), transparent 65%); animation: drift3 38s var(--ease) infinite alternate; }
 @keyframes drift1 { to { transform: translate3d(16vmax, 10vmax, 0) scale(1.15); } }
 @keyframes drift2 { to { transform: translate3d(-14vmax, -12vmax, 0) scale(0.9); } }
 @keyframes drift3 { to { transform: translate3d(12vmax, -8vmax, 0) scale(1.2); } }
+/* luz que anda por trás do vidro: segue o dedo ou o mouse e o vidro fosco a espalha */
+.orb { position: absolute; left: 0; top: 0; border-radius: 50%; mix-blend-mode: screen; will-change: transform; opacity: var(--o, 0); transition: opacity 0.9s var(--ease); transform: translate3d(var(--x, 50vw), var(--y, 40vh), 0) translate(-50%, -50%); }
+.orb--a { width: 220px; height: 220px; background: radial-gradient(circle, rgba(140, 200, 255, 0.5), rgba(60, 120, 230, 0.2) 45%, transparent 70%); filter: blur(22px); }
+.orb--b { width: 420px; height: 420px; background: radial-gradient(circle, rgba(70, 130, 240, 0.28), transparent 70%); filter: blur(34px); }
+.orb--c { display: none; }
+html.lite .blob { animation: none; filter: blur(50px); }
+html.lite .scene { filter: blur(5px); }
+@media (prefers-reduced-motion: reduce) { .blob, .scene .stars { animation: none; } .orb { display: none; } }
 .grain { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
-html.lite .aurora i { animation: none; filter: blur(60px); }
 html.lite .glass { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: rgba(14, 28, 54, 0.86) !important; }
 
 /* ---------- Vidro (liquid glass) ---------- */
@@ -95,9 +107,9 @@ html.lite .glass { backdrop-filter: none !important; -webkit-backdrop-filter: no
   --my: 0%;
   position: relative;
   isolation: isolate;
-  background: linear-gradient(150deg, rgba(34, 70, 130, 0.34), rgba(11, 20, 38, 0.56) 55%, rgba(8, 15, 30, 0.62));
-  -webkit-backdrop-filter: blur(26px) saturate(160%);
-  backdrop-filter: blur(26px) saturate(160%);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05) 60%, rgba(255, 255, 255, 0.08));
+  -webkit-backdrop-filter: blur(30px) saturate(190%) brightness(0.92);
+  backdrop-filter: blur(30px) saturate(190%) brightness(0.92);
   border-radius: var(--r-xl);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 28px 70px -28px rgba(0, 0, 0, 0.75), 0 2px 0 rgba(0, 0, 0, 0.2);
 }
@@ -332,7 +344,7 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 }
 .project { padding: 0; overflow: hidden; display: grid; grid-template-rows: auto 1fr; transition: transform var(--t-slow) var(--ease), box-shadow var(--t-slow); }
 .project:hover { transform: translateY(-6px); }
-.project__art { height: 150px; position: relative; border-bottom: 1px solid rgba(143, 163, 194, 0.14); background: radial-gradient(80% 120% at 20% 0%, rgba(42, 99, 214, 0.28), transparent 70%), rgba(5, 8, 15, 0.3); overflow: hidden; }
+.project__art { height: auto; aspect-ratio: 2 / 1; max-height: 240px; position: relative; border-bottom: 1px solid rgba(143, 163, 194, 0.14); background: radial-gradient(80% 120% at 20% 0%, rgba(42, 99, 214, 0.28), transparent 70%), rgba(5, 8, 15, 0.3); overflow: hidden; }
 .project__art svg { width: 100%; height: 100%; }
 .project__body { padding: 22px 24px 26px; display: grid; gap: 10px; align-content: start; }
 .project__tag { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
@@ -412,3 +424,30 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
   .reveal { opacity: 1; transform: none; filter: none; transition: none; }
   .btn, .project, .fab { transition: none; }
 }
+
+/* ---------- Mapa: detalhe de município e rios, e a contagem do estado ---------- */
+.map .uf { cursor: pointer; }
+.map .uf.sel { fill: rgba(42, 99, 214, 0.5); stroke: rgba(255, 255, 255, 0.75); }
+.map .muns, .map .rios { pointer-events: none; }
+.map .mun { fill: none; stroke: #fff; stroke-width: 0.55; stroke-dasharray: 3 2.4; vector-effect: non-scaling-stroke; opacity: calc(var(--det, 0) * 0.34); transition: opacity var(--t-med); }
+.map .mun.sel { opacity: calc(var(--det, 0) * 0.6); }
+.map .rio { fill: none; stroke: rgba(138, 217, 255, 0.9); stroke-width: 1.1; stroke-linecap: round; vector-effect: non-scaling-stroke; opacity: calc(var(--det, 0) * 0.55); }
+.map__badge { position: absolute; left: 14px; top: 14px; z-index: 3; display: grid; gap: 2px; padding: 12px 16px; border-radius: 16px; background: rgba(5, 8, 15, 0.72); border: 1px solid rgba(138, 217, 255, 0.5); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease); }
+.map__badge.on { opacity: 1; transform: none; }
+.map__badge b { font-family: var(--f-display); font-weight: 400; font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.1; }
+.map__badge span { font-size: 14px; color: var(--cyan-h); font-weight: 600; }
+
+/* ---------- "O que eu faço": grupos de capacidades ---------- */
+.skills { display: grid; gap: var(--s3); }
+.skills__g { display: grid; gap: 10px; }
+.skills__g > span { font-size: 12.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan-h); opacity: 0.85; }
+.b2b__side h3 { margin-bottom: var(--s2); }
+.b2b__side .skills + h3 { margin-top: var(--s4); }
+
+/* ---------- Títulos: o itálico serifado casa com o Anton (corpo maior e traço reforçado) ---------- */
+.display em.serif { font-size: 1.12em; line-height: 0.9; -webkit-text-stroke: 0.7px currentColor; letter-spacing: -0.015em; padding-inline: 0.04em; }
+.h3 em.serif { font-size: 1.1em; }
+
+/* ---------- Sobre: foto pequena ao lado do nome ---------- */
+.about__photo { margin-top: var(--s4); width: 112px; height: 112px; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.06), 0 18px 40px -14px rgba(0, 0, 0, 0.7); }
+.about__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }

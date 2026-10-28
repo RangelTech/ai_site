@@ -14,7 +14,7 @@ export const WHATSAPP = {
   mensagens: {
     hero: 'Oi, Lucas! Vim pelo seu site e quero entender como a IA pode me ajudar.',
     b2b: 'Oi, Lucas! Tenho um problema na minha empresa que quero resolver com IA. Posso te contar?',
-    individual: 'Oi, Lucas! Quero a Mentoria Individual. Ainda tem vaga este mês?',
+    individual: 'Oi, Lucas! Quero a Mentoria Individual. Ainda tem vaga aberta?',
     acompanhamento: 'Oi, Lucas! Quero entrar na Mentoria com Acompanhamento. Como funciona para começar?',
     final: 'Oi, Lucas! Vi o seu site e quero conversar sobre um projeto.',
     flutuante: 'Oi, Lucas! Vim pelo seu site.',
@@ -28,11 +28,10 @@ export function waHref(key: WaKey): string {
   return `https://wa.me/${WHATSAPP.numero}?text=${encodeURIComponent(WHATSAPP.mensagens[key])}`;
 }
 
-// Vagas da mentoria individual (spec 4.10): 4 por mês, Lucas atualiza `restantes` à mão.
+// Vagas da mentoria individual: no máximo 4 alunos ao mesmo tempo. Lucas atualiza `restantes` à mão.
 export const VAGAS = {
   total: 4,
   restantes: 4,
-  mes: 'novembro',
 };
 
 // Métricas (spec 4.6): Umami sem cookie. Vazio = desligado (nada é enviado).

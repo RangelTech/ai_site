@@ -3,6 +3,7 @@ import { geoMercator, geoPath } from 'd3-geo';
 import brasil from '../data/brasil-uf.geojson?raw';
 import dados from '../data/mentorados_ficticios.json';
 import { ICON } from '../lib/icons';
+import { UFS } from '../data/ufs';
 
 const W = 800;
 const H = 820;
@@ -24,7 +25,13 @@ const projecao = geoMercator().fitExtent(
   geo,
 );
 const path = geoPath(projecao);
-const estados = geo.features.map((f: any) => path(f)).filter(Boolean) as string[];
+const pontosPorUf = (dados.pontos as any[]).reduce((acc: Record<string, number>, p) => ((acc[p.uf] = (acc[p.uf] || 0) + 1), acc), {});
+const estados = geo.features
+  .map((f: any) => {
+    const u = UFS[f.properties.codarea];
+    return { d: path(f) as string, uf: u.uf, nome: u.nome, n: pontosPorUf[u.uf] || 0 };
+  })
+  .filter((e: any) => e.d);
 const pontos = (dados.pontos as any[])
   .map((p) => {
     const xy = projecao([p.lon, p.lat]);
@@ -40,15 +47,21 @@ const porRegiao = Object.entries(
 ---
 <div class="map glass--m" data-map>
   <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Mapa do Brasil com ${total} mentorados em ${nEstados} estados`}>
+    <defs>
+      <clipPath id="brasil-clip">{estados.map((e) => <path d={e.d} />)}</clipPath>
+    </defs>
     <g data-layer>
-      {estados.map((d) => <path class="uf" d={d} />)}
+      {estados.map((e) => <path class="uf" d={e.d} data-uf={e.uf} data-nome={e.nome} data-n={e.n} />)}
+      <g class="rios" data-rios clip-path="url(#brasil-clip)"></g>
+      <g class="muns" data-muns></g>
       {pontos.map((p) => (
         <circle class="pt" cx={p.x} cy={p.y} r="4.6" data-city={p.cidade} data-uf={p.uf} tabindex="-1" />
       ))}
     </g>
   </svg>
   <div class="map__tip" data-tip aria-hidden="true"></div>
-  <div class="map__hint" data-hint>Arraste para navegar</div>
+  <div class="map__badge" data-badge aria-live="polite"></div>
+  <div class="map__hint" data-hint>Arraste para navegar e toque em um estado</div>
   <div class="map__ctrl">
     <button type="button" data-zoom="in" aria-label="Aproximar o mapa"><Fragment set:html={ICON.plus} /></button>
     <button type="button" data-zoom="out" aria-label="Afastar o mapa"><Fragment set:html={ICON.minus} /></button>

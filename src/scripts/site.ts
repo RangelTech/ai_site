@@ -91,6 +91,63 @@ document.addEventListener('click', (e) => {
   );
 })();
 
+/* ---------- Luz por trás do vidro: segue o mouse ou o dedo e o vidro fosco a espalha ---------- */
+(function luzAtras() {
+  const orbs = [...document.querySelectorAll<HTMLElement>('.orb')]; // do mais lento (grande) ao mais rápido
+  const raiz = document.documentElement;
+  if (reduce || orbs.length === 0) return;
+  const pos = orbs.map(() => ({ x: innerWidth * 0.62, y: innerHeight * 0.34 }));
+  const alvo = { x: innerWidth * 0.62, y: innerHeight * 0.34 };
+  const vel = [0.05, 0.09, 0.16];
+  let ativo = false;
+  let raf = 0;
+  let ocioso = 0;
+  const loop = () => {
+    let mexeu = false;
+    orbs.forEach((o, i) => {
+      const p = pos[i];
+      const dx = alvo.x - p.x;
+      const dy = alvo.y - p.y;
+      if (Math.abs(dx) + Math.abs(dy) > 0.4) mexeu = true;
+      p.x += dx * vel[i];
+      p.y += dy * vel[i];
+      o.style.setProperty('--x', p.x.toFixed(1) + 'px');
+      o.style.setProperty('--y', p.y.toFixed(1) + 'px');
+    });
+    // sem ponteiro por um tempo, a luz passeia sozinha, devagar
+    if (!ativo) {
+      const t = performance.now() / 1000;
+      alvo.x = innerWidth * (0.5 + 0.34 * Math.sin(t * 0.17));
+      alvo.y = innerHeight * (0.42 + 0.26 * Math.sin(t * 0.23 + 1.3));
+      mexeu = true;
+    }
+    raf = mexeu ? requestAnimationFrame(loop) : 0;
+  };
+  const liga = () => {
+    if (!raf) raf = requestAnimationFrame(loop);
+  };
+  const toque = (e: PointerEvent) => {
+    alvo.x = e.clientX;
+    alvo.y = e.clientY;
+    ativo = true;
+    raiz.style.setProperty('--o', '1');
+    orbs.forEach((o) => o.style.setProperty('--o', '1'));
+    clearTimeout(ocioso);
+    ocioso = window.setTimeout(() => (ativo = false), 4500);
+    liga();
+  };
+  addEventListener('pointermove', toque, { passive: true });
+  addEventListener('pointerdown', toque, { passive: true });
+  // parallax suave da paisagem com a rolagem
+  addEventListener(
+    'scroll',
+    () => raiz.style.setProperty('--sy', (scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)).toFixed(4)),
+    { passive: true },
+  );
+  orbs.forEach((o, i) => o.style.setProperty('--o', String([0, 0.45, 0.55][i])));
+  liga();
+})();
+
 /* ---------- Entrada suave das seções ---------- */
 (function reveal() {
   const els = document.querySelectorAll<HTMLElement>('.reveal');
@@ -225,7 +282,7 @@ document.addEventListener('click', (e) => {
   let tx = 0;
   let ty = 0;
   const K_MIN = 1;
-  const K_MAX = 8;
+  const K_MAX = 18;
   let usou = false;
 
   // o conteúdo ocupa [tx, tx + W*k]; mantém o mapa sempre cobrindo a janela, com uma folga
@@ -234,10 +291,92 @@ document.addEventListener('click', (e) => {
     tx = Math.max(vb.width * (1 - k) - m, Math.min(m, tx));
     ty = Math.max(vb.height * (1 - k) - m, Math.min(m, ty));
   };
+  const NS = 'http://www.w3.org/2000/svg';
+  const muns = layer.querySelector<SVGGElement>('[data-muns]')!;
+  const rios = layer.querySelector<SVGGElement>('[data-rios]')!;
+  const badge = root.querySelector<HTMLElement>('[data-badge]');
+  const ufs = [...layer.querySelectorAll<SVGPathElement>('.uf')];
+  const caixas = new Map<string, DOMRect>();
+  ufs.forEach((u) => caixas.set(u.dataset.uf!, u.getBBox()));
+  const carregados = new Set<string>();
+  let riosOk = false;
+  let sel: SVGPathElement | null = null;
+
+  // municípios e rios só são baixados quando o zoom pede detalhe, e só os estados que estão na janela
+  const desenhar = async (url: string, alvo: SVGGElement, classe: string, uf?: string) => {
+    try {
+      const j = await (await fetch(url)).json();
+      if (!j.d) return;
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', j.d);
+      p.setAttribute('class', classe);
+      if (uf) p.dataset.uf = uf;
+      alvo.appendChild(p);
+    } catch {}
+  };
+  let voando = false;
+  const detalhar = () => {
+    if (k < 1.8 || voando) return;
+    if (!riosOk) {
+      riosOk = true;
+      desenhar('/geo/rios.json', rios, 'rio');
+    }
+    const x0 = -tx / k, y0 = -ty / k, x1 = (vb.width - tx) / k, y1 = (vb.height - ty) / k;
+    caixas.forEach((b, uf) => {
+      if (carregados.has(uf) || b.x > x1 || b.x + b.width < x0 || b.y > y1 || b.y + b.height < y0) return;
+      carregados.add(uf);
+      desenhar(`/geo/${uf}.json`, muns, 'mun', uf);
+    });
+  };
   const apply = () => {
     clamp();
     layer.setAttribute('transform', `translate(${tx.toFixed(2)} ${ty.toFixed(2)}) scale(${k.toFixed(3)})`);
     svg.style.setProperty('--k', String(k));
+    svg.style.setProperty('--det', String(Math.max(0, Math.min(1, (k - 1.5) / 2))));
+    detalhar();
+  };
+  // seleciona o estado: mostra a contagem no canto e aproxima o mapa dele
+  const selecionar = (u: SVGPathElement | null) => {
+    sel?.classList.remove('sel');
+    sel = u;
+    muns.querySelectorAll('.sel').forEach((m) => m.classList.remove('sel'));
+    if (!u || !badge) {
+      badge?.classList.remove('on');
+      return;
+    }
+    u.classList.add('sel');
+    muns.querySelector(`[data-uf="${u.dataset.uf}"]`)?.classList.add('sel');
+    const n = Number(u.dataset.n);
+    badge.innerHTML = `<b>${u.dataset.nome}</b><span>${n ? `${n} ${n === 1 ? 'pessoa atendida' : 'pessoas atendidas'}` : 'ainda sem mentorados'}</span>`;
+    badge.classList.add('on');
+    const b = caixas.get(u.dataset.uf!)!;
+    const nk = Math.max(K_MIN, Math.min(K_MAX, 0.62 * Math.min(vb.width / b.width, vb.height / b.height)));
+    voar(nk, vb.width / 2 - (b.x + b.width / 2) * nk, vb.height / 2 - (b.y + b.height / 2) * nk);
+  };
+  let anim = 0;
+  const voar = (nk: number, ntx: number, nty: number) => {
+    cancelAnimationFrame(anim);
+    voando = true;
+    if (reduce) {
+      voando = false;
+      k = nk; tx = ntx; ty = nty; apply(); return;
+    }
+    const k0 = k, x0 = tx, y0 = ty, t0 = performance.now();
+    const passo = (t: number) => {
+      const p = Math.min(1, (t - t0) / 700);
+      const e = 1 - Math.pow(1 - p, 3);
+      // interpola o zoom em escala logarítmica para o movimento parecer constante
+      k = k0 * Math.pow(nk / k0, e);
+      tx = x0 + (ntx - x0) * e;
+      ty = y0 + (nty - y0) * e;
+      apply();
+      if (p < 1) anim = requestAnimationFrame(passo);
+      else {
+        voando = false;
+        detalhar();
+      }
+    };
+    anim = requestAnimationFrame(passo);
   };
   // converte px da tela para unidades do viewBox
   const escala = () => vb.width / svg.getBoundingClientRect().width;
@@ -329,10 +468,16 @@ document.addEventListener('click', (e) => {
   };
   svg.addEventListener('pointerup', (e) => {
     const alvo = (e.target as Element).closest<SVGElement>('.pt');
+    const estado = (document.elementFromPoint(e.clientX, e.clientY) || (e.target as Element)).closest<SVGPathElement>('.uf');
     if (!arrastou && alvo) {
       mostrarTip(alvo);
       marcar();
       track('mapa_ponto', { uf: alvo.dataset.uf! });
+    } else if (!arrastou && estado) {
+      hideTip();
+      selecionar(estado === sel ? null : estado);
+      marcar();
+      track('mapa_estado', { uf: estado.dataset.uf! });
     } else if (!arrastou) hideTip();
     fim(e);
   });
@@ -362,11 +507,9 @@ document.addEventListener('click', (e) => {
       if (a === 'in') zoomEm(1.5);
       else if (a === 'out') zoomEm(1 / 1.5);
       else {
-        k = 1;
-        tx = 0;
-        ty = 0;
-        apply();
+        selecionar(null);
         hideTip();
+        voar(1, 0, 0);
       }
       marcar();
     }),

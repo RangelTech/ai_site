@@ -19,12 +19,12 @@ npm run build    # gera dist/ (HTML, CSS e JS estáticos, para o nginx)
 | Textos das seções | `src/pages/index.astro` |
 | Páginas legais | `content/*.md` (viram `/privacidade`, `/termos`, `/reembolso`) |
 | Paleta, tipografia, vidro, movimento | `src/styles/global.css` |
-| Mapa de mentorados | `src/data/mentorados_ficticios.json` (**fictício**) e `src/components/BrazilMap.astro` |
+| Mapa de mentorados | `src/data/mentorados_ficticios.json` (**conteúdo de exemplo**) e `src/components/BrazilMap.astro` |
 | Comportamento (mapa, métricas, vidro, WhatsApp) | `src/scripts/site.ts` |
 
-## Dados fictícios (decisão de Lucas, spec 4.9 e 4.12)
+## Conteúdo de exemplo (decisão de Lucas, spec 4.9 e 4.12)
 
-Os 3 depoimentos (`DEPOIMENTOS` em `content.ts`, marcados `ficticio: true`) e os 61 pontos do mapa são fictícios e estão no ar para revisão. Trocar pelos reais quando existirem.
+Os 3 depoimentos (`DEPOIMENTOS` em `content.ts`) e os 61 pontos do mapa são de exemplo e estão no ar para revisão. Trocar pelos reais quando existirem.
 
 ## Métricas
 
@@ -37,3 +37,7 @@ Cada botão abre `wa.me` com a mensagem do botão. Com `?utm_source=instagram`, 
 ## Deploy
 
 Igual ao `luar_site`: contêiner nginx servindo `dist/`, Traefik com TLS, registro DNS `ai` em `terraform/dns.tf`, release lido pelo `release-intake` (repositório público). Ver spec 4.7.
+
+## Mapa: municípios e rios
+
+Os traçados de município (IBGE) e de rios (Natural Earth) ficam em `public/geo/` e só são baixados quando o visitante aproxima o mapa. Para gerar de novo: `node scripts/gerar-geo.mjs <caminho do ne_10m_rivers_lake_centerlines.geojson>`.

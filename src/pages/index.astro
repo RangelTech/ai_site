@@ -75,17 +75,23 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
           <h2 class="display h2" id="t-b2b" style="margin-top:16px">Você traz o problema. Eu <em class="serif">resolvo.</em></h2>
           <p class="lead" style="margin-top:24px">Aqui eu não ensino: eu faço. Assumo o projeto do começo ao fim, com a minha equipe, e você fala direto comigo, sem robô no meio.</p>
           <p style="margin-top:16px">Cada projeto é orçado do tamanho do problema: o limite é a sua imaginação e o seu bolso.</p>
-          <p class="b2b__proof">Já desenvolvi projetos de IA e dados para varejo, finanças, indústria, educação e agronegócio.</p>
+          <p class="b2b__proof">Já desenvolvi projetos de IA e dados para varejo, finanças, indústria, educação, saúde e agronegócio.</p>
           <div class="b2b__cta"><a class="btn btn--primary" data-wa="b2b" data-track="whatsapp_b2b" href={waHref('b2b')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Contar o meu problema para o Lucas</a></div>
         </div>
         <div class="b2b__side">
           <h3>O que eu faço</h3>
-          <ul class="chips">
-            {['Visão computacional', 'Agentes de IA', 'Automação', 'Dados', 'Sensores no chão de fábrica', 'Sistemas sob medida', 'Cópia de sistemas antigos que travam a operação'].map((c) => <li class="chip">{c}</li>)}
-          </ul>
+          <div class="skills">
+            {[
+              ['Inteligência artificial', ['Agentes de IA', 'Visão computacional', 'IA própria, sem restrições', 'Clonagem de voz e deepfake', 'Imagem e vídeo por IA']],
+              ['Dados e sistemas', ['Engenharia de dados e BI', 'Previsão de demanda', 'ERP e SaaS sob medida', 'Clonar sistema obsoleto em tecnologia nova', 'Automação de processos']],
+              ['Mundo físico', ['Sensorização e prototipagem eletrônica', 'Câmeras inteligentes', 'Da foto ao modelo 3D']],
+            ].map(([t, itens]) => (
+              <div class="skills__g"><span>{t}</span><ul class="chips">{(itens as string[]).map((c) => <li class="chip">{c}</li>)}</ul></div>
+            ))}
+          </div>
           <h3>Setores</h3>
           <ul class="chips">
-            {['Varejo', 'Finanças', 'Indústria', 'Educação', 'Agronegócio'].map((c) => <li class="chip">{c}</li>)}
+            {['Varejo', 'Finanças', 'Indústria', 'Educação', 'Saúde', 'Agronegócio', 'Logística'].map((c) => <li class="chip">{c}</li>)}
           </ul>
         </div>
       </div>
@@ -133,7 +139,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <div><a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento_comparativo" href={waHref('acompanhamento')} target="_blank" rel="noopener">Quero o acompanhamento</a></div>
           </div>
         </div>
-        <p class="cmp__note small">Quer que eu faça por você? Aí é o serviço para empresas, orçado caso a caso. Na mentoria, você aprende a fazer com as próprias mãos.</p>
+        <p class="cmp__note small">Prefere que eu construa o projeto por você? Também faço, com proposta sob medida. Me chama no WhatsApp.</p>
       </div>
     </div>
   </section>
@@ -154,12 +160,11 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <li><Fragment set:html={ICON.check} /><span><b>Bônus:</b> acesso à minha área do aluno</span></li>
             <li><Fragment set:html={ICON.check} /><span><b>Bônus:</b> as habilidades técnicas que eu uso no dia a dia</span></li>
           </ul>
-          <p class="small muted">Mentoria é eu te ajudando a construir. Se você quer que eu construa por você, é o serviço para empresas: me chama que eu monto uma proposta.</p>
         </div>
         <div class="offer__box">
           <div class="price">R$ 5.000</div>
-          <p class="small muted">Pacote fechado. Conversamos antes, e eu te mando o link para pagar.</p>
-          <p class="scarce"><i></i>Atendo só {VAGAS.total} pessoas por mês. Vagas de {VAGAS.mes}: {VAGAS.restantes} de {VAGAS.total}.</p>
+          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
+          <p class="scarce"><i></i>Vagas limitadas: atendo no máximo {VAGAS.total} alunos ao mesmo tempo. Abertas agora: {VAGAS.restantes} de {VAGAS.total}.</p>
           <div class="bonus"><b>Bônus de quem entra</b>Você entra e já libera a minha área do aluno e as habilidades técnicas que eu uso no dia a dia, já prontas para você usar. Eu mostro o que tem lá dentro na nossa conversa.</div>
           <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Quero a mentoria individual</a>
         </div>
@@ -179,7 +184,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
         </div>
         <div class="offer__box">
           <div class="price">R$ 1.000</div>
-          <p class="small muted">Pacote fechado. Conversamos antes, e eu te mando o link para pagar.</p>
+          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
           <div class="bonus"><b>Bônus de quem entra</b>Você entra e já libera a minha área do aluno e as habilidades técnicas que eu uso no dia a dia, já prontas para você usar. Eu mostro o que tem lá dentro na nossa conversa.</div>
           <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Entrar no acompanhamento</a>
         </div>
@@ -207,7 +212,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="reveal">
         <span class="eyebrow">Pelo Brasil</span>
         <h2 class="display h2" id="t-mapa" style="margin-top:16px">Mentorados <em class="serif">pelo Brasil.</em></h2>
-        <p class="lead" style="margin-top:24px">Cada ponto é uma pessoa que eu acompanho ou já acompanhei. Arrasta para navegar e toca em um ponto para ver a região.</p>
+        <p class="lead" style="margin-top:24px">Cada ponto é uma pessoa que eu acompanho ou já acompanhei. Toque em um estado para ver quantos eu atendi lá, e aproxime para ver as cidades.</p>
         <div class="counter"><b>{totalMap}</b><span>mentorados em {estadosMap} estados</span></div>
       </div>
       <div class="reveal" style="--d:120ms"><BrazilMap /></div>
@@ -220,7 +225,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="sec__head reveal"><span class="eyebrow">Depoimentos</span><h2 class="display h2" id="t-dep">Quem já <em class="serif">passou por aqui.</em></h2></div>
       <div class="quotes">
         {DEPOIMENTOS.map((d, i) => (
-          <figure class="quote glass glass--m reveal" style={`--d:${i * 110}ms`} data-ficticio={d.ficticio ? 'true' : undefined}>
+          <figure class="quote glass glass--m reveal" style={`--d:${i * 110}ms`}>
             <blockquote>{d.texto}</blockquote>
             <figcaption class="who-is"><span class="avatar" aria-hidden="true">{iniciais(d.nome)}</span><div><b>{d.nome}</b><span>{d.arroba} · {d.cidade}<br />{d.produto}</span></div></figcaption>
           </figure>
@@ -260,16 +265,20 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
   <section class="sec" id="sobre" data-sec="sobre" aria-labelledby="t-sobre">
     <div class="wrap">
       <div class="about glass reveal">
-        <div><span class="eyebrow">Sobre</span><h2 class="display h2" id="t-sobre" style="margin-top:16px">Prazer, <em class="serif">Lucas Rangel.</em></h2></div>
+        <div class="about__who">
+          <span class="eyebrow">Sobre</span>
+          <h2 class="display h2" id="t-sobre" style="margin-top:16px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
+          <figure class="about__photo"><Image src={lucas} widths={[160, 320]} sizes="160px" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" /></figure>
+        </div>
         <div>
           <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação, em empresas que você reconhece pela faixa lá em cima. Hoje dirijo a Rangel Tech, a minha consultoria de IA, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
-          <p>Gosto de mostrar o que faço. Os meus testes de IA estão abertos no GitHub e no Kaggle, com código e dado, para quem quiser conferir.</p>
+          <p>Gosto de mostrar o que faço. Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam públicos no portfólio e no Kaggle, com código e dado, para quem quiser conferir.</p>
           <p>O meu objetivo com a mentoria é simples: mostrar a quem tem uma ideia ou um problema como usar IA para ganhar dinheiro de verdade.</p>
           <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
           <div class="links">
             <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
             <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub</a>
-            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Kaggle</a>
+            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Artigos no Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
           </div>
         </div>
       </div>
@@ -281,9 +290,9 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     <div class="wrap">
       <div class="sec__head reveal"><h2 class="display h2" id="t-nao">Não é para você <em class="serif">se...</em></h2></div>
       <ul class="not">
-        <li class="reveal"><Fragment set:html={ICON.x} /><span>Você quer que eu construa por você. Para isso existe o serviço para empresas, com proposta própria.</span></li>
-        <li class="reveal" style="--d:80ms"><Fragment set:html={ICON.x} /><span>Você procura um curso gravado para assistir e esquecer. Aqui você põe a mão no projeto.</span></li>
-        <li class="reveal" style="--d:160ms"><Fragment set:html={ICON.x} /><span>Você só quer um emprego. Eu ensino a vender o próprio trabalho.</span></li>
+        <li class="reveal"><Fragment set:html={ICON.x} /><span>Você procura um curso gravado para assistir e esquecer. Aqui você põe a mão no projeto.</span></li>
+        <li class="reveal" style="--d:80ms"><Fragment set:html={ICON.x} /><span>Você só quer um emprego. Eu ensino a vender o próprio trabalho.</span></li>
+        <li class="reveal" style="--d:160ms"><Fragment set:html={ICON.x} /><span>Você espera dinheiro fácil sem trabalhar. Aqui o resultado vem de construir e vender.</span></li>
       </ul>
     </div>
   </section>
@@ -309,7 +318,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="final glass reveal">
         <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
         <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i>Mentoria individual: {VAGAS.restantes} vagas para {VAGAS.mes}.</p>
+        <p class="scarce"><i></i>Mentoria individual: {VAGAS.restantes} vagas abertas.</p>
         <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
         <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
       </div>
