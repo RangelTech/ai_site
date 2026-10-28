@@ -76,11 +76,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ---------- Fundo: foto muito desfocada e azulada, como vidro embaçado (estilo iPhone) ---------- */
 .fundo { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #050b1c; }
-.fundo__nevoa { position: absolute; inset: -14%; background: url('/img/fundo.webp') center / cover no-repeat; filter: blur(70px) saturate(1.15); transform: translate3d(0, calc(var(--sy, 0) * -7vh), 0); will-change: transform; }
+.fundo__nevoa { position: absolute; inset: -14%; background: url('/img/fundo.webp') center / cover no-repeat; filter: blur(34px) saturate(1.25) brightness(1.1); transform: translate3d(0, calc(var(--sy, 0) * -7vh), 0); will-change: transform; }
 /* o "embaçado limpo": a mesma foto, menos desfocada, que só aparece onde o dedo ou a seta passou */
-.fundo__limpo { position: absolute; inset: 0; width: 100%; height: 100%; filter: blur(9px) saturate(1.45) brightness(1.35); opacity: 0.95; }
+.fundo__limpo { position: absolute; inset: 0; width: 100%; height: 100%; filter: blur(4px) saturate(1.5) brightness(1.55) contrast(1.08); opacity: 1; }
 /* tom azul por cima da foto toda, mais um escurecido para o texto ficar legível */
-.fundo__tom { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 9, 24, 0.62), rgba(3, 6, 16, 0.88)); }
+.fundo__tom { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 9, 24, 0.34), rgba(3, 6, 16, 0.7)); }
 .fundo__tom::before { content: ''; position: absolute; inset: 0; background: #1b4fc4; mix-blend-mode: color; opacity: 0.42; }
 .fundo__brilhos { position: absolute; inset: 0; width: 100%; height: 100%; }
 html.lite .fundo__nevoa { filter: blur(40px); }
@@ -346,10 +346,6 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 .draw.amb { stroke: var(--amber); }
 
 /* ---------- Sobre ---------- */
-.about { display: grid; gap: var(--s4); padding: clamp(28px, 5vw, 64px); }
-@media (min-width: 960px) { .about { grid-template-columns: 0.9fr 1.1fr; gap: var(--s6); align-items: start; } }
-.about p { color: #c4d2e8; }
-.about p + p { margin-top: var(--s2); }
 .about__edu { margin-top: var(--s3); font-size: 14.5px; color: var(--muted); line-height: 1.7; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--s3); }
 
@@ -432,8 +428,69 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 /* ---------- Títulos: o itálico serifado casa com o Anton (corpo maior e traço reforçado) ---------- */
 
 /* ---------- Sobre: foto pequena ao lado do nome ---------- */
-.about__photo { margin-top: var(--s4); width: 112px; height: 112px; border-radius: 50%; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.06), 0 18px 40px -14px rgba(0, 0, 0, 0.7); }
-.about__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+
+/* ---------- Mapa: empresas atendidas (laranja) e legenda ---------- */
+:root { --emp: #ff9f5a; }
+.map .pt--emp { fill: var(--emp); filter: drop-shadow(0 0 5px rgba(255, 159, 90, 0.9)); }
+.map .pt--emp:hover, .map .pt--emp.on { fill: #fff; }
+.map__legend { position: absolute; right: 14px; top: 14px; z-index: 3; display: flex; gap: 14px; padding: 8px 14px; border-radius: 999px; background: rgba(5, 8, 15, 0.6); border: 1px solid rgba(255, 255, 255, 0.14); font-size: 13px; font-weight: 600; color: #d5e0f2; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.map__legend li { display: inline-flex; align-items: center; gap: 7px; }
+.pt-key { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px rgba(94, 176, 255, 0.9); }
+.pt-key--emp { background: var(--emp); box-shadow: 0 0 8px rgba(255, 159, 90, 0.9); }
+.counters { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); margin-top: var(--s4); }
+.counters .counter { margin-top: 0; }
+.counter--emp b { color: var(--emp); }
+@media (max-width: 520px) { .map__legend { right: 10px; top: 10px; gap: 10px; padding: 6px 11px; font-size: 12px; } .map__badge { top: 52px; } }
 
 /* depoimentos: o seletor genérico de span não pode desfazer o avatar */
 .who-is .avatar { display: grid; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+
+
+/* ---------- Sobre: retrato grande ao lado do texto ---------- */
+.about { display: grid; gap: var(--s4); padding: clamp(20px, 4vw, 48px); }
+@media (min-width: 960px) { .about { grid-template-columns: 340px 1fr; gap: var(--s6); align-items: stretch; } }
+.about__photo { position: relative; margin: 0; border-radius: var(--r-l); overflow: hidden; aspect-ratio: 1 / 1; box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.14); }
+@media (min-width: 960px) { .about__photo { aspect-ratio: auto; min-height: 480px; } }
+.about__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.about__photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(4, 8, 18, 0.85)); }
+.about__photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 18px 20px; display: grid; gap: 2px; }
+.about__photo figcaption b { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.about__photo figcaption span { font-size: 14px; color: #c3d2ea; }
+.about__body p { color: #b9c6da; font-size: 17px; line-height: 1.5; }
+.about__body p + p { margin-top: var(--s2); }
+.about__body .about__lead { margin-top: var(--s3); font-size: clamp(19px, 2.2vw, 22px); line-height: 1.35; letter-spacing: -0.015em; color: #fff; font-weight: 500; }
+.about__body p b { color: #fff; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2); margin-top: var(--s3); }
+.stats li { padding: 14px 16px; border-radius: var(--r-m); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); display: grid; gap: 2px; }
+.stats b { font-family: var(--f-display); font-weight: 700; font-size: clamp(22px, 3.6vw, 30px); letter-spacing: -0.035em; line-height: 1.05; }
+.stats span { font-size: 13px; color: var(--muted); line-height: 1.3; }
+@media (max-width: 520px) { .stats { grid-template-columns: 1fr; } .stats li { grid-template-columns: auto 1fr; align-items: baseline; gap: 12px; } }
+.about__edu { margin-top: var(--s3); font-size: 14px; color: var(--muted); line-height: 1.6; }
+.about .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--s3); }
+
+/* ---------- Chips que abrem o modal ---------- */
+.b2b__hint { margin: -6px 0 var(--s2); font-size: 14px; color: var(--muted); }
+.chip--btn { cursor: pointer; font-family: inherit; }
+.chip--btn::after { content: '+'; margin-left: 8px; opacity: 0.55; font-weight: 600; transition: transform var(--t-fast), opacity var(--t-fast); }
+.chip--btn:hover::after { opacity: 1; transform: rotate(90deg); }
+.chips > li { display: contents; }
+
+/* ---------- Modal ---------- */
+.modal { padding: 0; border: 0; background: transparent; color: inherit; width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; overflow: visible; }
+.modal::backdrop { background: rgba(3, 6, 14, 0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.modal[open] { animation: modal-in 260ms var(--ease-out); }
+.modal[open]::backdrop { animation: modal-fundo 260ms ease-out; }
+@keyframes modal-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes modal-fundo { from { opacity: 0; } to { opacity: 1; } }
+.modal__card { position: relative; display: grid; gap: var(--s2); padding: clamp(24px, 4vw, 36px); max-height: calc(100dvh - 48px); overflow: auto; background: linear-gradient(150deg, rgba(40, 60, 100, 0.78), rgba(12, 20, 40, 0.86)); }
+.modal__card h3 { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 5vw, 34px); letter-spacing: -0.035em; line-height: 1.08; padding-right: 36px; }
+.modal__texto { color: #c9d5e8; font-size: 17px; line-height: 1.5; }
+.modal__card h4 { margin-top: var(--s1); font-size: 14px; font-weight: 600; color: var(--cyan-h); }
+.modal__feitos { display: grid; gap: 10px; }
+.modal__feitos li { position: relative; padding-left: 22px; font-size: 16px; line-height: 1.4; color: #e3ebf8; }
+.modal__feitos li::before { content: ''; position: absolute; left: 4px; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+.modal__card .btn { margin-top: var(--s2); }
+.modal__x { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16); transition: background var(--t-fast); }
+.modal__x:hover { background: rgba(255, 255, 255, 0.2); }
+.modal__x svg { width: 18px; height: 18px; }
+@media (prefers-reduced-motion: reduce) { .modal[open], .modal[open]::backdrop { animation: none; } }

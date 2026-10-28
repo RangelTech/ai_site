@@ -2,6 +2,7 @@
 import { geoMercator, geoPath } from 'd3-geo';
 import brasil from '../data/brasil-uf.geojson?raw';
 import dados from '../data/mentorados_ficticios.json';
+import emp from '../data/empresas.json';
 import { ICON } from '../lib/icons';
 import { UFS } from '../data/ufs';
 
@@ -26,10 +27,20 @@ const projecao = geoMercator().fitExtent(
 );
 const path = geoPath(projecao);
 const pontosPorUf = (dados.pontos as any[]).reduce((acc: Record<string, number>, p) => ((acc[p.uf] = (acc[p.uf] || 0) + 1), acc), {});
+// empresas na mesma cidade são espalhadas em volta do ponto para não ficarem empilhadas
+const porCidade: Record<string, number> = {};
+const empresas = (emp.empresas as any[]).map((e) => {
+  const k = e.cidade + e.uf;
+  const i = (porCidade[k] = (porCidade[k] ?? -1) + 1);
+  const ang = i * 2.4;
+  const raio = i === 0 ? 0 : 0.045 + 0.018 * Math.floor(i / 6);
+  return { ...e, lon: e.lon + Math.cos(ang) * raio, lat: e.lat + Math.sin(ang) * raio };
+});
+const empPorUf = empresas.reduce((acc: Record<string, number>, e) => ((acc[e.uf] = (acc[e.uf] || 0) + 1), acc), {});
 const estados = geo.features
   .map((f: any) => {
     const u = UFS[f.properties.codarea];
-    return { d: path(f) as string, uf: u.uf, nome: u.nome, n: pontosPorUf[u.uf] || 0 };
+    return { d: path(f) as string, uf: u.uf, nome: u.nome, n: pontosPorUf[u.uf] || 0, e: empPorUf[u.uf] || 0 };
   })
   .filter((e: any) => e.d);
 const pontos = (dados.pontos as any[])
@@ -39,28 +50,39 @@ const pontos = (dados.pontos as any[])
   })
   .filter(Boolean) as { x: number; y: number; cidade: string; uf: string; regiao: string }[];
 
+const pontosEmp = empresas
+  .map((p) => {
+    const xy = projecao([p.lon, p.lat]);
+    return xy ? { x: +xy[0].toFixed(1), y: +xy[1].toFixed(1), cidade: p.cidade, uf: p.uf } : null;
+  })
+  .filter(Boolean) as { x: number; y: number; cidade: string; uf: string }[];
 const total = pontos.length;
+const totalEmp = pontosEmp.length;
 const nEstados = new Set(pontos.map((p) => p.uf)).size;
 const porRegiao = Object.entries(
   pontos.reduce((acc: Record<string, number>, p) => ((acc[p.regiao] = (acc[p.regiao] || 0) + 1), acc), {}),
 );
 ---
 <div class="map glass--m" data-map>
-  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Mapa do Brasil com ${total} mentorados em ${nEstados} estados`}>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Mapa do Brasil com ${total} mentorados em ${nEstados} estados e ${totalEmp} empresas atendidas`}>
     <defs>
       <clipPath id="brasil-clip">{estados.map((e) => <path d={e.d} />)}</clipPath>
     </defs>
     <g data-layer>
-      {estados.map((e) => <path class="uf" d={e.d} data-uf={e.uf} data-nome={e.nome} data-n={e.n} />)}
+      {estados.map((e) => <path class="uf" d={e.d} data-uf={e.uf} data-nome={e.nome} data-n={e.n} data-e={e.e} />)}
       <g class="rios" data-rios clip-path="url(#brasil-clip)"></g>
       <g class="muns" data-muns></g>
       {pontos.map((p) => (
         <circle class="pt" cx={p.x} cy={p.y} r="4.6" data-city={p.cidade} data-uf={p.uf} tabindex="-1" />
       ))}
+      {pontosEmp.map((p) => (
+        <circle class="pt pt--emp" cx={p.x} cy={p.y} r="4.6" data-city={p.cidade} data-uf={p.uf} data-tipo="empresa" tabindex="-1" />
+      ))}
     </g>
   </svg>
   <div class="map__tip" data-tip aria-hidden="true"></div>
   <div class="map__badge" data-badge aria-live="polite"></div>
+  <ul class="map__legend" aria-hidden="true"><li><i class="pt-key"></i>Mentorados</li><li><i class="pt-key pt-key--emp"></i>Empresas</li></ul>
   <div class="map__hint" data-hint>Arraste para navegar e toque em um estado</div>
   <div class="map__ctrl">
     <button type="button" data-zoom="in" aria-label="Aproximar o mapa"><Fragment set:html={ICON.plus} /></button>
@@ -69,5 +91,6 @@ const porRegiao = Object.entries(
   </div>
   <ul class="sr-only">
     {porRegiao.map(([r, n]) => <li>{r}: {n} mentorados</li>)}
+    <li>{totalEmp} empresas atendidas</li>
   </ul>
 </div>

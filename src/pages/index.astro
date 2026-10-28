@@ -6,11 +6,17 @@ import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { LOGOS, PROJETOS, GRUPOS, FAQ, DEPOIMENTOS } from '../data/content';
+import { AREAS } from '../data/areas';
 import { waHref, VAGAS, BONUS, LINKS } from '../data/config';
+import { vagasRestantes, fraseVagas, fraseVagasCurta, fimDoMes, fraseFaltam } from '../lib/mes';
 import mentorados from '../data/mentorados_ficticios.json';
+import empresasMapa from '../data/empresas.json';
 
 const totalMap = mentorados.pontos.length;
+const totalEmpMap = empresasMapa.empresas.length;
 const estadosMap = new Set(mentorados.pontos.map((p: any) => p.uf)).size;
+const restantes = vagasRestantes();
+const fim = fimDoMes();
 const totalBonus = BONUS.itens.reduce((a, b) => a + b.valor, 0);
 const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR');
 const visiveis = PROJETOS.filter((p) => p.destaque).sort((a, b) => a.destaque! - b.destaque!);
@@ -109,18 +115,19 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
         </div>
         <div class="b2b__side">
           <h3>O que eu faço</h3>
+          <p class="b2b__hint">Toque em um tema para ver o que a gente já entregou.</p>
           <div class="skills">
             {[
-              ['Inteligência artificial', ['Agentes de IA', 'Visão computacional', 'IA própria, sem restrições', 'Clonagem de voz e deepfake', 'Imagem e vídeo por IA']],
-              ['Dados e sistemas', ['Engenharia de dados e BI', 'Previsão de demanda', 'ERP e SaaS sob medida', 'Clonar sistema obsoleto em tecnologia nova', 'Automação de processos']],
-              ['Mundo físico', ['Sensorização e prototipagem eletrônica', 'Câmeras inteligentes', 'Da foto ao modelo 3D']],
+              ['Inteligência artificial', [['Agentes de IA', 'agentes'], ['Visão computacional', 'visao'], ['IA própria, sem restrições', 'propria'], ['Clonagem de voz e deepfake', 'voz'], ['Imagem e vídeo por IA', 'imagemia']]],
+              ['Dados e sistemas', [['Engenharia de dados e BI', 'dados'], ['Previsão de demanda', 'previsao'], ['ERP e SaaS sob medida', 'erp'], ['Clonar sistema obsoleto em tecnologia nova', 'clonar'], ['Automação de processos', 'automacao']]],
+              ['Mundo físico', [['Sensorização e prototipagem eletrônica', 'sensores'], ['Câmeras inteligentes', 'cameras'], ['Da foto ao modelo 3D', 'modelo3d']]],
             ].map(([t, itens]) => (
-              <div class="skills__g"><span>{t}</span><ul class="chips">{(itens as string[]).map((c) => <li class="chip">{c}</li>)}</ul></div>
+              <div class="skills__g"><span>{t}</span><ul class="chips">{(itens as string[][]).map(([rotulo, k]) => <li><button type="button" class="chip chip--btn" data-info={k}>{rotulo}</button></li>)}</ul></div>
             ))}
           </div>
           <h3>Setores</h3>
           <ul class="chips">
-            {['Varejo', 'Finanças', 'Indústria', 'Educação', 'Saúde', 'Agronegócio', 'Logística'].map((c) => <li class="chip">{c}</li>)}
+            {[['Varejo', 'varejo'], ['Finanças', 'financas'], ['Indústria', 'industria'], ['Educação', 'educacao'], ['Saúde', 'saude'], ['Agronegócio', 'agro'], ['Logística', 'logistica']].map(([rotulo, k]) => <li><button type="button" class="chip chip--btn" data-info={k}>{rotulo}</button></li>)}
           </ul>
         </div>
       </div>
@@ -131,19 +138,27 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
   <section class="sec" id="sobre" data-sec="sobre" aria-labelledby="t-sobre">
     <div class="wrap">
       <div class="about glass reveal">
-        <div class="about__who">
+        <figure class="about__photo">
+          <Image src={lucas} widths={[320, 560, 800]} sizes="(min-width: 960px) 340px, 90vw" format="webp" quality={74} alt="Lucas Rangel, fundador da Rangel Tech" loading="lazy" />
+          <figcaption><b>Lucas Rangel</b><span>Fundador da Rangel Tech</span></figcaption>
+        </figure>
+        <div class="about__body">
           <span class="eyebrow">Sobre</span>
-          <h2 class="display h2" id="t-sobre" style="margin-top:16px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
-          <figure class="about__photo"><Image src={lucas} widths={[160, 320]} sizes="160px" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" /></figure>
-        </div>
-        <div>
-          <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação. Hoje dirijo a Rangel Tech, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
-          <p>Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam no portfólio e no Kaggle, com código e dado.</p>
+          <h2 class="display h2" id="t-sobre" style="margin-top:12px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
+          <p class="about__lead">Especialista em inteligência artificial. Eu coloco IA para trabalhar dentro de empresas, e ensino quem quer fazer o mesmo.</p>
+          <p>Em doze anos de tecnologia, entreguei agentes de IA, visão computacional, plataformas de dados e sistemas inteiros para varejo, finanças, indústria e educação, em empresas que você reconhece na faixa lá em cima.</p>
+          <p>A <b>Rangel Tech</b> é a minha consultoria de IA, em Goiânia. Eu e a minha equipe projetamos, construímos e colocamos no ar soluções sob medida, rodando no ambiente do cliente, do primeiro protótipo à produção.</p>
+          <p>Mantenho também um laboratório próprio: eu testo modelos, placas de vídeo e ferramentas na prática, meço custo e resultado e publico tudo, com código e dado, no GitHub, no Kaggle e no portfólio. É por isso que eu sei o que funciona antes de recomendar.</p>
+          <ul class="stats">
+            <li><b>12 anos</b><span>em tecnologia</span></li>
+            <li><b>{totalEmpMap}</b><span>empresas atendidas</span></li>
+            <li><b>3</b><span>formações: mecatrônica, dados e IA</span></li>
+          </ul>
           <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
           <div class="links">
             <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
-            <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub</a>
-            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Artigos no Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
+            <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub<Fragment set:html={ICON.arrowUpRight} /></a>
+            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
           </div>
         </div>
       </div>
@@ -155,9 +170,9 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     <div class="wrap mapsec">
       <div class="reveal">
         <span class="eyebrow">Pelo Brasil</span>
-        <h2 class="display h2" id="t-mapa" style="margin-top:16px">Mentorados <em class="serif">pelo Brasil.</em></h2>
-        <p class="lead" style="margin-top:24px">Cada ponto é uma pessoa que eu acompanho ou já acompanhei. Toque em um estado para ver os números.</p>
-        <div class="counter"><b>{totalMap}</b><span>mentorados em {estadosMap} estados</span></div>
+        <h2 class="display h2" id="t-mapa" style="margin-top:16px">Mentorados e empresas <em class="serif">pelo Brasil.</em></h2>
+        <p class="lead" style="margin-top:24px">Os pontos azuis são pessoas que eu acompanho ou já acompanhei. Os laranja são empresas que já atendi. Toque em um estado para ver os números.</p>
+        <div class="counters"><div class="counter"><b>{totalMap}</b><span>mentorados em {estadosMap} estados</span></div><div class="counter counter--emp"><b>{totalEmpMap}</b><span>empresas atendidas</span></div></div>
       </div>
       <div class="reveal" style="--d:120ms"><BrazilMap /></div>
     </div>
@@ -196,8 +211,8 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <li><Fragment set:html={ICON.check} /><span>As skills e os modelos de projeto que eu uso nos meus clientes</span></li>
           </ul>
           <div class="seats">
-            <div class="seats__dots" aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - VAGAS.restantes ? 'taken' : ''}></i>)}</div>
-            <p><b>Restam {VAGAS.restantes} de {VAGAS.total} vagas.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
+            <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''}></i>)}</div>
+            <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
           </div>
           <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Quero a mentoria individual</a>
         </article>
@@ -227,7 +242,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
           <ul class="bonusbar__list">
             {BONUS.itens.map((b) => <li><span>{b.nome}</span><span><s>{brl(b.valor)}</s><em>grátis</em></span></li>)}
           </ul>
-          <p class="bonusbar__prazo" data-until={BONUS.ate}><i></i><span>Bônus por tempo limitado: vale só até {BONUS.ateTexto}. <b data-dias></b></span></p>
+          <p class="bonusbar__prazo"><i></i><span>Bônus por tempo limitado: vale só até <span data-fim-texto>{fim.texto}</span>. <b data-fim-faltam>{fraseFaltam(fim.faltam)}</b></span></p>
         </div>
       </div>
     </div>
@@ -280,10 +295,21 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="final glass reveal">
         <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
         <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i>Mentoria individual: restam {VAGAS.restantes} de {VAGAS.total} vagas.</p>
+        <p class="scarce"><i></i>Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>.</p>
         <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
         <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
       </div>
     </div>
   </section>
+  <dialog class="modal" data-modal aria-labelledby="modal-titulo">
+    <div class="modal__card glass">
+      <button type="button" class="modal__x" data-modal-close aria-label="Fechar"><Fragment set:html={ICON.x} /></button>
+      <h3 id="modal-titulo" data-modal-titulo></h3>
+      <p class="modal__texto" data-modal-texto></p>
+      <h4>O que a gente já entregou</h4>
+      <ul class="modal__feitos" data-modal-feitos></ul>
+      <a class="btn btn--primary btn--block" data-modal-wa target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Conversar sobre isso</a>
+    </div>
+  </dialog>
+  <script type="application/json" id="areas-data" set:html={JSON.stringify(AREAS)} />
 </Base>

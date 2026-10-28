@@ -1,5 +1,7 @@
 // Comportamento do site. Sem dependências. Tudo degrada bem sem JavaScript.
 
+import { vagasRestantes, fraseVagas, fraseVagasCurta, fimDoMes, fraseFaltam } from '../lib/mes';
+
 type Dados = Record<string, string | number | boolean>;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -273,18 +275,51 @@ document.addEventListener('click', (e) => {
   inicia();
 })();
 
-/* ---------- Prazo do bônus: conta os dias até a data fixa; passou da data, o aviso some ---------- */
-(function prazoBonus() {
-  document.querySelectorAll<HTMLElement>('[data-until]').forEach((el) => {
-    const fim = new Date(el.dataset.until + 'T23:59:59');
-    const dias = Math.ceil((fim.getTime() - Date.now()) / 86400000);
-    if (isNaN(dias) || dias < 0) {
-      el.hidden = true;
-      return;
-    }
-    const alvo = el.querySelector<HTMLElement>('[data-dias]');
-    if (alvo) alvo.textContent = dias <= 1 ? 'Termina hoje.' : `Faltam ${dias} dias.`;
+/* ---------- Escassez fixa do mês: vagas por parte do mês e bônus até o último dia do mês ---------- */
+(function escassezDoMes() {
+  const hoje = new Date();
+  const n = vagasRestantes(hoje);
+  const fim = fimDoMes(hoje);
+  document.querySelectorAll<HTMLElement>('[data-vagas-frase]').forEach((e) => (e.textContent = fraseVagas(n) + '.'));
+  document.querySelectorAll<HTMLElement>('[data-vagas-curta]').forEach((e) => (e.textContent = fraseVagasCurta(n)));
+  document.querySelectorAll<HTMLElement>('[data-dots] i').forEach((e, i, todos) => e.classList.toggle('taken', i < todos.length - n));
+  document.querySelectorAll<HTMLElement>('[data-fim-texto]').forEach((e) => (e.textContent = fim.texto));
+  document.querySelectorAll<HTMLElement>('[data-fim-faltam]').forEach((e) => (e.textContent = fraseFaltam(fim.faltam)));
+})();
+
+/* ---------- Modais de "O que eu faço" e "Setores" ---------- */
+(function modais() {
+  const dlg = document.querySelector<HTMLDialogElement>('[data-modal]');
+  const dados = document.getElementById('areas-data');
+  if (!dlg || !dados || typeof dlg.showModal !== 'function') return;
+  const areas: Record<string, { titulo: string; texto: string; feitos: string[] }> = JSON.parse(dados.textContent || '{}');
+  const q = <T extends HTMLElement>(s: string) => dlg.querySelector<T>(s)!;
+  let origem: HTMLElement | null = null;
+  const abrir = (k: string, el: HTMLElement) => {
+    const a = areas[k];
+    if (!a) return;
+    origem = el;
+    q('[data-modal-titulo]').textContent = a.titulo;
+    q('[data-modal-texto]').textContent = a.texto;
+    const ul = q('[data-modal-feitos]');
+    ul.replaceChildren(...a.feitos.map((f) => Object.assign(document.createElement('li'), { textContent: f })));
+    // mensagem do WhatsApp específica do tema (com o sufixo do Instagram quando a origem é ela)
+    const wa = (window as any).__wa || {};
+    const insta = (sessionStorage.getItem('utm_source') || '').toLowerCase() === 'instagram' ? wa.sufixo || '' : '';
+    const msg = `Oi, Lucas! Quero saber mais sobre ${a.titulo}.${insta}`;
+    q<HTMLAnchorElement>('[data-modal-wa]').href = `https://wa.me/${wa.numero}?text=${encodeURIComponent(msg)}`;
+    dlg.showModal();
+    track('area_aberta', { area: k });
+  };
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-info]');
+    if (b) abrir(b.dataset.info!, b);
   });
+  // fecha no X, fora do cartão e no Esc (nativo)
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg || (e.target as HTMLElement).closest('[data-modal-close]')) dlg.close();
+  });
+  dlg.addEventListener('close', () => origem?.focus());
 })();
 
 /* ---------- Entrada suave das seções ---------- */
@@ -496,7 +531,9 @@ document.addEventListener('click', (e) => {
     u.classList.add('sel');
     muns.querySelector(`[data-uf="${u.dataset.uf}"]`)?.classList.add('sel');
     const n = Number(u.dataset.n);
-    badge.innerHTML = `<b>${u.dataset.nome}</b><span>${n ? `${n} ${n === 1 ? 'pessoa atendida' : 'pessoas atendidas'}` : 'ainda sem mentorados'}</span>`;
+    const e = Number(u.dataset.e);
+    const partes = [n ? `${n} ${n === 1 ? 'pessoa atendida' : 'pessoas atendidas'}` : '', e ? `${e} ${e === 1 ? 'empresa' : 'empresas'}` : ''].filter(Boolean);
+    badge.innerHTML = `<b>${u.dataset.nome}</b><span>${partes.length ? partes.join(' · ') : 'ainda sem atendimentos'}</span>`;
     badge.classList.add('on');
     const b = caixas.get(u.dataset.uf!)!;
     const nk = Math.max(K_MIN, Math.min(K_MAX, 0.62 * Math.min(vb.width / b.width, vb.height / b.height)));
@@ -553,7 +590,7 @@ document.addEventListener('click', (e) => {
   const mostrarTip = (pt: SVGElement) => {
     const r = pt.getBoundingClientRect();
     const rr = root.getBoundingClientRect();
-    tip.textContent = `Mentorado em ${pt.dataset.city}, ${pt.dataset.uf}`;
+    tip.textContent = pt.dataset.tipo === 'empresa' ? `Empresa atendida em ${pt.dataset.city}, ${pt.dataset.uf}` : `Mentorado em ${pt.dataset.city}, ${pt.dataset.uf}`;
     tip.classList.add('on');
     // mantém a dica dentro do mapa: ajusta na horizontal e vira para baixo perto do topo
     const meia = tip.offsetWidth / 2 + 10;

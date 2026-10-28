@@ -1,0 +1,21 @@
+{
+  "aviso": "Empresas atendidas, só para o mapa. Os nomes ficam aqui para manutenção e NÃO vão para o HTML. confirmar=true: cidade ainda por confirmar com o Lucas.",
+  "empresas": [
+    { "nome": "Drogasil", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Drogaria São Paulo", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Bradesco", "cidade": "Osasco", "uf": "SP", "lat": -23.5325, "lon": -46.7917 },
+    { "nome": "Cielo", "cidade": "Barueri", "uf": "SP", "lat": -23.5057, "lon": -46.8761 },
+    { "nome": "SCPC", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Sem Parar", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Smarttbot", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "TOTVS", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Cinemark", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "SysMap", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Semantix", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Leega", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333, "confirmar": true },
+    { "nome": "Cogna", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345 },
+    { "nome": "Eduk", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345, "confirmar": true },
+    { "nome": "MindLab", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345, "confirmar": true },
+    { "nome": "Capital Certo", "cidade": "Goiânia", "uf": "GO", "lat": -16.6869, "lon": -49.2648 }
+  ]
+}
