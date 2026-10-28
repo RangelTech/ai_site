@@ -59,9 +59,9 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     <div class="wrap">
       <div class="sec__head reveal"><span class="eyebrow">Para quem é</span><h2 class="display h2" id="t-quem">Isso é para você <em class="serif">se...</em></h2></div>
       <div class="who">
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">01</span><div><h3>Você tem uma empresa e um problema que ninguém resolveu.</h3><p>Atendimento que não dá conta, planilha que ninguém aguenta mais, dado espalhado em cinco sistemas. Eu resolvo com IA, do dado até a tela.</p></div></div>
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">02</span><div><h3>Você quer construir o seu próprio produto.</h3><p>Um sistema para os seus clientes, um SaaS, uma automação para revender. Eu te ensino a tirar do papel e colocar no ar.</p></div></div>
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">03</span><div><h3>Você quer viver de IA.</h3><p>Sair do salário, abrir o seu PJ, vender serviço para empresa. Eu mostro as ferramentas que eu uso e como cobrar por elas.</p></div></div>
+        <div class="who__row reveal"><span class="who__n" aria-hidden="true">01</span><div><h3>Você tem uma empresa e um problema que ninguém resolveu.</h3><p>Atendimento que não dá conta, planilha que ninguém aguenta, dado espalhado. Eu resolvo com IA, do dado até a tela.</p></div></div>
+        <div class="who__row reveal"><span class="who__n" aria-hidden="true">02</span><div><h3>Você quer construir o seu próprio produto.</h3><p>Um sistema, um SaaS, uma automação para revender. Eu te ensino a tirar do papel e colocar no ar.</p></div></div>
+        <div class="who__row reveal"><span class="who__n" aria-hidden="true">03</span><div><h3>Você quer viver de IA.</h3><p>Sair do salário e vender serviço para empresa. Eu mostro as ferramentas e como cobrar por elas.</p></div></div>
       </div>
     </div>
   </section>
@@ -73,9 +73,9 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
         <div>
           <span class="eyebrow">Para empresas</span>
           <h2 class="display h2" id="t-b2b" style="margin-top:16px">Você traz o problema. Eu <em class="serif">resolvo.</em></h2>
-          <p class="lead" style="margin-top:24px">Aqui eu não ensino: eu faço. Assumo o projeto do começo ao fim, com a minha equipe, e você fala direto comigo, sem robô no meio.</p>
-          <p style="margin-top:16px">Cada projeto é orçado do tamanho do problema: o limite é a sua imaginação e o seu bolso.</p>
-          <p class="b2b__proof">Já desenvolvi projetos de IA e dados para varejo, finanças, indústria, educação, saúde e agronegócio.</p>
+          <p class="lead" style="margin-top:24px">Aqui eu não ensino: eu faço. Assumo o projeto do começo ao fim, com a minha equipe, e você fala direto comigo.</p>
+          <p style="margin-top:16px">O limite é a sua imaginação e o seu investimento.</p>
+          <p class="b2b__proof">Projetos de IA e dados para varejo, finanças, indústria, educação, saúde e agronegócio.</p>
           <div class="b2b__cta"><a class="btn btn--primary" data-wa="b2b" data-track="whatsapp_b2b" href={waHref('b2b')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Contar o meu problema para o Lucas</a></div>
         </div>
         <div class="b2b__side">
@@ -194,7 +194,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
         <div class="seal" aria-hidden="true"><div><b>7</b><span>dias</span></div></div>
         <div>
           <h2 class="display h2" id="t-garantia">Não gostou? Eu <em class="serif valor">devolvo tudo.</em></h2>
-          <p>Você tem 7 dias corridos depois do pagamento para pedir o dinheiro de volta. Não precisa explicar o motivo, nem provar que tentou. Manda uma mensagem no WhatsApp e eu devolvo o valor inteiro, pela mesma forma de pagamento. O risco fica comigo.</p>
+          <p>Você tem 7 dias depois do pagamento para pedir o dinheiro de volta, sem explicar o motivo. Manda uma mensagem no WhatsApp e eu devolvo o valor inteiro. O risco fica comigo.</p>
           <a class="link" href="/reembolso">Ler a política de reembolso</a>
         </div>
       </div>
@@ -207,7 +207,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="reveal">
         <span class="eyebrow">Pelo Brasil</span>
         <h2 class="display h2" id="t-mapa" style="margin-top:16px">Mentorados <em class="serif">pelo Brasil.</em></h2>
-        <p class="lead" style="margin-top:24px">Cada ponto é uma pessoa que eu acompanho ou já acompanhei. Toque em um estado para ver quantos eu atendi lá, e aproxime para ver as cidades.</p>
+        <p class="lead" style="margin-top:24px">Cada ponto é uma pessoa que eu acompanho ou já acompanhei. Toque em um estado para ver os números.</p>
         <div class="counter"><b>{totalMap}</b><span>mentorados em {estadosMap} estados</span></div>
       </div>
       <div class="reveal" style="--d:120ms"><BrazilMap /></div>
@@ -266,9 +266,8 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
           <figure class="about__photo"><Image src={lucas} widths={[160, 320]} sizes="160px" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" /></figure>
         </div>
         <div>
-          <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação, em empresas que você reconhece pela faixa lá em cima. Hoje dirijo a Rangel Tech, a minha consultoria de IA, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
-          <p>Gosto de mostrar o que faço. Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam públicos no portfólio e no Kaggle, com código e dado, para quem quiser conferir.</p>
-          <p>O meu objetivo com a mentoria é simples: mostrar a quem tem uma ideia ou um problema como usar IA para ganhar dinheiro de verdade.</p>
+          <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação. Hoje dirijo a Rangel Tech, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
+          <p>Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam no portfólio e no Kaggle, com código e dado.</p>
           <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
           <div class="links">
             <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
