@@ -273,6 +273,20 @@ document.addEventListener('click', (e) => {
   inicia();
 })();
 
+/* ---------- Prazo do bônus: conta os dias até a data fixa; passou da data, o aviso some ---------- */
+(function prazoBonus() {
+  document.querySelectorAll<HTMLElement>('[data-until]').forEach((el) => {
+    const fim = new Date(el.dataset.until + 'T23:59:59');
+    const dias = Math.ceil((fim.getTime() - Date.now()) / 86400000);
+    if (isNaN(dias) || dias < 0) {
+      el.hidden = true;
+      return;
+    }
+    const alvo = el.querySelector<HTMLElement>('[data-dias]');
+    if (alvo) alvo.textContent = dias <= 1 ? 'Termina hoje.' : `Faltam ${dias} dias.`;
+  });
+})();
+
 /* ---------- Entrada suave das seções ---------- */
 (function reveal() {
   const els = document.querySelectorAll<HTMLElement>('.reveal');
@@ -439,6 +453,16 @@ document.addEventListener('click', (e) => {
       alvo.appendChild(p);
     } catch {}
   };
+  // um traçado leve do país inteiro aparece já na primeira vista; baixa só quando o mapa chega perto da tela
+  const io = new IntersectionObserver(
+    ([en]) => {
+      if (!en.isIntersecting) return;
+      io.disconnect();
+      desenhar('/geo/BR-leve.json', muns, 'mun leve');
+    },
+    { rootMargin: '400px' },
+  );
+  io.observe(root);
   let voando = false;
   const detalhar = () => {
     if (k < 1.8 || voando) return;

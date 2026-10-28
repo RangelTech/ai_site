@@ -6,11 +6,13 @@ import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { LOGOS, PROJETOS, GRUPOS, FAQ, DEPOIMENTOS } from '../data/content';
-import { waHref, VAGAS, LINKS } from '../data/config';
+import { waHref, VAGAS, BONUS, LINKS } from '../data/config';
 import mentorados from '../data/mentorados_ficticios.json';
 
 const totalMap = mentorados.pontos.length;
 const estadosMap = new Set(mentorados.pontos.map((p: any) => p.uf)).size;
+const totalBonus = BONUS.itens.reduce((a, b) => a + b.valor, 0);
+const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR');
 const visiveis = PROJETOS.filter((p) => p.destaque).sort((a, b) => a.destaque! - b.destaque!);
 const extras = PROJETOS.filter((p) => !p.destaque);
 const listaProjetos = [...visiveis, ...extras];
@@ -66,6 +68,33 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     </div>
   </section>
 
+  <!-- 11. Projetos -->
+  <section class="sec" id="projetos" data-sec="projetos" aria-labelledby="t-proj">
+    <div class="wrap" data-projects>
+      <div class="sec__head reveal"><span class="eyebrow">Projetos</span><h2 class="display h2" id="t-proj">O que a gente <em class="serif">já construiu.</em></h2><p class="lead">Projetos de clientes e projetos próprios. Sem nome de cliente, porque contrato é contrato.</p></div>
+      <div class="filters" data-filters hidden style="margin-bottom:24px">
+        <button type="button" class="chip" data-g="todos" aria-pressed="true">Todos</button>
+        {Object.entries(GRUPOS).map(([g, nome]) => <button type="button" class="chip" data-g={g} aria-pressed="false">{nome}</button>)}
+      </div>
+      <div class="projects">
+        {listaProjetos.map((p, i) => (
+          <article class="project glass glass--m reveal" style={`--d:${(i % 6) * 70}ms`} data-grupo={p.grupo} data-extra={p.destaque ? '0' : '1'}>
+            <div class="project__art" set:html={MOTIFS[p.motif]} />
+            <div class="project__body">
+              <span class="project__tag">{GRUPOS[p.grupo]}</span>
+              <h3>{p.titulo}</h3>
+              <p>{p.frase}</p>
+              {p.link && <a class="project__link" href={p.link.href} target="_blank" rel="noopener" data-track={`projeto_${i}`}>{p.link.rotulo}<Fragment set:html={ICON.arrowUpRight} /></a>}
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="more">
+        <button type="button" class="btn btn--ghost" data-more aria-expanded="false">Ver todos os projetos</button>
+      </div>
+    </div>
+  </section>
+
   <!-- 4. B2B -->
   <section class="sec" id="empresas" data-sec="b2b" aria-labelledby="t-b2b">
     <div class="wrap">
@@ -98,104 +127,24 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     </div>
   </section>
 
-  <!-- 5. Comparativo -->
-  <section class="sec" id="mentorias" data-sec="comparativo" aria-labelledby="t-cmp">
+  <!-- 12. Sobre -->
+  <section class="sec" id="sobre" data-sec="sobre" aria-labelledby="t-sobre">
     <div class="wrap">
-      <div class="sec__head reveal"><span class="eyebrow">Mentorias</span><h2 class="display h2" id="t-cmp">Duas formas de <em class="serif">aprender comigo.</em></h2><p class="lead">As duas são individuais. O que muda é quanto do meu tempo você tem.</p></div>
-      <div class="cmp glass reveal">
-        <div class="cmp__grid">
-          <div class="cmp__head">
-            <div class="cmp__spacer"></div>
-            <div class="cmp__col cmp__col--a">Mentoria individual</div>
-            <div class="cmp__col cmp__col--b">Mentoria com acompanhamento</div>
-          </div>
-          {[
-            ['Encontros por vídeo, só nós dois', '3 por semana', null],
-            ['Grupo no WhatsApp comigo e com a minha equipe', true, true],
-            ['Bônus: área do aluno e habilidades técnicas', true, true],
-            ['Para quem', 'quer construir rápido, com alguém do lado', 'quer aprender no próprio ritmo'],
-          ].map(([label, a, b]) => (
-            <div class="cmp__row">
-              <div class="cmp__label">{label}</div>
-              <div class="cmp__cell">{a === true ? <Fragment set:html={ICON.check} /> : a}</div>
-              <div class="cmp__cell">{b === true ? <Fragment set:html={ICON.check} /> : b === null ? <span class="no">não tem</span> : b}</div>
-            </div>
-          ))}
-          <div class="cmp__row">
-            <div class="cmp__label">Investimento</div>
-            <div class="cmp__cell cmp__price">R$ 5.000</div>
-            <div class="cmp__cell cmp__price">R$ 1.000</div>
-          </div>
-          <div class="cmp__row">
-            <div class="cmp__label">Garantia</div>
-            <div class="cmp__cell">7 dias</div>
-            <div class="cmp__cell">7 dias</div>
-          </div>
-          <div class="cmp__btns">
-            <div class="cmp__spacer"></div>
-            <div><a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual_comparativo" href={waHref('individual')} target="_blank" rel="noopener">Quero a individual</a></div>
-            <div><a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento_comparativo" href={waHref('acompanhamento')} target="_blank" rel="noopener">Quero o acompanhamento</a></div>
-          </div>
+      <div class="about glass reveal">
+        <div class="about__who">
+          <span class="eyebrow">Sobre</span>
+          <h2 class="display h2" id="t-sobre" style="margin-top:16px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
+          <figure class="about__photo"><Image src={lucas} widths={[160, 320]} sizes="160px" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" /></figure>
         </div>
-        <p class="cmp__note small">Prefere que eu construa o projeto por você? Também faço, com proposta sob medida. Me chama no WhatsApp.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6 e 7. Mentorias em detalhe -->
-  <section class="sec" style="padding-top:0" aria-label="Detalhes das mentorias">
-    <div class="wrap offers">
-      <article class="offer glass offer--hi reveal" id="individual" data-sec="individual">
-        <div class="offer__text">
-          <span class="eyebrow">Individual</span>
-          <h2 class="display h3" style="margin:16px 0 24px">Mentoria individual. <em class="serif">Eu e você.</em></h2>
-          <p>Três encontros por semana por videochamada, só nós dois. Você traz o que quer construir, e eu mostro o caminho mais curto até colocar no ar. Quando travar, a gente destrava junto na mesma semana.</p>
-          <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Três encontros individuais por semana, por vídeo</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
-            <li><Fragment set:html={ICON.check} /><span>As skills e os modelos de projeto que eu uso nos meus clientes</span></li>
-            <li><Fragment set:html={ICON.check} /><span><b>Bônus:</b> área do aluno e as habilidades técnicas que eu uso no dia a dia</span></li>
-          </ul>
-        </div>
-        <div class="offer__box">
-          <div class="price">R$ 5.000</div>
-          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
-          <p class="scarce"><i></i>Vagas limitadas: atendo no máximo {VAGAS.total} alunos ao mesmo tempo. Abertas agora: {VAGAS.restantes} de {VAGAS.total}.</p>
-          <div class="bonus"><b>Bônus de quem entra</b>Você entra e já libera a minha área do aluno e as habilidades técnicas que eu uso no dia a dia, já prontas para você usar. Eu mostro o que tem lá dentro na nossa conversa.</div>
-          <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Quero a mentoria individual</a>
-        </div>
-      </article>
-
-      <article class="offer glass reveal" id="acompanhamento" data-sec="acompanhamento">
-        <div class="offer__text">
-          <span class="eyebrow">Acompanhamento</span>
-          <h2 class="display h3" style="margin:16px 0 24px">Acompanhamento <em class="serif">no WhatsApp.</em></h2>
-          <p>Para quem quer aprender no próprio ritmo, sem reunião marcada. Você manda a dúvida quando ela aparecer, com print, áudio ou o erro colado, e recebe o caminho.</p>
-          <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
-            <li><Fragment set:html={ICON.check} /><span><b>Bônus:</b> área do aluno e as habilidades técnicas que eu uso no dia a dia</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, do jeito que ela vier</span></li>
-          </ul>
-        </div>
-        <div class="offer__box">
-          <div class="price">R$ 1.000</div>
-          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
-          <div class="bonus"><b>Bônus de quem entra</b>Você entra e já libera a minha área do aluno e as habilidades técnicas que eu uso no dia a dia, já prontas para você usar. Eu mostro o que tem lá dentro na nossa conversa.</div>
-          <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Entrar no acompanhamento</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- 8. Garantia -->
-  <section class="sec" style="padding-top:0" data-sec="garantia" aria-labelledby="t-garantia">
-    <div class="wrap">
-      <div class="guar glass reveal">
-        <div class="seal" aria-hidden="true"><div><b>7</b><span>dias</span></div></div>
         <div>
-          <h2 class="display h2" id="t-garantia">Não gostou? Eu <em class="serif valor">devolvo tudo.</em></h2>
-          <p>Você tem 7 dias depois do pagamento para pedir o dinheiro de volta, sem explicar o motivo. Manda uma mensagem no WhatsApp e eu devolvo o valor inteiro. O risco fica comigo.</p>
-          <a class="link" href="/reembolso">Ler a política de reembolso</a>
+          <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação. Hoje dirijo a Rangel Tech, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
+          <p>Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam no portfólio e no Kaggle, com código e dado.</p>
+          <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
+          <div class="links">
+            <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
+            <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub</a>
+            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Artigos no Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
+          </div>
         </div>
       </div>
     </div>
@@ -229,51 +178,70 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
     </div>
   </section>
 
-  <!-- 11. Projetos -->
-  <section class="sec" id="projetos" data-sec="projetos" aria-labelledby="t-proj">
-    <div class="wrap" data-projects>
-      <div class="sec__head reveal"><span class="eyebrow">Projetos</span><h2 class="display h2" id="t-proj">O que a gente <em class="serif">já construiu.</em></h2><p class="lead">Projetos de clientes e projetos próprios. Sem nome de cliente, porque contrato é contrato.</p></div>
-      <div class="filters" data-filters hidden style="margin-bottom:24px">
-        <button type="button" class="chip" data-g="todos" aria-pressed="true">Todos</button>
-        {Object.entries(GRUPOS).map(([g, nome]) => <button type="button" class="chip" data-g={g} aria-pressed="false">{nome}</button>)}
+  <!-- Mentorias: dois planos, bônus com valor e vagas -->
+  <section class="sec" id="mentorias" data-sec="mentorias" aria-labelledby="t-cmp">
+    <div class="wrap">
+      <div class="sec__head reveal"><span class="eyebrow">Mentorias</span><h2 class="display h2" id="t-cmp">Duas formas de <em class="serif">aprender comigo.</em></h2><p class="lead">As duas são individuais. O que muda é quanto do meu tempo você tem.</p></div>
+      <div class="plans">
+        <article class="plan plan--hi glass reveal" id="individual" data-sec="individual">
+          <span class="plan__badge">Mais completa</span>
+          <h3 class="plan__name">Mentoria individual</h3>
+          <p class="plan__for">Para quem quer construir rápido, com alguém do lado.</p>
+          <div class="price">R$ 5.000</div>
+          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
+          <ul class="offer__list">
+            <li><Fragment set:html={ICON.check} /><span>Três encontros por semana por vídeo, só nós dois</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu acompanho o seu projeto e digo o próximo passo</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
+            <li><Fragment set:html={ICON.check} /><span>As skills e os modelos de projeto que eu uso nos meus clientes</span></li>
+          </ul>
+          <div class="seats">
+            <div class="seats__dots" aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - VAGAS.restantes ? 'taken' : ''}></i>)}</div>
+            <p><b>Restam {VAGAS.restantes} de {VAGAS.total} vagas.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
+          </div>
+          <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Quero a mentoria individual</a>
+        </article>
+
+        <article class="plan glass reveal" id="acompanhamento" data-sec="acompanhamento">
+          <h3 class="plan__name">Mentoria com acompanhamento</h3>
+          <p class="plan__for">Para quem quer aprender no próprio ritmo, sem reunião marcada.</p>
+          <div class="price">R$ 1.000</div>
+          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
+          <ul class="offer__list">
+            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, com print, áudio ou o erro colado</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Você aprende no seu ritmo, sem horário marcado</span></li>
+            <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontros por vídeo</span></li>
+          </ul>
+          <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Entrar no acompanhamento</a>
+        </article>
       </div>
-      <div class="projects">
-        {listaProjetos.map((p, i) => (
-          <article class="project glass glass--m reveal" style={`--d:${(i % 6) * 70}ms`} data-grupo={p.grupo} data-extra={p.destaque ? '0' : '1'}>
-            <div class="project__art" set:html={MOTIFS[p.motif]} />
-            <div class="project__body">
-              <span class="project__tag">{GRUPOS[p.grupo]}</span>
-              <h3>{p.titulo}</h3>
-              <p>{p.frase}</p>
-              {p.link && <a class="project__link" href={p.link.href} target="_blank" rel="noopener" data-track={`projeto_${i}`}>{p.link.rotulo}<Fragment set:html={ICON.arrowUpRight} /></a>}
-            </div>
-          </article>
-        ))}
-      </div>
-      <div class="more">
-        <button type="button" class="btn btn--ghost" data-more aria-expanded="false">Ver todos os projetos</button>
+
+      <div class="bonusbar glass reveal">
+        <div>
+          <span class="bonusbar__tag">Bônus nas duas mentorias</span>
+          <h3>Você leva {brl(totalBonus)} em bônus, sem pagar nada a mais.</h3>
+          <p class="bonusbar__total">Somando o valor avulso de cada item, são <s>{brl(totalBonus)}</s> <b>de graça</b> para quem entrar agora.</p>
+        </div>
+        <div>
+          <ul class="bonusbar__list">
+            {BONUS.itens.map((b) => <li><span>{b.nome}</span><span><s>{brl(b.valor)}</s><em>grátis</em></span></li>)}
+          </ul>
+          <p class="bonusbar__prazo" data-until={BONUS.ate}><i></i><span>Bônus por tempo limitado: vale só até {BONUS.ateTexto}. <b data-dias></b></span></p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 12. Sobre -->
-  <section class="sec" id="sobre" data-sec="sobre" aria-labelledby="t-sobre">
+  <!-- 8. Garantia -->
+  <section class="sec" style="padding-top:0" data-sec="garantia" aria-labelledby="t-garantia">
     <div class="wrap">
-      <div class="about glass reveal">
-        <div class="about__who">
-          <span class="eyebrow">Sobre</span>
-          <h2 class="display h2" id="t-sobre" style="margin-top:16px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
-          <figure class="about__photo"><Image src={lucas} widths={[160, 320]} sizes="160px" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" /></figure>
-        </div>
+      <div class="guar glass reveal">
+        <div class="seal" aria-hidden="true"><div><b>7</b><span>dias</span></div></div>
         <div>
-          <p>Trabalho com tecnologia há doze anos. Já construí plataformas de agentes, projetos de dados e sistemas de IA para varejo, finanças, indústria e educação. Hoje dirijo a Rangel Tech, onde eu e a minha equipe desenvolvemos projetos sob medida para empresas.</p>
-          <p>Os meus testes de IA estão abertos no GitHub, e os artigos que eu publico ficam no portfólio e no Kaggle, com código e dado.</p>
-          <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
-          <div class="links">
-            <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
-            <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub</a>
-            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Artigos no Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
-          </div>
+          <h2 class="display h2" id="t-garantia">Não gostou? Eu <em class="serif valor">devolvo tudo.</em></h2>
+          <p>Você tem 7 dias depois do pagamento para pedir o dinheiro de volta, sem explicar o motivo. Manda uma mensagem no WhatsApp e eu devolvo o valor inteiro. O risco fica comigo.</p>
+          <a class="link" href="/reembolso">Ler a política de reembolso</a>
         </div>
       </div>
     </div>
@@ -312,7 +280,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="final glass reveal">
         <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
         <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i>Mentoria individual: {VAGAS.restantes} vagas abertas.</p>
+        <p class="scarce"><i></i>Mentoria individual: restam {VAGAS.restantes} de {VAGAS.total} vagas.</p>
         <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
         <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
       </div>

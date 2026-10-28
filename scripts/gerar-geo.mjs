@@ -22,13 +22,27 @@ const path = geoPath(proj).digits(1);
 const UFS = { RO: 11, AC: 12, AM: 13, RR: 14, PA: 15, AP: 16, TO: 17, MA: 21, PI: 22, CE: 23, RN: 24, PB: 25, PE: 26, AL: 27, SE: 28, BA: 29, MG: 31, ES: 32, RJ: 33, SP: 35, PR: 41, SC: 42, RS: 43, MS: 50, MT: 51, GO: 52, DF: 53 };
 mkdirSync('public/geo', { recursive: true });
 
+// versão leve do país inteiro (mesma malha, com 1 em cada 3 pontos): aparece já na primeira vista do mapa
+const decima = (anel) => { const r = anel.filter((_, i) => i % 3 === 0); r.push(anel[anel.length - 1]); return r.length >= 4 ? r : anel; };
+const leve = [];
+const pathLeve = geoPath(proj).digits(0);
+
 for (const [uf, cod] of Object.entries(UFS)) {
   const url = `https://servicodados.ibge.gov.br/api/v3/malhas/estados/${cod}?intrarregiao=municipio&formato=application/vnd.geo+json&qualidade=minima`;
   const geo = rewind(await (await fetch(url)).json());
   const d = geo.features.map((f) => path(f)).filter(Boolean).join('');
   writeFileSync(`public/geo/${uf}.json`, JSON.stringify({ d }));
+  for (const f of geo.features) {
+    const g = f.geometry;
+    const g2 = g.type === 'Polygon' ? { ...g, coordinates: g.coordinates.map(decima) } : { ...g, coordinates: g.coordinates.map((poly) => poly.map(decima)) };
+    const d2 = pathLeve({ ...f, geometry: g2 });
+    if (d2) leve.push(d2);
+  }
   console.log(uf, Math.round(d.length / 1024) + ' KB');
 }
+
+writeFileSync('public/geo/BR-leve.json', JSON.stringify({ d: leve.join('') }));
+console.log('leve', Math.round(leve.join('').length / 1024) + ' KB');
 
 // rios: só os que cruzam o Brasil, linhas simples
 const rios = JSON.parse(readFileSync(process.argv[2] || 'rios.json', 'utf8'));

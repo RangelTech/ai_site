@@ -41,3 +41,7 @@ Igual ao `luar_site`: contêiner nginx servindo `dist/`, Traefik com TLS, regist
 ## Mapa: municípios e rios
 
 Os traçados de município (IBGE) e de rios (Natural Earth) ficam em `public/geo/` e só são baixados quando o visitante aproxima o mapa. Para gerar de novo: `node scripts/gerar-geo.mjs <caminho do ne_10m_rivers_lake_centerlines.geojson>`.
+
+## Vagas, bônus e prazo
+
+Em `src/data/config.ts`: `VAGAS.restantes` (quantas vagas ainda existem, deve refletir a realidade), `BONUS.itens` (nome e valor avulso de cada bônus) e `BONUS.ate` (último dia do bônus, AAAA-MM-DD). Passada a data, o aviso de prazo some sozinho.

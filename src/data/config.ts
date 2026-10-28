@@ -28,10 +28,23 @@ export function waHref(key: WaKey): string {
   return `https://wa.me/${WHATSAPP.numero}?text=${encodeURIComponent(WHATSAPP.mensagens[key])}`;
 }
 
-// Vagas da mentoria individual: no máximo 4 alunos ao mesmo tempo. Lucas atualiza `restantes` à mão.
+// Vagas da mentoria individual: no máximo 4 alunos ao mesmo tempo.
+// ATENÇÃO: `restantes` precisa refletir a realidade. Lucas atualiza à mão a cada aluno que entra ou sai.
 export const VAGAS = {
   total: 4,
-  restantes: 4,
+  restantes: 2,
+};
+
+// Bônus das duas mentorias. Valores = preço avulso de cada item (spec: área do aluno R$ 197, pacote de skills R$ 97).
+// `ate` é o último dia em que o bônus vale (AAAA-MM-DD). Depois dessa data o aviso de prazo some sozinho.
+// Só mantenha uma data que você de fato vai cumprir.
+export const BONUS = {
+  itens: [
+    { nome: 'Minha área do aluno', valor: 197 },
+    { nome: 'As habilidades técnicas que eu uso no dia a dia', valor: 97 },
+  ],
+  ate: '2026-11-30',
+  ateTexto: '30 de novembro',
 };
 
 // Métricas (spec 4.6): Umami sem cookie. Vazio = desligado (nada é enviado).
