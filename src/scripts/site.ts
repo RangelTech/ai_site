@@ -168,11 +168,11 @@ document.addEventListener('click', (e) => {
 
   /* --- brilhos: pontos que orbitam, piscam e às vezes "explodem" para longe e voltam --- */
   type P = { cx: number; cy: number; rx: number; ry: number; a: number; va: number; vx: number; vy: number; tw: number; ph: number; r: number; tom: number; kick: number; tilt: number };
-  const N = lite ? 26 : innerWidth < 700 ? 42 : 78;
+  const N = lite ? 14 : innerWidth < 700 ? 22 : 34;
   const ps: P[] = [];
   const rnd = (a: number, b: number) => a + Math.random() * (b - a);
   const nova = (): P => ({
-    cx: rnd(0, innerWidth), cy: rnd(0, innerHeight), rx: rnd(18, 120), ry: rnd(14, 90), a: rnd(0, 6.28), va: rnd(0.12, 0.5) * (Math.random() < 0.5 ? -1 : 1),
+    cx: rnd(0, innerWidth), cy: rnd(0, innerHeight), rx: rnd(18, 120), ry: rnd(14, 90), a: rnd(0, 6.28), va: rnd(0.08, 0.32) * (Math.random() < 0.5 ? -1 : 1),
     vx: rnd(-7, 7), vy: rnd(-7, 7), tw: rnd(0.25, 0.9), ph: rnd(0, 6.28), r: rnd(0.8, 2.3), tom: Math.random(), kick: 1, tilt: rnd(0, 3.14),
   });
   for (let i = 0; i < N; i++) ps.push(nova());
@@ -228,7 +228,7 @@ document.addEventListener('click', (e) => {
     if (alvo.ativo) { halo.x += (alvo.x - halo.x) * Math.min(1, dt * 6); halo.y += (alvo.y - halo.y) * Math.min(1, dt * 6); }
     if (halo.a > 0.01) {
       const g = bctx.createRadialGradient(halo.x, halo.y, 0, halo.x, halo.y, 190);
-      g.addColorStop(0, `rgba(160,210,255,${0.16 * halo.a})`);
+      g.addColorStop(0, `rgba(200,225,255,${0.1 * halo.a})`);
       g.addColorStop(1, 'rgba(160,210,255,0)');
       bctx.fillStyle = g;
       bctx.fillRect(halo.x - 190, halo.y - 190, 380, 380);
@@ -250,7 +250,7 @@ document.addEventListener('click', (e) => {
       const ex = Math.cos(p.a) * p.rx * p.kick, ey = Math.sin(p.a) * p.ry * p.kick;
       const x = p.cx + ex * Math.cos(p.tilt) - ey * Math.sin(p.tilt);
       const y = p.cy + ex * Math.sin(p.tilt) + ey * Math.cos(p.tilt);
-      let al = Math.pow(0.5 + 0.5 * Math.sin(t * p.tw + p.ph), 2) * 0.75 + 0.06;
+      let al = Math.pow(0.5 + 0.5 * Math.sin(t * p.tw + p.ph), 2) * 0.5 + 0.04;
       al *= 1 + (p.kick - 1) * 0.35; // brilha mais na explosão
       if (halo.a > 0.05) {
         const d = Math.hypot(x - halo.x, y - halo.y);
