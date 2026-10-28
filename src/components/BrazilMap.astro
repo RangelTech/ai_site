@@ -1,0 +1,60 @@
+---
+import { geoMercator, geoPath } from 'd3-geo';
+import brasil from '../data/brasil-uf.geojson?raw';
+import dados from '../data/mentorados_ficticios.json';
+import { ICON } from '../lib/icons';
+
+const W = 800;
+const H = 820;
+const geo = JSON.parse(brasil);
+
+// d3-geo exige anel externo no sentido horário e furos no anti-horário; o GeoJSON do IBGE vem no padrão oposto.
+const area = (ring: number[][]) => ring.reduce((a, p, i) => { const q = ring[(i + 1) % ring.length]; return a + (p[0] * q[1] - q[0] * p[1]); }, 0) / 2;
+const orienta = (rings: number[][][]) => rings.map((r, i) => ((i === 0 ? area(r) > 0 : area(r) < 0) ? [...r].reverse() : r));
+for (const f of geo.features) {
+  const g = f.geometry;
+  if (g.type === 'Polygon') g.coordinates = orienta(g.coordinates);
+  else if (g.type === 'MultiPolygon') g.coordinates = g.coordinates.map(orienta);
+}
+const projecao = geoMercator().fitExtent(
+  [
+    [28, 24],
+    [W - 28, H - 24],
+  ],
+  geo,
+);
+const path = geoPath(projecao);
+const estados = geo.features.map((f: any) => path(f)).filter(Boolean) as string[];
+const pontos = (dados.pontos as any[])
+  .map((p) => {
+    const xy = projecao([p.lon, p.lat]);
+    return xy ? { x: +xy[0].toFixed(1), y: +xy[1].toFixed(1), cidade: p.cidade, uf: p.uf, regiao: p.regiao } : null;
+  })
+  .filter(Boolean) as { x: number; y: number; cidade: string; uf: string; regiao: string }[];
+
+const total = pontos.length;
+const nEstados = new Set(pontos.map((p) => p.uf)).size;
+const porRegiao = Object.entries(
+  pontos.reduce((acc: Record<string, number>, p) => ((acc[p.regiao] = (acc[p.regiao] || 0) + 1), acc), {}),
+);
+---
+<div class="map glass--m" data-map>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Mapa do Brasil com ${total} mentorados em ${nEstados} estados`}>
+    <g data-layer>
+      {estados.map((d) => <path class="uf" d={d} />)}
+      {pontos.map((p) => (
+        <circle class="pt" cx={p.x} cy={p.y} r="4.6" data-city={p.cidade} data-uf={p.uf} tabindex="-1" />
+      ))}
+    </g>
+  </svg>
+  <div class="map__tip" data-tip aria-hidden="true"></div>
+  <div class="map__hint" data-hint>Arraste para navegar</div>
+  <div class="map__ctrl">
+    <button type="button" data-zoom="in" aria-label="Aproximar o mapa"><Fragment set:html={ICON.plus} /></button>
+    <button type="button" data-zoom="out" aria-label="Afastar o mapa"><Fragment set:html={ICON.minus} /></button>
+    <button type="button" data-zoom="reset" aria-label="Voltar ao mapa inteiro"><Fragment set:html={ICON.reset} /></button>
+  </div>
+  <ul class="sr-only">
+    {porRegiao.map(([r, n]) => <li>{r}: {n} mentorados</li>)}
+  </ul>
+</div>

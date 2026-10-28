@@ -1,0 +1,557 @@
+{
+ "ficticio": true,
+ "aviso": "DADOS FICTICIOS para desenhar e testar o mapa. Proibido publicar. Substituir pela lista real (com consentimento) antes do lancamento.",
+ "gerado_em": "2026-10-28",
+ "total": 61,
+ "pontos": [
+  {
+   "id": 1,
+   "cidade": "Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.6813,
+   "lon": -49.246,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 2,
+   "cidade": "Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.6797,
+   "lon": -49.287,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 3,
+   "cidade": "Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.7146,
+   "lon": -49.283,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 4,
+   "cidade": "Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.7073,
+   "lon": -49.2378,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 5,
+   "cidade": "Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.6639,
+   "lon": -49.242,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 6,
+   "cidade": "Anápolis",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.3001,
+   "lon": -48.976,
+   "produto": "individual"
+  },
+  {
+   "id": 7,
+   "cidade": "Aparecida de Goiânia",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -16.8083,
+   "lon": -49.2677,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 8,
+   "cidade": "Rio Verde",
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "lat": -17.7892,
+   "lon": -50.8967,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 9,
+   "cidade": "Brasília",
+   "uf": "DF",
+   "regiao": "Centro-Oeste",
+   "lat": -15.768,
+   "lon": -47.8675,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 10,
+   "cidade": "Brasília",
+   "uf": "DF",
+   "regiao": "Centro-Oeste",
+   "lat": -15.8295,
+   "lon": -47.8478,
+   "produto": "individual"
+  },
+  {
+   "id": 11,
+   "cidade": "Brasília",
+   "uf": "DF",
+   "regiao": "Centro-Oeste",
+   "lat": -15.8215,
+   "lon": -47.9107,
+   "produto": "individual"
+  },
+  {
+   "id": 12,
+   "cidade": "Cuiabá",
+   "uf": "MT",
+   "regiao": "Centro-Oeste",
+   "lat": -15.5841,
+   "lon": -56.0723,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 13,
+   "cidade": "Campo Grande",
+   "uf": "MS",
+   "regiao": "Centro-Oeste",
+   "lat": -20.4901,
+   "lon": -54.6291,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 14,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.5348,
+   "lon": -46.6097,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 15,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.582,
+   "lon": -46.6341,
+   "produto": "individual"
+  },
+  {
+   "id": 16,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.5807,
+   "lon": -46.6012,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 17,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.5139,
+   "lon": -46.6486,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 18,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.5857,
+   "lon": -46.6102,
+   "produto": "individual"
+  },
+  {
+   "id": 19,
+   "cidade": "São Paulo",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.5751,
+   "lon": -46.6449,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 20,
+   "cidade": "Campinas",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -22.9449,
+   "lon": -47.0922,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 21,
+   "cidade": "Campinas",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -22.8792,
+   "lon": -47.0381,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 22,
+   "cidade": "Ribeirão Preto",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -21.1729,
+   "lon": -47.791,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 23,
+   "cidade": "Sorocaba",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.4973,
+   "lon": -47.4314,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 24,
+   "cidade": "São José dos Campos",
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "lat": -23.2013,
+   "lon": -45.877,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 25,
+   "cidade": "Rio de Janeiro",
+   "uf": "RJ",
+   "regiao": "Sudeste",
+   "lat": -22.9347,
+   "lon": -43.1847,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 26,
+   "cidade": "Rio de Janeiro",
+   "uf": "RJ",
+   "regiao": "Sudeste",
+   "lat": -22.9151,
+   "lon": -43.1437,
+   "produto": "individual"
+  },
+  {
+   "id": 27,
+   "cidade": "Rio de Janeiro",
+   "uf": "RJ",
+   "regiao": "Sudeste",
+   "lat": -22.8997,
+   "lon": -43.1496,
+   "produto": "individual"
+  },
+  {
+   "id": 28,
+   "cidade": "Niterói",
+   "uf": "RJ",
+   "regiao": "Sudeste",
+   "lat": -22.8803,
+   "lon": -43.1279,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 29,
+   "cidade": "Belo Horizonte",
+   "uf": "MG",
+   "regiao": "Sudeste",
+   "lat": -19.9265,
+   "lon": -43.9062,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 30,
+   "cidade": "Belo Horizonte",
+   "uf": "MG",
+   "regiao": "Sudeste",
+   "lat": -19.8919,
+   "lon": -43.9525,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 31,
+   "cidade": "Uberlândia",
+   "uf": "MG",
+   "regiao": "Sudeste",
+   "lat": -18.9296,
+   "lon": -48.2791,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 32,
+   "cidade": "Vitória",
+   "uf": "ES",
+   "regiao": "Sudeste",
+   "lat": -20.2896,
+   "lon": -40.3209,
+   "produto": "individual"
+  },
+  {
+   "id": 33,
+   "cidade": "Curitiba",
+   "uf": "PR",
+   "regiao": "Sul",
+   "lat": -25.4604,
+   "lon": -49.2934,
+   "produto": "individual"
+  },
+  {
+   "id": 34,
+   "cidade": "Curitiba",
+   "uf": "PR",
+   "regiao": "Sul",
+   "lat": -25.4279,
+   "lon": -49.2328,
+   "produto": "individual"
+  },
+  {
+   "id": 35,
+   "cidade": "Londrina",
+   "uf": "PR",
+   "regiao": "Sul",
+   "lat": -23.2707,
+   "lon": -51.1953,
+   "produto": "individual"
+  },
+  {
+   "id": 36,
+   "cidade": "Maringá",
+   "uf": "PR",
+   "regiao": "Sul",
+   "lat": -23.4432,
+   "lon": -51.9514,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 37,
+   "cidade": "Florianópolis",
+   "uf": "SC",
+   "regiao": "Sul",
+   "lat": -27.5629,
+   "lon": -48.5235,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 38,
+   "cidade": "Florianópolis",
+   "uf": "SC",
+   "regiao": "Sul",
+   "lat": -27.5703,
+   "lon": -48.5802,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 39,
+   "cidade": "Joinville",
+   "uf": "SC",
+   "regiao": "Sul",
+   "lat": -26.2838,
+   "lon": -48.8166,
+   "produto": "individual"
+  },
+  {
+   "id": 40,
+   "cidade": "Blumenau",
+   "uf": "SC",
+   "regiao": "Sul",
+   "lat": -26.9205,
+   "lon": -49.0703,
+   "produto": "individual"
+  },
+  {
+   "id": 41,
+   "cidade": "Porto Alegre",
+   "uf": "RS",
+   "regiao": "Sul",
+   "lat": -30.0317,
+   "lon": -51.1879,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 42,
+   "cidade": "Porto Alegre",
+   "uf": "RS",
+   "regiao": "Sul",
+   "lat": -30.0566,
+   "lon": -51.2433,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 43,
+   "cidade": "Caxias do Sul",
+   "uf": "RS",
+   "regiao": "Sul",
+   "lat": -29.1549,
+   "lon": -51.14,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 44,
+   "cidade": "Salvador",
+   "uf": "BA",
+   "regiao": "Nordeste",
+   "lat": -12.9754,
+   "lon": -38.5249,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 45,
+   "cidade": "Salvador",
+   "uf": "BA",
+   "regiao": "Nordeste",
+   "lat": -13.0098,
+   "lon": -38.5019,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 46,
+   "cidade": "Feira de Santana",
+   "uf": "BA",
+   "regiao": "Nordeste",
+   "lat": -12.2928,
+   "lon": -38.9703,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 47,
+   "cidade": "Recife",
+   "uf": "PE",
+   "regiao": "Nordeste",
+   "lat": -8.0335,
+   "lon": -34.8919,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 48,
+   "cidade": "Recife",
+   "uf": "PE",
+   "regiao": "Nordeste",
+   "lat": -8.0501,
+   "lon": -34.9154,
+   "produto": "individual"
+  },
+  {
+   "id": 49,
+   "cidade": "Fortaleza",
+   "uf": "CE",
+   "regiao": "Nordeste",
+   "lat": -3.7682,
+   "lon": -38.4934,
+   "produto": "individual"
+  },
+  {
+   "id": 50,
+   "cidade": "Fortaleza",
+   "uf": "CE",
+   "regiao": "Nordeste",
+   "lat": -3.7441,
+   "lon": -38.5003,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 51,
+   "cidade": "Natal",
+   "uf": "RN",
+   "regiao": "Nordeste",
+   "lat": -5.8018,
+   "lon": -35.2126,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 52,
+   "cidade": "João Pessoa",
+   "uf": "PB",
+   "regiao": "Nordeste",
+   "lat": -7.1332,
+   "lon": -34.8958,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 53,
+   "cidade": "Maceió",
+   "uf": "AL",
+   "regiao": "Nordeste",
+   "lat": -9.682,
+   "lon": -35.7185,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 54,
+   "cidade": "Aracaju",
+   "uf": "SE",
+   "regiao": "Nordeste",
+   "lat": -10.9718,
+   "lon": -37.1028,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 55,
+   "cidade": "São Luís",
+   "uf": "MA",
+   "regiao": "Nordeste",
+   "lat": -2.5386,
+   "lon": -44.3201,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 56,
+   "cidade": "Teresina",
+   "uf": "PI",
+   "regiao": "Nordeste",
+   "lat": -5.1205,
+   "lon": -42.813,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 57,
+   "cidade": "Manaus",
+   "uf": "AM",
+   "regiao": "Norte",
+   "lat": -3.1437,
+   "lon": -60.0388,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 58,
+   "cidade": "Belém",
+   "uf": "PA",
+   "regiao": "Norte",
+   "lat": -1.4369,
+   "lon": -48.5224,
+   "produto": "individual"
+  },
+  {
+   "id": 59,
+   "cidade": "Palmas",
+   "uf": "TO",
+   "regiao": "Norte",
+   "lat": -10.1898,
+   "lon": -48.3209,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 60,
+   "cidade": "Porto Velho",
+   "uf": "RO",
+   "regiao": "Norte",
+   "lat": -8.7529,
+   "lon": -63.9029,
+   "produto": "acompanhamento"
+  },
+  {
+   "id": 61,
+   "cidade": "Macapá",
+   "uf": "AP",
+   "regiao": "Norte",
+   "lat": 0.0393,
+   "lon": -51.0969,
+   "produto": "individual"
+  }
+ ]
+}

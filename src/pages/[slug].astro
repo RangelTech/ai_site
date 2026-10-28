@@ -1,0 +1,31 @@
+---
+import { marked } from 'marked';
+import Base from '../layouts/Base.astro';
+
+const arquivos = import.meta.glob('../../content/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const mapa: Record<string, string> = {
+  privacidade: 'politica_privacidade.md',
+  termos: 'termos_de_uso.md',
+  reembolso: 'politica_reembolso.md',
+};
+const titulos: Record<string, string> = {
+  privacidade: 'Política de privacidade',
+  termos: 'Termos de uso',
+  reembolso: 'Política de reembolso',
+};
+
+export function getStaticPaths() {
+  return ['privacidade', 'termos', 'reembolso'].map((slug) => ({ params: { slug } }));
+}
+const { slug } = Astro.params as { slug: string };
+const bruto = Object.entries(arquivos).find(([k]) => k.endsWith('/' + mapa[slug]))![1];
+const semTitulo = bruto.replace(/^#\s+.*\r?\n/, '').replace(/politica_reembolso\.md/g, '/reembolso');
+const html = marked.parse(semTitulo, { async: false }) as string;
+---
+<Base title={`${titulos[slug]} | Lucas Rangel`} description={`${titulos[slug]} do site de Lucas Rangel (Rangel Tech).`} path={`/${slug}`} legal>
+  <article class="wrap legal">
+    <h1>{titulos[slug]}</h1>
+    <div set:html={html} />
+    <p style="margin-top:48px"><a class="btn btn--ghost" href="/">Voltar ao início</a></p>
+  </article>
+</Base>

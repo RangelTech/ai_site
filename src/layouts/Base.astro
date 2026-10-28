@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import { SITE, UMAMI, LINKS, WHATSAPP, waHref } from '../data/config';
+import { ICON } from '../lib/icons';
+
+interface Props { title?: string; description?: string; path?: string; legal?: boolean }
+const { title = SITE.titulo, description = SITE.descricao, path = '/', legal = false } = Astro.props;
+const canonical = new URL(path, SITE.url).href;
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: SITE.nome, url: SITE.url, inLanguage: 'pt-BR' },
+    {
+      '@type': 'Person',
+      name: 'Lucas Rangel',
+      jobTitle: 'Especialista em inteligência artificial',
+      url: SITE.url,
+      sameAs: [LINKS.instagram, LINKS.linkedin, LINKS.github, LINKS.kaggle, LINKS.portfolio],
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#05080F" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${SITE.url}/og.png`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try {
+        var lowPower = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
+        if (lowPower) document.documentElement.classList.add('lite');
+      } catch (e) {}
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    {UMAMI.src && <script defer src={UMAMI.src} data-website-id={UMAMI.websiteId} data-do-not-track="true"></script>}
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="header" data-header>
+      <div class="header__bar glass">
+        <a class="brand" href="/" aria-label="Lucas Rangel, início">Lucas <span>Rangel</span></a>
+        <nav class="nav" aria-label="Principal">
+          <a href="/#mentorias">Mentorias</a>
+          <a href="/#projetos">Projetos</a>
+          <a href="/#sobre">Sobre</a>
+          <a href="/#perguntas">Perguntas</a>
+        </nav>
+        <a class="btn btn--primary btn--sm" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener">
+          <Fragment set:html={ICON.message} />WhatsApp
+        </a>
+      </div>
+    </header>
+
+    <main id="conteudo"><slot /></main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <nav class="footer__links" aria-label="Rodapé">
+          <a href={waHref('flutuante')} data-wa="flutuante" data-track="whatsapp_rodape" target="_blank" rel="noopener">WhatsApp</a>
+          <a href={LINKS.instagram} target="_blank" rel="noopener">Instagram</a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+          <a href={LINKS.github} target="_blank" rel="noopener">GitHub</a>
+          <a href={LINKS.portfolio} target="_blank" rel="noopener">Portfólio</a>
+          <a href="/privacidade">Política de privacidade</a>
+          <a href="/termos">Termos de uso</a>
+          <a href="/reembolso">Política de reembolso</a>
+        </nav>
+        <p class="footer__legal">Rangel Technologia e Informação LTDA (Rangel Tech) · CNPJ 65.505.647/0001-10<br />Av. Rio Grande do Sul, 343, sala 03, Setor Campinas, Goiânia/GO</p>
+      </div>
+    </footer>
+
+    {!legal && (
+      <div class="fab" data-fab>
+        <a class="btn btn--primary" data-wa="flutuante" data-track="whatsapp_flutuante" href={waHref('flutuante')} target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
+          <Fragment set:html={ICON.message} /><span class="t">Falar no WhatsApp</span>
+        </a>
+      </div>
+    )}
+
+    <script>
+      import '../scripts/site.ts';
+    </script>
+    <script is:inline define:vars={{ numero: WHATSAPP.numero, sufixo: WHATSAPP.sufixoInstagram }}>
+      window.__wa = { numero: numero, sufixo: sufixo };
+    </script>
+  </body>
+</html>
