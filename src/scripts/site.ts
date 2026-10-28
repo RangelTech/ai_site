@@ -91,61 +91,186 @@ document.addEventListener('click', (e) => {
   );
 })();
 
-/* ---------- Luz por trás do vidro: segue o mouse ou o dedo e o vidro fosco a espalha ---------- */
-(function luzAtras() {
-  const orbs = [...document.querySelectorAll<HTMLElement>('.orb')]; // do mais lento (grande) ao mais rápido
+/* ---------- Fundo vivo: vidro embaçado que "limpa" onde o dedo passa, e brilhos que vão e voltam ---------- */
+(function fundoVivo() {
   const raiz = document.documentElement;
-  if (reduce || orbs.length === 0) return;
-  const pos = orbs.map(() => ({ x: innerWidth * 0.62, y: innerHeight * 0.34 }));
-  const alvo = { x: innerWidth * 0.62, y: innerHeight * 0.34 };
-  const vel = [0.05, 0.09, 0.16];
-  let ativo = false;
-  let raf = 0;
-  let ocioso = 0;
-  const loop = () => {
-    let mexeu = false;
-    orbs.forEach((o, i) => {
-      const p = pos[i];
-      const dx = alvo.x - p.x;
-      const dy = alvo.y - p.y;
-      if (Math.abs(dx) + Math.abs(dy) > 0.4) mexeu = true;
-      p.x += dx * vel[i];
-      p.y += dy * vel[i];
-      o.style.setProperty('--x', p.x.toFixed(1) + 'px');
-      o.style.setProperty('--y', p.y.toFixed(1) + 'px');
-    });
-    // sem ponteiro por um tempo, a luz passeia sozinha, devagar
-    if (!ativo) {
-      const t = performance.now() / 1000;
-      alvo.x = innerWidth * (0.5 + 0.34 * Math.sin(t * 0.17));
-      alvo.y = innerHeight * (0.42 + 0.26 * Math.sin(t * 0.23 + 1.3));
-      mexeu = true;
-    }
-    raf = mexeu ? requestAnimationFrame(loop) : 0;
-  };
-  const liga = () => {
-    if (!raf) raf = requestAnimationFrame(loop);
-  };
-  const toque = (e: PointerEvent) => {
-    alvo.x = e.clientX;
-    alvo.y = e.clientY;
-    ativo = true;
-    raiz.style.setProperty('--o', '1');
-    orbs.forEach((o) => o.style.setProperty('--o', '1'));
-    clearTimeout(ocioso);
-    ocioso = window.setTimeout(() => (ativo = false), 4500);
-    liga();
-  };
-  addEventListener('pointermove', toque, { passive: true });
-  addEventListener('pointerdown', toque, { passive: true });
-  // parallax suave da paisagem com a rolagem
+  // parallax suave da foto com a rolagem
   addEventListener(
     'scroll',
-    () => raiz.style.setProperty('--sy', (scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)).toFixed(4)),
+    () => raiz.style.setProperty('--sy', (scrollY / Math.max(1, raiz.scrollHeight - innerHeight)).toFixed(4)),
     { passive: true },
   );
-  orbs.forEach((o, i) => o.style.setProperty('--o', String([0, 0.45, 0.55][i])));
-  liga();
+
+  const limpo = document.querySelector<HTMLCanvasElement>('[data-limpo]');
+  const brilhos = document.querySelector<HTMLCanvasElement>('[data-brilhos]');
+  if (!limpo || !brilhos) return;
+  const lite = raiz.classList.contains('lite');
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const bctx = brilhos.getContext('2d')!;
+  const lctx = limpo.getContext('2d')!;
+
+  /* --- limpar o embaçado: o rastro vive num canvas pequeno (a foto já é borrada, então a resolução baixa não aparece) --- */
+  const ESC = 8; // 1 px do canvas = 8 px da tela
+  const foto = new Image();
+  const fotoC = document.createElement('canvas');
+  const rastro = document.createElement('canvas');
+  const rctx = rastro.getContext('2d')!;
+  let w = 0, h = 0, fotoOk = false;
+  const dimensiona = () => {
+    w = Math.max(8, Math.ceil(innerWidth / ESC));
+    h = Math.max(8, Math.ceil(innerHeight / ESC));
+    for (const c of [limpo, fotoC, rastro]) { c.width = w; c.height = h; }
+    brilhos.width = Math.round(innerWidth * dpr);
+    brilhos.height = Math.round(innerHeight * dpr);
+    if (fotoOk) {
+      // "cover": a foto preenche a tela sem deformar
+      const r = Math.max(w / foto.naturalWidth, h / foto.naturalHeight);
+      const fw = foto.naturalWidth * r, fh = foto.naturalHeight * r;
+      fotoC.getContext('2d')!.drawImage(foto, (w - fw) / 2, (h - fh) / 2, fw, fh);
+    }
+    energia = 0;
+    lctx.clearRect(0, 0, w, h);
+  };
+  let energia = 0; // quadros restantes até o rastro sumir por completo
+  const alvo = { x: -999, y: -999, ativo: false };
+  let ult: { x: number; y: number } | null = null;
+  const carimba = (x: number, y: number) => {
+    const raio = 170 / ESC;
+    const cx = x / ESC, cy = y / ESC;
+    const g = rctx.createRadialGradient(cx, cy, 0, cx, cy, raio);
+    g.addColorStop(0, 'rgba(255,255,255,0.30)');
+    g.addColorStop(0.55, 'rgba(255,255,255,0.14)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    rctx.fillStyle = g;
+    rctx.fillRect(cx - raio, cy - raio, raio * 2, raio * 2);
+  };
+  const toca = (x: number, y: number) => {
+    alvo.x = x; alvo.y = y; alvo.ativo = true;
+    if (!reduce) {
+      // interpola entre o ponto anterior e o atual, para o traço não ficar com buracos
+      if (ult) {
+        const d = Math.hypot(x - ult.x, y - ult.y);
+        const n = Math.min(12, Math.ceil(d / 28));
+        for (let i = 1; i <= n; i++) carimba(ult.x + ((x - ult.x) * i) / n, ult.y + ((y - ult.y) * i) / n);
+      } else carimba(x, y);
+      energia = 260;
+    }
+    ult = { x, y };
+  };
+  addEventListener('pointermove', (e) => toca(e.clientX, e.clientY), { passive: true });
+  addEventListener('pointerdown', (e) => ((ult = null), toca(e.clientX, e.clientY)), { passive: true });
+  addEventListener('touchmove', (e) => e.touches[0] && toca(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  addEventListener('touchstart', (e) => e.touches[0] && ((ult = null), toca(e.touches[0].clientX, e.touches[0].clientY)), { passive: true });
+  const solta = () => { ult = null; alvo.ativo = false; };
+  document.addEventListener('pointerleave', solta);
+  addEventListener('touchend', solta, { passive: true });
+  addEventListener('blur', solta);
+
+  /* --- brilhos: pontos que orbitam, piscam e às vezes "explodem" para longe e voltam --- */
+  type P = { cx: number; cy: number; rx: number; ry: number; a: number; va: number; vx: number; vy: number; tw: number; ph: number; r: number; tom: number; kick: number; tilt: number };
+  const N = lite ? 26 : innerWidth < 700 ? 42 : 78;
+  const ps: P[] = [];
+  const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+  const nova = (): P => ({
+    cx: rnd(0, innerWidth), cy: rnd(0, innerHeight), rx: rnd(18, 120), ry: rnd(14, 90), a: rnd(0, 6.28), va: rnd(0.12, 0.5) * (Math.random() < 0.5 ? -1 : 1),
+    vx: rnd(-7, 7), vy: rnd(-7, 7), tw: rnd(0.25, 0.9), ph: rnd(0, 6.28), r: rnd(0.8, 2.3), tom: Math.random(), kick: 1, tilt: rnd(0, 3.14),
+  });
+  for (let i = 0; i < N; i++) ps.push(nova());
+  // sprite do brilho, desenhado uma vez
+  const spr = document.createElement('canvas');
+  spr.width = spr.height = 48;
+  const sc = spr.getContext('2d')!;
+  const sg = sc.createRadialGradient(24, 24, 0, 24, 24, 24);
+  sg.addColorStop(0, 'rgba(255,255,255,1)');
+  sg.addColorStop(0.18, 'rgba(190,225,255,0.85)');
+  sg.addColorStop(0.5, 'rgba(90,160,255,0.22)');
+  sg.addColorStop(1, 'rgba(60,120,255,0)');
+  sc.fillStyle = sg;
+  sc.fillRect(0, 0, 48, 48);
+
+  let t0 = performance.now(), proxExplosao = t0 + 1200, halo = { x: -999, y: -999, a: 0 };
+  // no celular o vidro fosco refaz o desfoque a cada quadro, então limitamos a 30 quadros por segundo
+  const intervalo = innerWidth < 700 || lite ? 33 : 0;
+  const quadro = (now: number) => {
+    if (intervalo && now - t0 < intervalo) {
+      if (!document.hidden) requestAnimationFrame(quadro);
+      return;
+    }
+    const dt = Math.min(0.05, (now - t0) / 1000);
+    t0 = now;
+    const t = now / 1000;
+
+    // 1) rastro do embaçado
+    if (energia > 0 && fotoOk) {
+      energia--;
+      rctx.globalCompositeOperation = 'destination-out';
+      rctx.fillStyle = 'rgba(0,0,0,0.018)';
+      rctx.fillRect(0, 0, w, h);
+      rctx.globalCompositeOperation = 'source-over';
+      lctx.clearRect(0, 0, w, h);
+      lctx.globalCompositeOperation = 'source-over';
+      lctx.drawImage(fotoC, 0, 0);
+      lctx.globalCompositeOperation = 'destination-in';
+      lctx.drawImage(rastro, 0, 0);
+      lctx.globalCompositeOperation = 'source-over';
+      if (energia === 0) {
+        rctx.clearRect(0, 0, w, h);
+        lctx.clearRect(0, 0, w, h);
+      }
+    }
+
+    // 2) brilhos
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.clearRect(0, 0, innerWidth, innerHeight);
+    bctx.globalCompositeOperation = 'lighter';
+    // halo suave que acompanha a seta ou o dedo
+    halo.a += ((alvo.ativo ? 1 : 0) - halo.a) * Math.min(1, dt * 3);
+    if (alvo.ativo) { halo.x += (alvo.x - halo.x) * Math.min(1, dt * 6); halo.y += (alvo.y - halo.y) * Math.min(1, dt * 6); }
+    if (halo.a > 0.01) {
+      const g = bctx.createRadialGradient(halo.x, halo.y, 0, halo.x, halo.y, 190);
+      g.addColorStop(0, `rgba(160,210,255,${0.16 * halo.a})`);
+      g.addColorStop(1, 'rgba(160,210,255,0)');
+      bctx.fillStyle = g;
+      bctx.fillRect(halo.x - 190, halo.y - 190, 380, 380);
+    }
+    if (!reduce && now > proxExplosao) {
+      const p = ps[(Math.random() * ps.length) | 0];
+      p.kick = rnd(2.4, 3.8);
+      proxExplosao = now + rnd(500, 1800);
+    }
+    for (const p of ps) {
+      if (!reduce) {
+        p.a += p.va * dt;
+        p.cx += p.vx * dt;
+        p.cy += p.vy * dt;
+        p.kick += (1 - p.kick) * Math.min(1, dt * 1.1); // volta devagar para a órbita
+        if (p.cx < -140) p.cx = innerWidth + 140; else if (p.cx > innerWidth + 140) p.cx = -140;
+        if (p.cy < -140) p.cy = innerHeight + 140; else if (p.cy > innerHeight + 140) p.cy = -140;
+      }
+      const ex = Math.cos(p.a) * p.rx * p.kick, ey = Math.sin(p.a) * p.ry * p.kick;
+      const x = p.cx + ex * Math.cos(p.tilt) - ey * Math.sin(p.tilt);
+      const y = p.cy + ex * Math.sin(p.tilt) + ey * Math.cos(p.tilt);
+      let al = Math.pow(0.5 + 0.5 * Math.sin(t * p.tw + p.ph), 2) * 0.75 + 0.06;
+      al *= 1 + (p.kick - 1) * 0.35; // brilha mais na explosão
+      if (halo.a > 0.05) {
+        const d = Math.hypot(x - halo.x, y - halo.y);
+        if (d < 190) al += (1 - d / 190) * 0.5 * halo.a;
+      }
+      const s = p.r * 7 * (p.kick > 1.4 ? 1.25 : 1);
+      bctx.globalAlpha = Math.min(1, al);
+      bctx.drawImage(spr, x - s, y - s, s * 2, s * 2);
+    }
+    bctx.globalAlpha = 1;
+    if (!document.hidden) requestAnimationFrame(quadro);
+  };
+  const inicia = () => { t0 = performance.now(); requestAnimationFrame(quadro); };
+  document.addEventListener('visibilitychange', () => !document.hidden && inicia());
+  addEventListener('resize', dimensiona);
+
+  foto.onload = () => { fotoOk = true; dimensiona(); };
+  foto.src = '/img/fundo.webp';
+  dimensiona();
+  inicia();
 })();
 
 /* ---------- Entrada suave das seções ---------- */

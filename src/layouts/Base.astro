@@ -29,6 +29,7 @@ const ld = {
     <meta name="description" content={description} />
     <meta name="theme-color" content="#05080F" />
     <meta name="color-scheme" content="dark" />
+    <link rel="preload" as="image" href="/img/fundo.webp" type="image/webp" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
@@ -50,29 +51,11 @@ const ld = {
   </head>
   <body>
     <a class="skip" href="#conteudo">Pular para o conteúdo</a>
-    <div class="aurora" aria-hidden="true">
-      <div class="scene">
-        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" focusable="false">
-          <defs>
-            <linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050a1c" /><stop offset="0.55" stop-color="#0a1840" /><stop offset="1" stop-color="#04101f" /></linearGradient>
-            <linearGradient id="f1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b4cf0" stop-opacity="0.9" /><stop offset="0.6" stop-color="#1b7fe8" stop-opacity="0.55" /><stop offset="1" stop-color="#12c2c8" stop-opacity="0.5" /></linearGradient>
-            <linearGradient id="f2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17b6c4" stop-opacity="0.75" /><stop offset="0.5" stop-color="#2358d8" stop-opacity="0.55" /><stop offset="1" stop-color="#5a35d0" stop-opacity="0.5" /></linearGradient>
-            <linearGradient id="f3" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#081a48" stop-opacity="0.95" /><stop offset="1" stop-color="#2a6fe0" stop-opacity="0.5" /></linearGradient>
-            <linearGradient id="brilho" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#bfe6ff" stop-opacity="0" /><stop offset="0.5" stop-color="#bfe6ff" stop-opacity="0.7" /><stop offset="1" stop-color="#bfe6ff" stop-opacity="0" /></linearGradient>
-          </defs>
-          <rect width="1600" height="900" fill="url(#base)" />
-          <path class="s1" fill="url(#f1)" d="M-100 560C150 330 360 330 620 470S1060 700 1300 520 1620 250 1720 300V-100H-100Z" />
-          <path class="s2" fill="url(#f2)" d="M-100 900C100 700 330 640 560 740S980 930 1240 760 1560 540 1720 580V1000H-100Z" />
-          <path class="s3" fill="url(#f3)" d="M-100 380C140 230 330 260 540 360S900 520 1120 380 1500 120 1720 200V-100H-100Z" opacity="0.85" />
-          <g fill="none" stroke="url(#brilho)" stroke-width="1.6">
-            <path d="M-100 560C150 330 360 330 620 470S1060 700 1300 520 1620 250 1720 300" />
-            <path d="M-100 900C100 700 330 640 560 740S980 930 1240 760 1560 540 1720 580" />
-            <path d="M-100 380C140 230 330 260 540 360S900 520 1120 380 1500 120 1720 200" opacity="0.6" />
-          </g>
-        </svg>
-      </div>
-      <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i>
-      <i class="orb orb--c"></i><i class="orb orb--b"></i><i class="orb orb--a"></i>
+    <div class="fundo" aria-hidden="true">
+      <div class="fundo__nevoa"></div>
+      <canvas class="fundo__limpo" data-limpo></canvas>
+      <div class="fundo__tom"></div>
+      <canvas class="fundo__brilhos" data-brilhos></canvas>
     </div>
     <div class="grain" aria-hidden="true"></div>
 
