@@ -11,7 +11,7 @@ export interface Area {
 export const AREAS: Record<string, Area> = {
   agentes: {
     titulo: 'Agentes de IA',
-    texto: 'Desenvolvemos agentes de inteligência artificial para resolver qualquer problema da sua empresa: atendimento, vendas, financeiro, análise de dados, documentos. Cada agente recebe uma função, as ferramentas certas e a memória do seu negócio.',
+    texto: 'Desenvolvemos agentes de inteligência artificial para resolver qualquer problema da sua empresa: atendimento, vendas, financeiro, análise de dados, documentos. Cada agente recebe uma função, as ferramentas certas e a memória do seu negócio. Tudo dentro da sua arquitetura, sem depender de serviço de terceiros.',
     feitos: ['Plataforma onde vários agentes trabalham juntos, cada um com a sua função', 'Agente que responde perguntas em português sobre os documentos e os bancos de dados da empresa', 'Agentes que recomendam preço e produção no lugar da planilha'],
   },
   visao: {
@@ -21,17 +21,17 @@ export const AREAS: Record<string, Area> = {
   },
   propria: {
     titulo: 'IA própria, sem restrições',
-    texto: 'Desenvolvemos e implantamos o seu próprio modelo de inteligência artificial, com muito menos recusas em responder, dentro do seu ambiente e sem depender de nenhum provedor externo. Os seus dados não saem da sua empresa.',
+    texto: 'Desenvolvemos e implantamos o seu próprio modelo de inteligência artificial, com muito menos recusas em responder. Tudo roda dentro da sua própria arquitetura, sem serviço de terceiros e sem precisar de nenhuma IA de fora. Os seus dados não saem da sua empresa: você fica protegido e pode fazer o que quiser com o seu modelo.',
     feitos: ['Modelos rodando em servidor próprio, com API e custo por resposta medido', 'Versões compactadas que rodam em máquinas menores sem perder qualidade', 'Cluster de placas de vídeo para processar IA em grande volume'],
   },
   voz: {
     titulo: 'Clonagem de voz e deepfake',
-    texto: 'Avatar em tempo real com o seu rosto e a sua voz, para gravar vídeos e atender sem estar na frente da câmera. Já temos uma prova de conceito funcionando.',
+    texto: 'Avatar em tempo real com o seu rosto e a sua voz, para gravar vídeos e atender sem estar na frente da câmera. Roda na sua própria arquitetura, sem serviço de terceiros: o seu rosto e a sua voz ficam só com você. Já temos uma prova de conceito funcionando.',
     feitos: ['Troca de rosto e conversão de voz em tempo real', 'Transcrição de áudio e voz sintética com baixa latência'],
   },
   imagemia: {
     titulo: 'Imagem e vídeo por IA',
-    texto: 'Montamos para você um ambiente próprio de geração de imagens e vídeos com IA. Nada de plataforma paga, mensalidade ou crédito que acaba: tudo roda dentro da sua infraestrutura, o custo é só o da GPU e sai bem mais barato. Os seus prompts e as suas imagens não saem da empresa.',
+    texto: 'Montamos para você um ambiente próprio de geração de imagens e vídeos com IA. Nada de plataforma paga, mensalidade ou crédito que acaba: tudo roda dentro da sua própria arquitetura, sem serviço de terceiros. O custo é só o da GPU e sai bem mais barato. Os seus prompts e as suas imagens não saem da empresa, e você gera o que quiser, protegido.',
     feitos: ['Ambientes próprios de geração de imagem e de vídeo, na GPU do cliente', 'Geração em lote com o custo por imagem medido', 'Pipelines de vídeo com codificação e entrega automáticas'],
   },
   dados: {
