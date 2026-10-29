@@ -235,6 +235,9 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, com print, áudio ou o erro colado</span></li>
             <li><Fragment set:html={ICON.check} /><span>Você aprende no seu ritmo, sem horário marcado</span></li>
             <li><Fragment set:html={ICON.check} /><span>A minha área do aluno e as habilidades técnicas, de bônus</span></li>
+            <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontros por vídeo</span></li>
+            <li class="off"><Fragment set:html={ICON.x} /><span>Sem acompanhamento semanal do seu projeto</span></li>
+            <li class="off"><Fragment set:html={ICON.x} /><span>Sem os modelos de projeto dos meus clientes</span></li>
           </ul>
           <div class="seats seats--m">
             <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''}></i>)}</div>
