@@ -490,7 +490,11 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 .modal__feitos li { position: relative; padding-left: 22px; font-size: 16px; line-height: 1.4; color: #e3ebf8; }
 .modal__feitos li::before { content: ''; position: absolute; left: 4px; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
 .modal__card .btn { margin-top: var(--s2); }
-.modal__x { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16); transition: background var(--t-fast); }
-.modal__x:hover { background: rgba(255, 255, 255, 0.2); }
-.modal__x svg { width: 18px; height: 18px; }
+.modal__card > .modal__x { position: absolute; z-index: 5; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.16); transition: background var(--t-fast); }
+.modal__card > .modal__x:hover { background: rgba(255, 255, 255, 0.2); }
+.modal__card > .modal__x svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) { .modal[open], .modal[open]::backdrop { animation: none; } }
+
+/* ---------- Cards com print real ---------- */
+.project__art--img { background: #071226; }
+.project__art--img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }

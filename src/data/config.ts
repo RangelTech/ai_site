@@ -5,7 +5,7 @@ export const SITE = {
   nome: 'Lucas Rangel',
   titulo: 'Lucas Rangel | Especialista em IA: mentoria e projetos',
   descricao:
-    'Especialista em IA com 12 anos de experiência. Eu resolvo o problema da sua empresa com IA ou ensino você a construir o seu produto. Mentoria individual e com acompanhamento.',
+    'Especialista em IA: 20 anos em tecnologia, 12 deles só com inteligência artificial. Eu resolvo o problema da sua empresa com IA ou ensino você a construir o seu produto. Mentoria individual e com acompanhamento.',
 };
 
 export const WHATSAPP = {

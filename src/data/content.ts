@@ -47,6 +47,7 @@ export interface Projeto {
   motif: Motif;
   link?: { rotulo: string; href: string };
   destaque?: number; // ordem entre os seis visíveis
+  img?: string; // arquivo em /img/projetos (print real ou imagem de exemplo); sem ele vale a ilustração do `motif`
 }
 
 const gh = (repo: string) => ({ rotulo: 'GitHub', href: GH + repo });
@@ -56,28 +57,28 @@ export const PROJETOS: Projeto[] = [
   { titulo: 'Agentes de IA que trabalham pela sua empresa', frase: 'Uma plataforma onde cada agente tem a sua função, as suas ferramentas e a memória do seu negócio.', grupo: 'empresas', motif: 'agents', destaque: 1 },
   { titulo: 'Cliente 360 e CRM', frase: 'Vários sistemas num painel só, com as análises que a diretoria usa para decidir.', grupo: 'empresas', motif: 'dash', destaque: 2 },
   { titulo: 'Agentes que decidem preço e produção', frase: 'Troque a planilha por uma recomendação pronta na hora de definir preço e mix.', grupo: 'empresas', motif: 'agents' },
-  { titulo: 'Recomendação que aumenta a venda', frase: 'Sugestões de produto testadas em produção, para vender mais para quem já compra.', grupo: 'empresas', motif: 'data' },
-  { titulo: 'Previsão de vendas e de demanda', frase: 'Os dados da empresa organizados e a previsão do que vai sair, semana a semana.', grupo: 'empresas', motif: 'data' },
-  { titulo: 'Motor de risco de crédito', frase: 'Lago de dados, painéis e um modelo que separa risco financeiro de má-fé.', grupo: 'empresas', motif: 'data' },
-  { titulo: 'Clonamos o seu sistema obsoleto em tecnologia nova', frase: 'O sistema velho que trava a operação ganha uma versão moderna, sem a empresa parar.', grupo: 'empresas', motif: 'code' },
+  { titulo: 'Recomendação que aumenta a venda', img: 'recomendacao', frase: 'Sugestões de produto testadas em produção, para vender mais para quem já compra.', grupo: 'empresas', motif: 'data' },
+  { titulo: 'Previsão de vendas e de demanda', img: 'previsao', frase: 'Os dados da empresa organizados e a previsão do que vai sair, semana a semana.', grupo: 'empresas', motif: 'data' },
+  { titulo: 'Motor de risco de crédito', img: 'risco', frase: 'Lago de dados, painéis e um modelo que separa risco financeiro de má-fé.', grupo: 'empresas', motif: 'data' },
+  { titulo: 'Clonamos o seu sistema obsoleto em tecnologia nova', img: 'clonar', frase: 'O sistema velho que trava a operação ganha uma versão moderna, sem a empresa parar.', grupo: 'empresas', motif: 'code' },
   { titulo: 'ERP e SaaS do zero', frase: 'Sistema sob medida, multiempresa, do banco de dados à tela.', grupo: 'empresas', motif: 'erp', link: gh('Projeto-Sistema-ERP') },
   { titulo: 'Agente de IA que conversa com os seus documentos', frase: 'Pergunte em português e receba a resposta tirada dos arquivos da sua empresa, com a fonte.', grupo: 'empresas', motif: 'rag', link: gh('rag-chat') },
-  { titulo: 'Painéis de BI para a diretoria', frase: 'Painéis de gestão no ar em poucos dias, rodando no servidor da própria empresa.', grupo: 'empresas', motif: 'dash', link: gh('metabase-postgres-docker') },
-  { titulo: 'Câmeras que enxergam, seguem e medem', frase: 'Visão computacional que detecta pessoas, veículos e objetos em imagem e em vídeo.', grupo: 'fisico', motif: 'vision', link: gh('vision-detection-tracking-bench'), destaque: 3 },
+  { titulo: 'Painéis de BI para a diretoria', img: 'bi', frase: 'Painéis de gestão no ar em poucos dias, rodando no servidor da própria empresa.', grupo: 'empresas', motif: 'dash', link: gh('metabase-postgres-docker') },
+  { titulo: 'Câmeras que enxergam, seguem e medem', img: 'cameras', frase: 'Visão computacional que detecta pessoas, veículos e objetos em imagem e em vídeo.', grupo: 'fisico', motif: 'vision', link: gh('vision-detection-tracking-bench'), destaque: 3 },
   { titulo: 'Câmeras inteligentes', frase: 'O vídeo das câmeras vira evento que dá para pesquisar, investigar e agir.', grupo: 'fisico', motif: 'vision', link: gh('multi-camera-rtsp-capacity') },
   { titulo: 'Prototipagem de sensores e eletrônica', frase: 'Do circuito na bancada à nuvem: placa, firmware, leitura do sensor e painel.', grupo: 'fisico', motif: 'sensor', link: gh('sensoriamento_esp32') },
   { titulo: 'Da foto ao modelo 3D', frase: 'Transformar imagens em modelo 3D e em gêmeo digital de um local ou de uma peça.', grupo: 'fisico', motif: 'mesh', link: gh('image-to-3d-and-digital-twin') },
   { titulo: 'IA própria, rodando no seu servidor', frase: 'O seu próprio modelo de IA, com a sua API e o custo sob controle, sem mandar dado para fora.', grupo: 'ia', motif: 'chip', link: gh('llm-serving-engines-bench'), destaque: 4 },
-  { titulo: 'IA sem limites e sem recusa', frase: 'Modelo próprio sem as travas dos serviços públicos, para quem precisa de resposta e não de sermão.', grupo: 'ia', motif: 'chip' },
+  { titulo: 'IA sem limites e sem recusa', img: 'semlimites', frase: 'Modelo próprio sem as travas dos serviços públicos, para quem precisa de resposta e não de sermão.', grupo: 'ia', motif: 'chip' },
   { titulo: 'IA compacta que cabe em máquina pequena', frase: 'Versões enxutas do mesmo modelo, que rodam em equipamento barato sem perder qualidade.', grupo: 'ia', motif: 'chip', link: gh('quantization-and-offload-lab') },
   { titulo: 'Voz que ouve e fala', frase: 'Transcrição de áudio e voz sintética em tempo real.', grupo: 'ia', motif: 'wave', link: gh('voice-stt-tts-bench') },
-  { titulo: 'Clonagem de voz e deepfake em tempo real', frase: 'Avatar com o seu rosto e a sua voz para gravar vídeo sem estar na frente da câmera.', grupo: 'ia', motif: 'wave' },
-  { titulo: 'Imagens e vídeos gerados por IA', frase: 'Geração de imagem e de vídeo com custo conhecido por resultado.', grupo: 'ia', motif: 'wave', link: gh('image-video-generation-bench') },
+  { titulo: 'Clonagem de voz e deepfake em tempo real', img: 'voz', frase: 'Avatar com o seu rosto e a sua voz para gravar vídeo sem estar na frente da câmera.', grupo: 'ia', motif: 'wave' },
+  { titulo: 'Imagens e vídeos gerados por IA', img: 'imagemia', frase: 'Geração de imagem e de vídeo com custo conhecido por resultado.', grupo: 'ia', motif: 'wave', link: gh('image-video-generation-bench') },
   { titulo: 'IA que corrige código', frase: 'Acha o problema e abre a correção; a decisão final é de uma pessoa.', grupo: 'ia', motif: 'code' },
-  { titulo: 'Assistente de código dentro do editor', frase: 'Uma extensão que leva o agente de IA para dentro do editor do programador.', grupo: 'ia', motif: 'code', link: gh('hermes-vscode') },
+  { titulo: 'Assistente de código dentro do editor', img: 'codigo', frase: 'Uma extensão que leva o agente de IA para dentro do editor do programador.', grupo: 'ia', motif: 'code', link: gh('hermes-vscode') },
   { titulo: 'Robôs que usam sites por você', frase: 'Automação de navegador: preenche, consulta e confere como uma pessoa faria.', grupo: 'automacao', motif: 'flow', link: gh('web-automation-lab') },
   { titulo: 'Agentes de IA mais baratos', frase: 'Técnicas que reduzem o custo de rodar agentes, dizendo com clareza o que foi provado.', grupo: 'automacao', motif: 'flow', link: gh('agent-tooling-token-savings') },
-  { titulo: 'Dados públicos em escala', frase: 'Transformamos dado aberto do governo em produto e painel.', grupo: 'automacao', motif: 'data' },
+  { titulo: 'Dados públicos em escala', img: 'publicos', frase: 'Transformamos dado aberto do governo em produto e painel.', grupo: 'automacao', motif: 'data' },
   { titulo: 'Roteirização, desenho 3D e produção de conteúdo', frase: 'Dezenas de ferramentas testadas e transformadas em fluxos prontos: o que você recebe é o resultado, não a ferramenta.', grupo: 'automacao', motif: 'flow', link: gh('app-platforms-smoke-tests') },
   { titulo: 'LUAR, atendimento com IA', frase: 'O nosso produto: caixa de entrada com IA, Kanban e agentes que trabalham nos computadores da empresa.', grupo: 'proprios', motif: 'agents', link: { rotulo: 'Site do LUAR', href: LINKS.luar }, destaque: 5 },
   { titulo: 'Cluster multi-GPU para IA em massa', frase: 'Infraestrutura própria de placas de vídeo para processar IA em grande volume, com custo por resultado medido e publicado.', grupo: 'proprios', motif: 'chip', link: { rotulo: 'Hub', href: LINKS.hub }, destaque: 6 },
@@ -99,6 +100,6 @@ export const FAQ: { p: string; r: string }[] = [
 // Depoimentos: trocar pelos reais quando existirem (ver README, seção "Conteúdo de exemplo").
 export const DEPOIMENTOS = [
   { texto: 'Eu achava que IA era só o ChatGPT. Na mentoria a gente montou o atendimento automático da minha clínica, e eu entendo cada peça do que está rodando. Quando quebra, eu mesma conserto.', nome: 'Carla M.', arroba: '@carla.exemplo', cidade: 'Goiânia, GO', produto: 'Mentoria individual' },
-  { texto: 'Eu sempre travava na hora de colocar no ar. O Lucas me mostrou o ambiente certo na primeira semana. Hoje vendo automação como serviço, com o meu CNPJ.', nome: 'Rafael T.', arroba: '@rafa.exemplo', cidade: 'Curitiba, PR', produto: 'Mentoria individual' },
+  { texto: 'Eu achava que inteligência artificial era só chat. Hoje eu entendo que existe um universo de ferramentas: geração de imagem, previsão de demanda, visão computacional, e eu sei qual usar em cada problema.', nome: 'Rafael T.', arroba: '@rafa.exemplo', cidade: 'Curitiba, PR', produto: 'Mentoria individual' },
   { texto: 'Fiquei no acompanhamento pelo WhatsApp. Toda vez que a IA não obedecia, eu mandava o print no grupo e saía de lá destravada.', nome: 'Juliana P.', arroba: '@ju.exemplo', cidade: 'Recife, PE', produto: 'Mentoria com acompanhamento' },
 ];

@@ -41,7 +41,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <figure class="portrait glass reveal" style="--d:200ms">
         <div class="portrait__img">
           <Image src={lucas} widths={[420, 640, 840]} sizes="(min-width: 960px) 420px, 90vw" format="webp" quality={72} alt="Lucas Rangel, especialista em inteligência artificial" loading="eager" fetchpriority="high" />
-          <span class="portrait__chip">12 anos em tecnologia</span>
+          <span class="portrait__chip">20 anos em tecnologia</span>
           <figcaption class="portrait__cap"><b>Lucas Rangel</b><span>Especialista em inteligência artificial</span></figcaption>
         </div>
       </figure>
@@ -85,7 +85,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="projects">
         {listaProjetos.map((p, i) => (
           <article class="project glass glass--m reveal" style={`--d:${(i % 6) * 70}ms`} data-grupo={p.grupo} data-extra={p.destaque ? '0' : '1'}>
-            <div class="project__art" set:html={MOTIFS[p.motif]} />
+            {p.img ? <div class="project__art project__art--img"><img src={`/img/projetos/${p.img}.webp`} alt={p.titulo} loading="lazy" decoding="async" width="1000" height="500" /></div> : <div class="project__art" set:html={MOTIFS[p.motif]} />}
             <div class="project__body">
               <span class="project__tag">{GRUPOS[p.grupo]}</span>
               <h3>{p.titulo}</h3>
@@ -146,15 +146,15 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
           <span class="eyebrow">Sobre</span>
           <h2 class="display h2" id="t-sobre" style="margin-top:12px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
           <p class="about__lead">Especialista em inteligência artificial. Eu coloco IA para trabalhar dentro de empresas, e ensino quem quer fazer o mesmo.</p>
-          <p>Em doze anos de tecnologia, entreguei agentes de IA, visão computacional, plataformas de dados e sistemas inteiros para varejo, finanças, indústria e educação, em empresas que você reconhece na faixa lá em cima.</p>
+          <p>São 20 anos de tecnologia, e 12 deles só com inteligência artificial. Nesse tempo eu entreguei agentes de IA, visão computacional, plataformas de dados e sistemas inteiros para varejo, finanças, indústria e educação, em empresas que você reconhece na faixa lá em cima.</p>
           <p>A <b>Rangel Tech</b> é a minha consultoria de IA, em Goiânia. Eu e a minha equipe projetamos, construímos e colocamos no ar soluções sob medida, rodando no ambiente do cliente, do primeiro protótipo à produção.</p>
-          <p>Mantenho também um laboratório próprio: eu testo modelos, placas de vídeo e ferramentas na prática, meço custo e resultado e publico tudo, com código e dado, no GitHub, no Kaggle e no portfólio. É por isso que eu sei o que funciona antes de recomendar.</p>
+          <p>Inteligência artificial não é só chat: é visão, previsão, voz, imagem, dados. Por isso mantenho um laboratório próprio: eu testo modelos, placas de vídeo e ferramentas na prática, meço custo e resultado e publico tudo, com código e dado, no GitHub, no Kaggle e no portfólio. É por isso que eu sei o que funciona antes de recomendar.</p>
           <ul class="stats">
-            <li><b>12 anos</b><span>em tecnologia</span></li>
+            <li><b>20 anos</b><span>em tecnologia, 12 só com IA</span></li>
             <li><b>{totalEmpMap}</b><span>empresas atendidas</span></li>
             <li><b>3</b><span>formações: mecatrônica, dados e IA</span></li>
           </ul>
-          <p class="about__edu">Engenharia Mecatrônica (IFG) · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
+          <p class="about__edu">Engenharia Mecatrônica · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
           <div class="links">
             <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
             <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub<Fragment set:html={ICON.arrowUpRight} /></a>
@@ -269,7 +269,6 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <ul class="not">
         <li class="reveal"><Fragment set:html={ICON.x} /><span>Você procura um curso gravado para assistir e esquecer. Aqui você põe a mão no projeto.</span></li>
         <li class="reveal" style="--d:80ms"><Fragment set:html={ICON.x} /><span>Você só quer um emprego. Eu ensino a vender o próprio trabalho.</span></li>
-        <li class="reveal" style="--d:160ms"><Fragment set:html={ICON.x} /><span>Você espera dinheiro fácil sem trabalhar. Aqui o resultado vem de construir e vender.</span></li>
       </ul>
     </div>
   </section>

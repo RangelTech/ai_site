@@ -169,13 +169,14 @@ document.addEventListener('click', (e) => {
   addEventListener('blur', solta);
 
   /* --- brilhos: pontos que orbitam, piscam e às vezes "explodem" para longe e voltam --- */
-  type P = { cx: number; cy: number; rx: number; ry: number; a: number; va: number; vx: number; vy: number; tw: number; ph: number; r: number; tom: number; kick: number; tilt: number };
+  type P = { cx: number; cy: number; rx: number; ry: number; a: number; va: number; vx: number; vy: number; tw: number; ph: number; r: number; tom: number; kick: number; tilt: number; vis: number; fase: number; ate: number; fim: number; boost: number; px: number; py: number };
   const N = lite ? 14 : innerWidth < 700 ? 22 : 34;
   const ps: P[] = [];
   const rnd = (a: number, b: number) => a + Math.random() * (b - a);
   const nova = (): P => ({
-    cx: rnd(0, innerWidth), cy: rnd(0, innerHeight), rx: rnd(18, 120), ry: rnd(14, 90), a: rnd(0, 6.28), va: rnd(0.08, 0.32) * (Math.random() < 0.5 ? -1 : 1),
+    cx: rnd(0, innerWidth), cy: rnd(0, innerHeight), rx: rnd(18, 120), ry: rnd(14, 90), a: rnd(0, 6.28), va: rnd(0.22, 0.6) * (Math.random() < 0.5 ? -1 : 1),
     vx: rnd(-7, 7), vy: rnd(-7, 7), tw: rnd(0.25, 0.9), ph: rnd(0, 6.28), r: rnd(0.8, 2.3), tom: Math.random(), kick: 1, tilt: rnd(0, 3.14),
+    vis: 1, fase: 0, ate: performance.now() + rnd(1500, 12000), fim: 0, boost: 1, px: 0, py: 0,
   });
   for (let i = 0; i < N; i++) ps.push(nova());
   // sprite do brilho, desenhado uma vez
@@ -190,7 +191,7 @@ document.addEventListener('click', (e) => {
   sc.fillStyle = sg;
   sc.fillRect(0, 0, 48, 48);
 
-  let t0 = performance.now(), proxExplosao = t0 + 1200, halo = { x: -999, y: -999, a: 0 };
+  let t0 = performance.now(), halo = { x: -999, y: -999, a: 0 };
   // no celular o vidro fosco refaz o desfoque a cada quadro, então limitamos a 30 quadros por segundo
   const intervalo = innerWidth < 700 || lite ? 33 : 0;
   const quadro = (now: number) => {
@@ -235,30 +236,72 @@ document.addEventListener('click', (e) => {
       bctx.fillStyle = g;
       bctx.fillRect(halo.x - 190, halo.y - 190, 380, 380);
     }
-    if (!reduce && now > proxExplosao) {
-      const p = ps[(Math.random() * ps.length) | 0];
-      p.kick = rnd(2.4, 3.8);
-      proxExplosao = now + rnd(500, 1800);
-    }
     for (const p of ps) {
       if (!reduce) {
-        p.a += p.va * dt;
+        // ciclo do elétron: órbita lenta -> acelera -> some -> reaparece em outro ponto
+        if (p.fase === 0 && now > p.ate) {
+          p.fase = 1;
+          p.fim = now + rnd(450, 800);
+        } else if (p.fase === 1) {
+          p.boost += (8 - p.boost) * Math.min(1, dt * 7);
+          p.kick += (1.5 - p.kick) * Math.min(1, dt * 4);
+          if (now > p.fim) p.fase = 2;
+        } else if (p.fase === 2) {
+          p.vis -= dt * 6;
+          if (p.vis <= 0) {
+            p.vis = 0;
+            p.cx = rnd(0, innerWidth);
+            p.cy = rnd(0, innerHeight);
+            p.rx = rnd(18, 120);
+            p.ry = rnd(14, 90);
+            p.tilt = rnd(0, 3.14);
+            p.a = rnd(0, 6.28);
+            p.kick = 1;
+            p.fase = 3;
+            p.boost = 5; // chega ainda rápido e desacelera
+            p.px = p.py = 0;
+          }
+        } else if (p.fase === 3) {
+          p.vis = Math.min(1, p.vis + dt * 1.8);
+          p.boost += (1 - p.boost) * Math.min(1, dt * 2.5);
+          if (p.vis >= 1) {
+            p.fase = 0;
+            p.boost = 1;
+            p.ate = now + rnd(5000, 15000);
+          }
+        }
+        if (p.fase === 0) {
+          p.boost += (1 - p.boost) * Math.min(1, dt * 3);
+          p.kick += (1 - p.kick) * Math.min(1, dt * 2);
+        }
+        p.a += p.va * p.boost * dt;
         p.cx += p.vx * dt;
         p.cy += p.vy * dt;
-        p.kick += (1 - p.kick) * Math.min(1, dt * 1.1); // volta devagar para a órbita
         if (p.cx < -140) p.cx = innerWidth + 140; else if (p.cx > innerWidth + 140) p.cx = -140;
         if (p.cy < -140) p.cy = innerHeight + 140; else if (p.cy > innerHeight + 140) p.cy = -140;
       }
       const ex = Math.cos(p.a) * p.rx * p.kick, ey = Math.sin(p.a) * p.ry * p.kick;
       const x = p.cx + ex * Math.cos(p.tilt) - ey * Math.sin(p.tilt);
       const y = p.cy + ex * Math.sin(p.tilt) + ey * Math.cos(p.tilt);
-      let al = Math.pow(0.5 + 0.5 * Math.sin(t * p.tw + p.ph), 2) * 0.5 + 0.04;
-      al *= 1 + (p.kick - 1) * 0.35; // brilha mais na explosão
+      let al = Math.pow(0.5 + 0.5 * Math.sin(t * p.tw + p.ph), 2) * 0.5 + 0.06;
+      al *= 1 + (p.boost - 1) * 0.12; // acende ao acelerar
       if (halo.a > 0.05) {
         const d = Math.hypot(x - halo.x, y - halo.y);
         if (d < 190) al += (1 - d / 190) * 0.5 * halo.a;
       }
-      const s = p.r * 7 * (p.kick > 1.4 ? 1.25 : 1);
+      al *= p.vis;
+      const s = p.r * 7;
+      // rastro curto enquanto o elétron está rápido
+      if (p.boost > 2.2 && p.px && p.vis > 0.05) {
+        for (let k = 1; k <= 4; k++) {
+          const f = k / 5;
+          bctx.globalAlpha = Math.min(1, al) * (1 - f) * 0.5;
+          const rs = s * (1 - f * 0.4);
+          bctx.drawImage(spr, x + (p.px - x) * f - rs, y + (p.py - y) * f - rs, rs * 2, rs * 2);
+        }
+      }
+      p.px = x;
+      p.py = y;
       bctx.globalAlpha = Math.min(1, al);
       bctx.drawImage(spr, x - s, y - s, s * 2, s * 2);
     }
