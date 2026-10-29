@@ -1,6 +1,6 @@
 // Comportamento do site. Sem dependências. Tudo degrada bem sem JavaScript.
 
-import { vagasRestantes, fraseVagas, fraseVagasCurta, fimDoMes, fraseFaltam } from '../lib/mes';
+import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, fimDoMes, fraseFaltam } from '../lib/mes';
 
 type Dados = Record<string, string | number | boolean>;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -336,6 +336,10 @@ document.addEventListener('click', (e) => {
   document.querySelectorAll<HTMLElement>('[data-vagas-frase]').forEach((e) => (e.textContent = fraseVagas(n) + '.'));
   document.querySelectorAll<HTMLElement>('[data-vagas-curta]').forEach((e) => (e.textContent = fraseVagasCurta(n)));
   document.querySelectorAll<HTMLElement>('[data-dots] i').forEach((e, i, todos) => e.classList.toggle('taken', i < todos.length - n));
+  const m = mentoradosRestantes(hoje);
+  document.querySelectorAll<HTMLElement>('[data-mentorados-frase]').forEach((e) => (e.textContent = fraseMentorados(m) + '.'));
+  document.querySelectorAll<HTMLElement>('[data-mentorados-curta]').forEach((e) => (e.textContent = `restam ${m} vagas`));
+  document.querySelectorAll<HTMLElement>('[data-dots-m] i').forEach((e, i, todos) => e.classList.toggle('taken', i < todos.length - m));
   document.querySelectorAll<HTMLElement>('[data-fim-texto]').forEach((e) => (e.textContent = fim.texto));
   document.querySelectorAll<HTMLElement>('[data-fim-faltam]').forEach((e) => (e.textContent = fraseFaltam(fim.faltam)));
 })();

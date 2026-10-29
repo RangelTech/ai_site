@@ -3,6 +3,7 @@
 // Usado no build (valor inicial do HTML) e no navegador (valor do dia de quem está visitando).
 
 export const TOTAL_VAGAS = 4;
+export const TOTAL_MENTORADOS = 15;
 
 const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 
@@ -10,6 +11,16 @@ const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julh
 export function vagasRestantes(d: Date = new Date()): number {
   const dia = d.getDate();
   return dia <= 10 ? 3 : dia <= 20 ? 2 : 1;
+}
+
+/** Acompanhamento (até 15 mentorados): mesma regra de terço do mês. Dias 1 a 10: 11 vagas. 11 a 20: 7. Dia 21 em diante: 3. */
+export function mentoradosRestantes(d: Date = new Date()): number {
+  const dia = d.getDate();
+  return dia <= 10 ? 11 : dia <= 20 ? 7 : 3;
+}
+
+export function fraseMentorados(n: number): string {
+  return `Restam ${n} de ${TOTAL_MENTORADOS} vagas`;
 }
 
 /** Frase curta para o cartão: "Restam 3 de 4 vagas" ou "Resta só 1 de 4 vagas". */

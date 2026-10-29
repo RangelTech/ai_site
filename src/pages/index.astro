@@ -10,7 +10,7 @@ import { AREAS } from '../data/areas';
 import { EMPRESAS_INFO } from '../data/empresas_info';
 const DADOS_MODAL = { ...AREAS, ...Object.fromEntries(Object.entries(EMPRESAS_INFO).map(([k, v]) => ['emp:' + k, v])) };
 import { waHref, VAGAS, BONUS, LINKS } from '../data/config';
-import { vagasRestantes, fraseVagas, fraseVagasCurta, fimDoMes, fraseFaltam } from '../lib/mes';
+import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS, fimDoMes, fraseFaltam } from '../lib/mes';
 import mentorados from '../data/mentorados_ficticios.json';
 import empresasMapa from '../data/empresas.json';
 
@@ -18,6 +18,7 @@ const totalMap = mentorados.pontos.length;
 const totalEmpMap = empresasMapa.empresas.length;
 const estadosMap = new Set(mentorados.pontos.map((p: any) => p.uf)).size;
 const restantes = vagasRestantes();
+const mRestantes = mentoradosRestantes();
 const fim = fimDoMes();
 const totalBonus = BONUS.itens.reduce((a, b) => a + b.valor, 0);
 const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR');
@@ -210,10 +211,12 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
           <div class="price">R$ 5.000</div>
           <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
           <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Três encontros por semana por vídeo, só nós dois</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Eu acompanho o seu projeto e digo o próximo passo</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
-            <li><Fragment set:html={ICON.check} /><span>As skills e os modelos de projeto que eu uso nos meus clientes</span></li>
+            <li><Fragment set:html={ICON.check} /><span><b>Três encontros por semana por vídeo</b>, só nós dois: cerca de 12 por mês</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu guio o seu projeto e digo o próximo passo toda semana</span></li>
+            <li><Fragment set:html={ICON.check} /><span>A gente monta as contas e o ambiente juntos, na tela, do zero</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Os modelos de projeto que eu uso nos meus clientes</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe entre um encontro e outro</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Tudo o que está na mentoria com acompanhamento</span></li>
           </ul>
           <div class="seats">
             <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''}></i>)}</div>
@@ -231,10 +234,26 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
             <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, com print, áudio ou o erro colado</span></li>
             <li><Fragment set:html={ICON.check} /><span>Você aprende no seu ritmo, sem horário marcado</span></li>
-            <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontros por vídeo</span></li>
+            <li><Fragment set:html={ICON.check} /><span>A minha área do aluno e as habilidades técnicas, de bônus</span></li>
           </ul>
+          <div class="seats seats--m">
+            <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''}></i>)}</div>
+            <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> Atendo no máximo {TOTAL_MENTORADOS} mentorados ao mesmo tempo, para responder cada dúvida.</p>
+          </div>
+          <p class="small muted plan__up">Quer me ver por vídeo toda semana? <a href="#individual">Veja a mentoria individual</a>.</p>
           <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Entrar no acompanhamento</a>
         </article>
+      </div>
+
+      <div class="cmp glass reveal" role="table" aria-label="Comparativo das duas mentorias">
+        <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">Acompanhamento<br /><b>R$ 1.000</b></span><span role="columnheader" class="hi">Individual<br /><b>R$ 5.000</b></span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Por mensagem, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu destravo cada dúvida</span><span role="cell" class="hi">Eu guio e digo o próximo passo toda semana</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Você monta, eu te ajudo</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Grupo no WhatsApp com a minha equipe</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Bônus e garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
       </div>
 
       <div class="bonusbar glass reveal">
@@ -300,7 +319,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="final glass reveal">
         <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
         <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i>Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>.</p>
+        <p class="scarce"><i></i>Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>. Acompanhamento: <span data-mentorados-curta>restam {mRestantes} vagas</span>.</p>
         <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
         <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
       </div>

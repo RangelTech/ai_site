@@ -88,7 +88,7 @@ export const FAQ: { p: string; r: string }[] = [
   { p: 'Preciso saber programar?', r: 'Não. Quem está começando recebe de bônus a minha área do aluno para pegar o básico, e eu te acompanho desde o primeiro passo, inclusive criar as contas e montar o ambiente.' },
   { p: 'É uma turma?', r: 'Não. As duas mentorias são individuais. Ninguém divide o seu horário.' },
   { p: 'Quanto tempo dura?', r: 'Depende do que você quer construir. A gente combina na conversa, antes de você decidir.' },
-  { p: 'Qual a diferença entre as duas?', r: 'Na individual eu te vejo três vezes por semana por vídeo. No acompanhamento, tudo acontece no WhatsApp, no seu ritmo.' },
+  { p: 'Qual a diferença entre as duas?', r: 'Na individual eu te vejo três vezes por semana por vídeo, guio o seu projeto e monto o ambiente com você. No acompanhamento, tudo acontece por mensagem no WhatsApp, no seu ritmo, e eu destravo cada dúvida.' },
   { p: 'R$ 5.000 é caro?', r: 'É o valor de três encontros por semana comigo, com o ambiente e as ferramentas que eu uso nos meus clientes. Se em 7 dias você achar que não vale, eu devolvo tudo.' },
   { p: 'Vou ganhar dinheiro garantido?', r: 'Ninguém sério garante isso. Eu garanto o caminho, as ferramentas e eu do seu lado. O resultado depende do que você constrói e de quanto você vende.' },
   { p: 'E se eu travar?', r: 'É para isso que a mentoria existe. Você manda a travada e a gente resolve.' },
