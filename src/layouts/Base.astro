@@ -71,9 +71,12 @@ const ld = {
           <a href="/#sobre">Sobre</a>
           <a href="/#perguntas">Perguntas</a>
         </nav>
-        <a class="btn btn--primary btn--sm" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener">
-          <Fragment set:html={ICON.message} />WhatsApp
-        </a>
+        <div class="header__acoes">
+          <a class="login" data-track="login_aluno" href={LINKS.aluno} rel="noopener">Entrar</a>
+          <a class="btn btn--primary btn--sm" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+            <Fragment set:html={ICON.message} /><span class="wl">WhatsApp</span>
+          </a>
+        </div>
       </div>
     </header>
 

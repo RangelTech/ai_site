@@ -55,6 +55,7 @@ export const LINKS = {
   portfolio: 'https://lucas.rangeltech.net/pt/',
   hub: 'https://github.com/LucasRangelSSouza/gpu-ai-benchmark-hub',
   luar: 'https://luar.rangeltech.net',
+  aluno: 'https://user.rangeltech.net/login',
 };
 
 export const EMPRESA = {

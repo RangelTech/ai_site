@@ -310,7 +310,17 @@ document.addEventListener('click', (e) => {
   };
   const inicia = () => { t0 = performance.now(); requestAnimationFrame(quadro); };
   document.addEventListener('visibilitychange', () => !document.hidden && inicia());
-  addEventListener('resize', dimensiona);
+  // No celular a barra do navegador some e volta ao rolar e dispara "resize"; refazer os canvases a cada vez
+  // limpava o fundo inteiro (o "refresh" da página). Só refaz quando a largura muda ou a altura muda de verdade.
+  let lw = innerWidth, lh = innerHeight, tResize = 0;
+  addEventListener('resize', () => {
+    clearTimeout(tResize);
+    tResize = window.setTimeout(() => {
+      if (innerWidth === lw && Math.abs(innerHeight - lh) < 160) return;
+      lw = innerWidth; lh = innerHeight;
+      dimensiona();
+    }, 150);
+  });
 
   foto.onload = () => { fotoOk = true; dimensiona(); };
   foto.src = '/img/fundo.webp';
@@ -362,7 +372,11 @@ document.addEventListener('click', (e) => {
   dlg.addEventListener('click', (e) => {
     if (e.target === dlg || (e.target as HTMLElement).closest('[data-modal-close]')) dlg.close();
   });
-  dlg.addEventListener('close', () => origem?.focus());
+  dlg.addEventListener('close', () => {
+    // o foco no logo pausava o carrossel; para quem usa o mouse ou o dedo ele volta a girar na hora
+    if (origem?.closest('.marquee')) origem.blur();
+    else origem?.focus();
+  });
 })();
 
 /* ---------- Entrada suave das seções ---------- */
@@ -473,6 +487,26 @@ document.addEventListener('click', (e) => {
     if (!aberto) grupo = 'todos';
     filtros?.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.g === grupo)));
     render();
+    if (!aberto) {
+      // ao recolher, a página encolhe e o navegador jogaria a tela para o fim: leva de volta ao último card visível
+      const visiveis = cards.filter((c) => !c.hidden);
+      const ultimo = visiveis[visiveis.length - 1];
+      if (ultimo) {
+        // 'instant' porque o site usa rolagem suave: sem isso a tela "voaria" por milhares de pixels
+        const vai = () => scrollTo({ top: Math.max(0, ultimo.getBoundingClientRect().bottom + scrollY - innerHeight + 140), behavior: 'instant' as ScrollBehavior });
+        vai();
+        // imagens preguiçosas acima do card terminam de carregar e empurram o layout: reajusta uma vez, se a pessoa ainda não rolou
+        let mexeu = false;
+        const parar = () => (mexeu = true);
+        addEventListener('wheel', parar, { once: true, passive: true });
+        addEventListener('touchstart', parar, { once: true, passive: true });
+        addEventListener('keydown', parar, { once: true });
+        setTimeout(() => {
+          const r = ultimo.getBoundingClientRect();
+          if (!mexeu && (r.bottom < 0 || r.bottom > innerHeight)) vai();
+        }, 400);
+      }
+    }
     track('projetos_ver_todos', { aberto });
   });
   filtros?.addEventListener('click', (e) => {
