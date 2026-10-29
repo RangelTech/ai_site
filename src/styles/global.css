@@ -249,6 +249,7 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 .plan { display: flex; flex-direction: column; gap: var(--s2); padding: clamp(24px, 4vw, 40px); }
 .plan > .btn { margin-top: auto; }
 .plan__cta { margin-top: auto; display: grid; gap: 10px; }
+.plan__cta .btn { line-height: 1.25; padding-block: 14px; text-align: center; }
 .plan--hi { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px rgba(94, 176, 255, 0.35), 0 40px 90px -34px rgba(20, 90, 200, 0.6); }
 .plan__badge { justify-self: start; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #0a84ff; color: #fff; }
 .plan__name { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 5vw, 34px); letter-spacing: -0.035em; line-height: 1.08; }
@@ -282,7 +283,9 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 @media (max-width: 640px) { .cmp__row { grid-template-columns: 1fr 1fr; font-size: 14.5px; } .cmp__row > span:first-child { grid-column: 1 / -1; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cyan-h); } .cmp__head > span:first-child { display: none; } }
 .seats p { font-size: 15px; line-height: 1.45; color: #e6ecf6; }
 .seats b { color: var(--hot); font-weight: 700; }
-.scarce { display: inline-flex; align-items: center; gap: 10px; color: var(--hot); font-weight: 600; font-size: 15px; }
+.scarce { display: inline-flex; align-items: flex-start; gap: 10px; color: var(--hot); font-weight: 600; font-size: 15px; max-width: 100%; text-align: left; }
+.scarce__t { min-width: 0; overflow-wrap: anywhere; }
+.scarce i { margin-top: 7px; flex: none; }
 .scarce i { width: 8px; height: 8px; border-radius: 50%; background: var(--hot); box-shadow: 0 0 0 0 rgba(255, 143, 107, 0.6); animation: pulse 2.2s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(255, 143, 107, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 143, 107, 0); } }
 /* bônus: itens com valor, total e prazo */

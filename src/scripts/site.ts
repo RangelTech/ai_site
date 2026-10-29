@@ -409,8 +409,12 @@ document.addEventListener('click', (e) => {
   const f = document.querySelector<HTMLElement>('[data-fab]');
   const hero = document.querySelector('#topo');
   if (!f || !hero) return;
-  const io = new IntersectionObserver(([en]) => f.classList.toggle('on', !en.isIntersecting), { threshold: 0 });
-  io.observe(hero);
+  // aparece depois do hero, mas some enquanto os planos estão na tela: ele cobria a ponta direita dos botões de compra no celular
+  let passouHero = false, nosPlanos = false;
+  const atualiza = () => f.classList.toggle('on', passouHero && !nosPlanos);
+  new IntersectionObserver(([en]) => { passouHero = !en.isIntersecting; atualiza(); }, { threshold: 0 }).observe(hero);
+  const planos = document.querySelector('#mentorias');
+  if (planos) new IntersectionObserver(([en]) => { nosPlanos = en.isIntersecting; atualiza(); }, { threshold: 0, rootMargin: '-10% 0px -10% 0px' }).observe(planos);
 })();
 
 /* ---------- Tempo em cada seção e profundidade de rolagem ---------- */

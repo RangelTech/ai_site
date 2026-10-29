@@ -328,7 +328,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="final glass reveal">
         <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
         <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i>Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>. Acompanhamento: <span data-mentorados-curta>restam {mRestantes} vagas</span>.</p>
+        <p class="scarce"><i></i><span class="scarce__t">Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>. Acompanhamento: <span data-mentorados-curta>restam {mRestantes} vagas</span>.</span></p>
         <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
         <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
       </div>
