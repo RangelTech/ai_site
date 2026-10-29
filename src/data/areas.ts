@@ -31,8 +31,8 @@ export const AREAS: Record<string, Area> = {
   },
   imagemia: {
     titulo: 'Imagem e vídeo por IA',
-    texto: 'Montamos para você um ambiente privado de geração de imagens e vídeos com IA: roda no seu servidor, sem depender nem pagar plataformas externas, e os seus prompts e imagens não saem da empresa.',
-    feitos: ['Ambientes privados de geração de imagem e de vídeo, na GPU do cliente', 'Geração em lote com o custo por imagem medido', 'Pipelines de vídeo com codificação e entrega automáticas'],
+    texto: 'Montamos para você um ambiente próprio de geração de imagens e vídeos com IA. Nada de plataforma paga, mensalidade ou crédito que acaba: tudo roda dentro da sua infraestrutura, o custo é só o da GPU e sai bem mais barato. Os seus prompts e as suas imagens não saem da empresa.',
+    feitos: ['Ambientes próprios de geração de imagem e de vídeo, na GPU do cliente', 'Geração em lote com o custo por imagem medido', 'Pipelines de vídeo com codificação e entrega automáticas'],
   },
   dados: {
     titulo: 'Engenharia de dados e BI',
