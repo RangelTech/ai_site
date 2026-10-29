@@ -9,7 +9,7 @@ import { LOGOS, PROJETOS, GRUPOS, FAQ, DEPOIMENTOS } from '../data/content';
 import { AREAS } from '../data/areas';
 import { EMPRESAS_INFO } from '../data/empresas_info';
 const DADOS_MODAL = { ...AREAS, ...Object.fromEntries(Object.entries(EMPRESAS_INFO).map(([k, v]) => ['emp:' + k, v])) };
-import { waHref, VAGAS, BONUS, LINKS } from '../data/config';
+import { waHref, VAGAS, BONUS, LINKS, CHECKOUT } from '../data/config';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS, fimDoMes, fraseFaltam } from '../lib/mes';
 import mentorados from '../data/mentorados_ficticios.json';
 import empresasMapa from '../data/empresas.json';
@@ -222,14 +222,17 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''}></i>)}</div>
             <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
           </div>
-          <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Quero a mentoria individual</a>
+          <div class="plan__cta">
+            <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />{CHECKOUT.individual ? 'Conversar comigo' : 'Quero a mentoria individual'}</a>
+            {CHECKOUT.individual && <a class="btn btn--ghost btn--block" data-track="checkout_individual" href={CHECKOUT.individual} rel="noopener">Já conversei, quero essa vaga</a>}
+          </div>
         </article>
 
         <article class="plan glass reveal" id="acompanhamento" data-sec="acompanhamento">
           <h3 class="plan__name">Mentoria com acompanhamento</h3>
           <p class="plan__for">Para quem quer aprender no próprio ritmo, sem reunião marcada.</p>
           <div class="price">R$ 1.000</div>
-          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
+          <p class="small muted">{CHECKOUT.acompanhamento ? 'Compra online, direto aqui. Se preferir, tire as dúvidas comigo no WhatsApp antes.' : 'Pacote fechado. A gente conversa antes e combina a forma de pagamento.'}</p>
           <ul class="offer__list">
             <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
             <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, com print, áudio ou o erro colado</span></li>
@@ -244,7 +247,10 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
             <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> Atendo no máximo {TOTAL_MENTORADOS} mentorados ao mesmo tempo, para responder cada dúvida.</p>
           </div>
           <p class="small muted plan__up">Quer me ver por vídeo toda semana? <a href="#individual">Veja a mentoria individual</a>.</p>
-          <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Entrar no acompanhamento</a>
+          <div class="plan__cta">
+            {CHECKOUT.acompanhamento && <a class="btn btn--primary btn--block" data-track="checkout_acompanhamento" href={CHECKOUT.acompanhamento} rel="noopener">Quero entrar agora</a>}
+            <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />{CHECKOUT.acompanhamento ? 'Tirar dúvidas no WhatsApp' : 'Entrar no acompanhamento'}</a>
+          </div>
         </article>
       </div>
 

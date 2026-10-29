@@ -58,6 +58,14 @@ export const LINKS = {
   aluno: 'https://user.rangeltech.net/login',
 };
 
+// Links de compra de cada mentoria (checkout hospedado). Vazio = o botão de compra não aparece e o site funciona só com WhatsApp.
+// Quando o link existir, a mentoria de R$ 1.000 mostra "Quero entrar agora" + "Tirar dúvidas", e a de R$ 5.000 mostra
+// "Conversar comigo" + "Já conversei, quero essa vaga".
+export const CHECKOUT = {
+  acompanhamento: '',
+  individual: '',
+};
+
 export const EMPRESA = {
   nome: 'Rangel Technologia e Informação LTDA (Rangel Tech)',
   cnpj: '65.505.647/0001-10',

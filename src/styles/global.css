@@ -248,6 +248,7 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 @media (min-width: 900px) { .plans { grid-template-columns: 1.08fr 0.92fr; gap: var(--s4); } }
 .plan { display: flex; flex-direction: column; gap: var(--s2); padding: clamp(24px, 4vw, 40px); }
 .plan > .btn { margin-top: auto; }
+.plan__cta { margin-top: auto; display: grid; gap: 10px; }
 .plan--hi { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 0 1px rgba(94, 176, 255, 0.35), 0 40px 90px -34px rgba(20, 90, 200, 0.6); }
 .plan__badge { justify-self: start; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #0a84ff; color: #fff; }
 .plan__name { font-family: var(--f-display); font-weight: 700; font-size: clamp(26px, 5vw, 34px); letter-spacing: -0.035em; line-height: 1.08; }
