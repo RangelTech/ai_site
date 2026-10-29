@@ -62,8 +62,8 @@ export const LINKS = {
 // Quando o link existir, a mentoria de R$ 1.000 mostra "Quero entrar agora" + "Tirar dúvidas", e a de R$ 5.000 mostra
 // "Conversar comigo" + "Já conversei, quero essa vaga".
 export const CHECKOUT = {
-  acompanhamento: '',
-  individual: '',
+  acompanhamento: 'https://pay.cakto.com.br/qddg2xq',
+  individual: 'https://pay.cakto.com.br/3acojxi',
 };
 
 export const EMPRESA = {
