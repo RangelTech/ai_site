@@ -43,8 +43,8 @@ export const BONUS = {
 
 // Métricas (spec 4.6): Umami sem cookie. Vazio = desligado (nada é enviado).
 export const UMAMI = {
-  src: '', // ex.: 'https://stats.rangeltech.net/script.js'
-  websiteId: '',
+  src: 'https://metricas.rangeltech.net/script.js',
+  websiteId: '0b313bb2-4ae7-4a1b-9de8-f717b5a69dd8',
 };
 
 export const LINKS = {
