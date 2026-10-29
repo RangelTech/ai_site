@@ -1,5 +1,5 @@
 {
-  "aviso": "Empresas atendidas, só para o mapa. Os nomes ficam aqui para manutenção e NÃO vão para o HTML. confirmar=true: cidade ainda por confirmar com o Lucas.",
+  "aviso": "Empresas atendidas, só para o mapa. Os nomes ficam aqui para manutenção e NÃO vão para o HTML. confirmar=true: cidade ainda por confirmar com o Lucas. Fora do mapa por falta de cidade: Jump.",
   "empresas": [
     { "nome": "Drogasil", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
     { "nome": "Drogaria São Paulo", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
@@ -12,10 +12,15 @@
     { "nome": "Cinemark", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
     { "nome": "SysMap", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
     { "nome": "Semantix", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
-    { "nome": "Leega", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333, "confirmar": true },
+    { "nome": "Leega", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Eduk", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "MindLab", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Fleetcore (Triggo Labs)", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
+    { "nome": "Bulk", "cidade": "São Paulo", "uf": "SP", "lat": -23.5505, "lon": -46.6333 },
     { "nome": "Cogna", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345 },
-    { "nome": "Eduk", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345, "confirmar": true },
-    { "nome": "MindLab", "cidade": "Belo Horizonte", "uf": "MG", "lat": -19.9167, "lon": -43.9345, "confirmar": true },
-    { "nome": "Capital Certo", "cidade": "Goiânia", "uf": "GO", "lat": -16.6869, "lon": -49.2648 }
+    { "nome": "Capital Certo", "cidade": "Goiânia", "uf": "GO", "lat": -16.6869, "lon": -49.2648 },
+    { "nome": "SENAI IST", "cidade": "Goiânia", "uf": "GO", "lat": -16.6869, "lon": -49.2648 },
+    { "nome": "UISA", "cidade": "Nova Olímpia", "uf": "MT", "lat": -14.7967, "lon": -57.2886 },
+    { "nome": "Lunelli", "cidade": "Guaramirim", "uf": "SC", "lat": -26.4719, "lon": -49.0036 }
   ]
 }

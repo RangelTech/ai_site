@@ -5,6 +5,7 @@ export interface Area {
   titulo: string;
   texto: string;
   feitos: string[];
+  msg?: string; // mensagem do WhatsApp deste modal; sem ela vale "quero saber mais sobre <título>"
 }
 
 export const AREAS: Record<string, Area> = {
@@ -30,8 +31,8 @@ export const AREAS: Record<string, Area> = {
   },
   imagemia: {
     titulo: 'Imagem e vídeo por IA',
-    texto: 'Geração de imagens e vídeos com IA para campanhas, produto e conteúdo, com o custo por resultado conhecido desde o começo.',
-    feitos: ['Geração em lote com custo por imagem medido', 'Pipelines de vídeo com codificação e entrega automáticas'],
+    texto: 'Montamos para você um ambiente privado de geração de imagens e vídeos com IA: roda no seu servidor, sem depender nem pagar plataformas externas, e os seus prompts e imagens não saem da empresa.',
+    feitos: ['Ambientes privados de geração de imagem e de vídeo, na GPU do cliente', 'Geração em lote com o custo por imagem medido', 'Pipelines de vídeo com codificação e entrega automáticas'],
   },
   dados: {
     titulo: 'Engenharia de dados e BI',

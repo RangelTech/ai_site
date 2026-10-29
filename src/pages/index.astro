@@ -7,6 +7,8 @@ import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { LOGOS, PROJETOS, GRUPOS, FAQ, DEPOIMENTOS } from '../data/content';
 import { AREAS } from '../data/areas';
+import { EMPRESAS_INFO } from '../data/empresas_info';
+const DADOS_MODAL = { ...AREAS, ...Object.fromEntries(Object.entries(EMPRESAS_INFO).map(([k, v]) => ['emp:' + k, v])) };
 import { waHref, VAGAS, BONUS, LINKS } from '../data/config';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, fimDoMes, fraseFaltam } from '../lib/mes';
 import mentorados from '../data/mentorados_ficticios.json';
@@ -55,7 +57,10 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <div class="marquee__track">
         {[0, 1].map((rep) =>
           LOGOS.map((l) => (
-            <img class="logo" src={`/logos/${l.slug}.${l.ext}`} alt={rep === 0 ? l.nome : ''} aria-hidden={rep === 1 ? 'true' : undefined} style={l.h ? `height:${l.h}px` : undefined} loading="lazy" decoding="async" />
+            <button type="button" class="logo-btn" data-empresa={l.slug.replace(/\.w$/, '')} aria-label={`Ver o projeto: ${l.nome}`} tabindex={rep === 1 ? -1 : undefined} aria-hidden={rep === 1 ? 'true' : undefined}>
+              <img class="logo" src={`/logos/${l.slug}.${l.ext}`} alt="" style={l.h ? `height:${l.h}px` : undefined} loading="lazy" decoding="async" />
+              <span class="logo-btn__nome">{l.nome}</span>
+            </button>
           )),
         )}
       </div>
@@ -269,6 +274,7 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <ul class="not">
         <li class="reveal"><Fragment set:html={ICON.x} /><span>Você procura um curso gravado para assistir e esquecer. Aqui você põe a mão no projeto.</span></li>
         <li class="reveal" style="--d:80ms"><Fragment set:html={ICON.x} /><span>Você só quer um emprego. Eu ensino a vender o próprio trabalho.</span></li>
+        <li class="reveal" style="--d:160ms"><Fragment set:html={ICON.x} /><span>Você quer continuar exatamente onde está. Aqui é para quem já decidiu mudar de vida.</span></li>
       </ul>
     </div>
   </section>
@@ -310,5 +316,5 @@ const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map
       <a class="btn btn--primary btn--block" data-modal-wa target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Conversar sobre isso</a>
     </div>
   </dialog>
-  <script type="application/json" id="areas-data" set:html={JSON.stringify(AREAS)} />
+  <script type="application/json" id="areas-data" set:html={JSON.stringify(DADOS_MODAL)} />
 </Base>

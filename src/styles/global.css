@@ -498,3 +498,10 @@ button.chip[aria-pressed='true'] { background: rgba(92, 200, 255, 0.18); border-
 /* ---------- Cards com print real ---------- */
 .project__art--img { background: #071226; }
 .project__art--img img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+/* ---------- Faixa de empresas: logo clicável, com o nome em destaque ao passar ---------- */
+.logo-btn { position: relative; flex: none; display: grid; place-items: center; padding: 10px 6px 26px; background: none; border: 0; cursor: pointer; color: inherit; }
+.logo-btn .logo { transition: opacity var(--t-med), transform var(--t-med) var(--ease); }
+.logo-btn:hover .logo, .logo-btn:focus-visible .logo { opacity: 1; transform: translateY(-3px); }
+.logo-btn__nome { position: absolute; left: 50%; bottom: 0; transform: translate(-50%, 4px); white-space: nowrap; font-size: 13px; font-weight: 600; letter-spacing: -0.005em; color: #fff; padding: 3px 11px; border-radius: 999px; background: rgba(94, 176, 255, 0.22); border: 1px solid rgba(156, 201, 255, 0.5); opacity: 0; transition: opacity var(--t-med), transform var(--t-med) var(--ease); pointer-events: none; }
+.logo-btn:hover .logo-btn__nome, .logo-btn:focus-visible .logo-btn__nome { opacity: 1; transform: translate(-50%, 0); }

@@ -335,7 +335,7 @@ document.addEventListener('click', (e) => {
   const dlg = document.querySelector<HTMLDialogElement>('[data-modal]');
   const dados = document.getElementById('areas-data');
   if (!dlg || !dados || typeof dlg.showModal !== 'function') return;
-  const areas: Record<string, { titulo: string; texto: string; feitos: string[] }> = JSON.parse(dados.textContent || '{}');
+  const areas: Record<string, { titulo: string; texto: string; feitos: string[]; msg?: string }> = JSON.parse(dados.textContent || '{}');
   const q = <T extends HTMLElement>(s: string) => dlg.querySelector<T>(s)!;
   let origem: HTMLElement | null = null;
   const abrir = (k: string, el: HTMLElement) => {
@@ -349,14 +349,14 @@ document.addEventListener('click', (e) => {
     // mensagem do WhatsApp específica do tema (com o sufixo do Instagram quando a origem é ela)
     const wa = (window as any).__wa || {};
     const insta = (sessionStorage.getItem('utm_source') || '').toLowerCase() === 'instagram' ? wa.sufixo || '' : '';
-    const msg = `Oi, Lucas! Quero saber mais sobre ${a.titulo}.${insta}`;
+    const msg = `${a.msg || `Oi, Lucas! Quero saber mais sobre ${a.titulo}.`}${insta}`;
     q<HTMLAnchorElement>('[data-modal-wa]').href = `https://wa.me/${wa.numero}?text=${encodeURIComponent(msg)}`;
     dlg.showModal();
     track('area_aberta', { area: k });
   };
   document.addEventListener('click', (e) => {
-    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-info]');
-    if (b) abrir(b.dataset.info!, b);
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-info], [data-empresa]');
+    if (b) abrir(b.dataset.info || 'emp:' + b.dataset.empresa, b);
   });
   // fecha no X, fora do cartão e no Esc (nativo)
   dlg.addEventListener('click', (e) => {

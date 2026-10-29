@@ -7,17 +7,15 @@ const mapa: Record<string, string> = {
   privacidade: 'politica_privacidade.md',
   termos: 'termos_de_uso.md',
   reembolso: 'politica_reembolso.md',
-  creditos: 'creditos.md',
 };
 const titulos: Record<string, string> = {
   privacidade: 'Política de privacidade',
   termos: 'Termos de uso',
   reembolso: 'Política de reembolso',
-  creditos: 'Créditos das imagens',
 };
 
 export function getStaticPaths() {
-  return ['privacidade', 'termos', 'reembolso', 'creditos'].map((slug) => ({ params: { slug } }));
+  return ['privacidade', 'termos', 'reembolso'].map((slug) => ({ params: { slug } }));
 }
 const { slug } = Astro.params as { slug: string };
 const bruto = Object.entries(arquivos).find(([k]) => k.endsWith('/' + mapa[slug]))![1];
