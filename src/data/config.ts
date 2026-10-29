@@ -52,7 +52,7 @@ export const LINKS = {
   linkedin: 'https://www.linkedin.com/in/lucas-rangel-s-souza/',
   github: 'https://github.com/LucasRangelSSouza',
   kaggle: 'https://www.kaggle.com/lucasrangelss',
-  portfolio: 'https://lucas.rangeltech.net/',
+  portfolio: 'https://lucas.rangeltech.net/pt/',
   hub: 'https://github.com/LucasRangelSSouza/gpu-ai-benchmark-hub',
   luar: 'https://luar.rangeltech.net',
 };
