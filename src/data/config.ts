@@ -32,11 +32,11 @@ export function waHref(key: WaKey): string {
 // Quantas aparecem como "sobrando" segue uma regra fixa por parte do mês (src/lib/mes.ts).
 export const VAGAS = { total: 4 };
 
-// Bônus das duas mentorias. Valores = preço avulso de cada item (spec: área do aluno R$ 197, pacote de skills R$ 97).
+// Bônus das duas mentorias. Valores = preço avulso de cada item (spec: área do aluno R$ 294, pacote de skills R$ 97).
 // O prazo é sempre o último dia do mês atual (src/lib/mes.ts), então não há data para atualizar.
 export const BONUS = {
   itens: [
-    { nome: 'Minha área do aluno', valor: 197 },
+    { nome: 'Minha área do aluno', valor: 294 },
     { nome: 'As habilidades técnicas que eu uso no dia a dia', valor: 97 },
   ],
 };
