@@ -75,9 +75,9 @@ const ld = {
           <a href="/#perguntas">Perguntas</a>
         </nav>
         <div class="header__acoes">
-          <a class="login" data-track="login_aluno" href={LINKS.aluno} rel="noopener"><span class="login__l">Área do aluno</span><span class="login__s">Entrar</span></a>
+          <a class="login" data-track="login_aluno" href={LINKS.aluno} rel="noopener" aria-label="Área do aluno: entrar"><span class="login__l">Área do aluno</span><span class="login__s">Entrar</span><svg class="login__i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></a>
           <a class="hwa" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
-            <span class="hwa__dot" aria-hidden="true"></span><span class="wl">Falar comigo</span>
+            <span class="hwa__dot" aria-hidden="true"></span><Fragment set:html={ICON.message} /><span class="wl">Falar comigo</span>
           </a>
         </div>
       </div>

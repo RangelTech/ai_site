@@ -177,15 +177,21 @@ em.valor { background: linear-gradient(100deg, #c4e2ff 0%, #6db7ff 60%, #8b9bff 
 .hwa__dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: #25d366; opacity: 0.35; animation: hwa-pulso 2.2s ease-out infinite; }
 @keyframes hwa-pulso { 0% { transform: scale(0.5); opacity: 0.5; } 100% { transform: scale(1.4); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .hwa__dot::after { animation: none; } }
+.login__i, .hwa svg { display: none; }
 @media (max-width: 560px) { .login__l { display: none; } .login__s { display: inline; } }
-@media (max-width: 420px) {
-  .header__bar { gap: 6px; padding-left: 12px; }
-  .brand { font-size: 15px; gap: 7px; }
-  .brand__mark { width: 28px; height: 28px; padding: 6px; }
-  .login { padding: 0 8px; font-size: 14px; }
-  .hwa { padding: 0 12px 0 10px; font-size: 14px; gap: 7px; }
+/* telas pequenas: os dois botões viram só ícone (pessoa = área do aluno, balão = WhatsApp) */
+@media (max-width: 520px) {
+  .header__bar { gap: 8px; padding: 8px 8px 8px 12px; }
+  .brand { font-size: 16px; gap: 8px; }
+  .brand__mark { width: 30px; height: 30px; padding: 6px; }
+  .login__s, .hwa .wl { display: none; }
+  .login { width: 44px; padding: 0; justify-content: center; border: 1px solid rgba(160, 200, 255, 0.3); }
+  .login__i { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .hwa { position: relative; width: 44px; padding: 0; justify-content: center; }
+  .hwa svg { display: block; width: 22px; height: 22px; }
+  .hwa__dot { position: absolute; top: 7px; right: 7px; width: 9px; height: 9px; box-shadow: 0 0 0 2px #fff; }
 }
-@media (max-width: 359px) { .header { padding-inline: 12px; } .header__bar { padding-right: 8px; } .brand__mark { display: none; } .brand { font-size: 16px; } .login { padding: 0 6px; } .hwa { padding: 0 10px 0 9px; font-size: 13.5px; gap: 6px; } }
+@media (max-width: 359px) { .header { padding-inline: 12px; } .brand__nome { font-size: 15px; } }
 
 /* ---------- Seções ---------- */
 .sec { position: relative; padding-block: clamp(64px, 11vw, 128px); }
