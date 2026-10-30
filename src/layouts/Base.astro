@@ -64,7 +64,10 @@ const ld = {
 
     <header class="header" data-header>
       <div class="header__bar glass">
-        <a class="brand" href="/" aria-label="Lucas Rangel, início">Lucas <span>Rangel</span></a>
+        <a class="brand" href="/" aria-label="Lucas Rangel, início">
+          <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12C7.97056 12 12 7.97056 12 3C12 7.97056 16.0294 12 21 12C16.0294 12 12 16.0294 12 21C12 16.0294 7.97056 12 3 12Z"/></svg>
+          <span class="brand__nome">Lucas <span>Rangel</span></span>
+        </a>
         <nav class="nav" aria-label="Principal">
           <a href="/#mentorias">Mentorias</a>
           <a href="/#projetos">Projetos</a>
@@ -72,9 +75,9 @@ const ld = {
           <a href="/#perguntas">Perguntas</a>
         </nav>
         <div class="header__acoes">
-          <a class="login" data-track="login_aluno" href={LINKS.aluno} rel="noopener">Entrar</a>
-          <a class="btn btn--primary btn--sm" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
-            <Fragment set:html={ICON.message} /><span class="wl">WhatsApp</span>
+          <a class="login" data-track="login_aluno" href={LINKS.aluno} rel="noopener"><span class="login__l">Área do aluno</span><span class="login__s">Entrar</span></a>
+          <a class="hwa" data-wa="hero" data-track="whatsapp_header" href={waHref('hero')} target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
+            <span class="hwa__dot" aria-hidden="true"></span><span class="wl">Falar comigo</span>
           </a>
         </div>
       </div>

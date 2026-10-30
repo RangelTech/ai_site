@@ -157,29 +157,35 @@ em.valor { background: linear-gradient(100deg, #c4e2ff 0%, #6db7ff 60%, #8b9bff 
 /* ---------- Header ---------- */
 .header { position: fixed; z-index: 50; inset: 0 0 auto 0; padding: 12px var(--gutter) 0; transition: transform var(--t-med) var(--ease); }
 .header__bar { max-width: var(--maxw); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 22px; border-radius: 999px; }
-.brand { white-space: nowrap; font-family: var(--f-display); font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: var(--text); }
-.brand span { color: var(--text); opacity: 0.6; }
+.brand { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; font-family: var(--f-display); font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: var(--text); }
+.brand__nome span { opacity: 0.6; }
+.brand__mark { flex: none; width: 34px; height: 34px; padding: 7px; border-radius: 50%; fill: #fff; stroke: none; background: linear-gradient(140deg, #5eb0ff 0%, #2f6bff 60%, #7d8cff 100%); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 8px 18px -8px rgba(47, 107, 255, 0.9); transition: transform var(--t-med) var(--ease); }
 .brand:hover { color: var(--text); }
+.brand:hover .brand__mark { transform: rotate(90deg) scale(1.06); }
 .nav { display: none; gap: 28px; font-size: 15px; font-weight: 500; }
 .nav a { color: #c1cfe6; }
 .nav a:hover { color: var(--cyan-h); }
 @media (min-width: 900px) { .nav { display: flex; } }
-.header__acoes { display: flex; align-items: center; gap: 6px; }
-.login { display: inline-flex; align-items: center; height: 44px; padding: 0 16px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #c1cfe6; border: 1px solid rgba(160, 200, 255, 0.28); }
-.login:hover { color: var(--cyan-h); border-color: rgba(160, 200, 255, 0.55); }
+.header__acoes { display: flex; align-items: center; gap: 4px; }
+.login { display: inline-flex; align-items: center; height: 44px; padding: 0 14px; border-radius: 999px; font-size: 15px; font-weight: 500; color: #b6c8e6; transition: color var(--t-fast), background var(--t-fast); }
+.login:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.login__s { display: none; }
+.hwa { white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 20px 0 16px; border-radius: 999px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #07101f; background: #fff; box-shadow: 0 1px 0 #fff inset, 0 10px 24px -12px rgba(255, 255, 255, 0.55); transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), background var(--t-fast); }
+.hwa:hover { color: #07101f; background: #e6f1ff; transform: translateY(-1px); }
+.hwa:active { transform: scale(0.98); }
+.hwa__dot { position: relative; flex: none; width: 9px; height: 9px; border-radius: 50%; background: #25d366; }
+.hwa__dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: #25d366; opacity: 0.35; animation: hwa-pulso 2.2s ease-out infinite; }
+@keyframes hwa-pulso { 0% { transform: scale(0.5); opacity: 0.5; } 100% { transform: scale(1.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hwa__dot::after { animation: none; } }
+@media (max-width: 560px) { .login__l { display: none; } .login__s { display: inline; } }
 @media (max-width: 420px) {
-  .header__bar { gap: 8px; padding-left: 16px; }
-  .brand { font-size: 16px; }
-  .header__acoes { gap: 4px; }
-  .login { padding: 0 12px; font-size: 14px; }
-  .header__acoes .btn--sm { padding: 0 14px; font-size: 14px; gap: 6px; }
+  .header__bar { gap: 6px; padding-left: 12px; }
+  .brand { font-size: 15px; gap: 7px; }
+  .brand__mark { width: 28px; height: 28px; padding: 6px; }
+  .login { padding: 0 8px; font-size: 14px; }
+  .hwa { padding: 0 12px 0 10px; font-size: 14px; gap: 7px; }
 }
-/* telas bem estreitas: o botão do WhatsApp vira só o ícone, para caber ao lado do "Entrar" */
-@media (max-width: 380px) {
-  .header__acoes .btn--sm { width: 44px; padding: 0; }
-  .header__acoes .btn--sm .wl { display: none; }
-}
-@media (max-width: 359px) { .header { padding-inline: 12px; } .header__bar { padding-left: 16px; } .brand { font-size: 17px; } .btn--sm { padding: 0 14px; font-size: 14px; } }
+@media (max-width: 359px) { .header { padding-inline: 12px; } .header__bar { padding-right: 8px; } .brand__mark { display: none; } .brand { font-size: 16px; } .login { padding: 0 6px; } .hwa { padding: 0 10px 0 9px; font-size: 13.5px; gap: 6px; } }
 
 /* ---------- Seções ---------- */
 .sec { position: relative; padding-block: clamp(64px, 11vw, 128px); }
