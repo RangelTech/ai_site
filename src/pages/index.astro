@@ -7,7 +7,7 @@ import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { PROJETOS, FAQ } from '../data/content';
-import { QUIZ, VAGAS, PRECOS, PRECOS_DE, VIDEO, LINKS, VIDEOS_CLIENTES, NUMEROS, PROVA_VISIVEL } from '../data/config';
+import { QUIZ, VAGAS, PRECOS, PRECOS_DE, VIDEO, LINKS, VIDEOS_CLIENTES, NUMEROS, PROVA_VISIVEL, VIDEOS_VISIVEIS } from '../data/config';
 import { EMPRESAS_INFO } from '../data/empresas_info';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS } from '../lib/mes';
 import { carregarProva } from '../lib/prova';
@@ -230,6 +230,7 @@ const PASSOS = [
         </div>
         <div data-reveal><BrazilMap pontos={prova.mapa} /></div>
       </div>
+      {VIDEOS_VISIVEIS && (
       <div class="vids" style="margin-top:var(--s6)">
         <div class="sec__head" data-reveal style="margin-bottom:var(--s3)"><span class="eyebrow">Quem já resolveu</span><h3 class="display h3">Eles contam <em class="hot">com a própria voz.</em></h3></div>
         <div class="vids__grid">
@@ -246,6 +247,7 @@ const PASSOS = [
           ))}
         </div>
       </div>
+      )}
       {prova.depoimentos.length > 0 && (
         <div class="quotes" style="margin-top:var(--s4)">
           {prova.depoimentos.map((d) => (

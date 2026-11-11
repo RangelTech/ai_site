@@ -69,8 +69,10 @@ export const VIDEO = {
 export const TRES_D = { ligado: false }; // substituido pelo cerebro (src/scripts/cerebro.ts)
 
 // Depoimentos em vídeo (3 espaços). Preencha `mp4` (vertical, 30 a 60 s) e `capa` (imagem) quando os vídeos existirem; vazio = espaço reservado.
-// Seção de prova social (mapa, vídeos e depoimentos de clientes, logos). Desligada até haver material real; mude para true para voltar.
-export const PROVA_VISIVEL = false;
+// Seção de prova social (mapa, depoimentos escritos, logos): visível.
+export const PROVA_VISIVEL = true;
+// Os 3 cards de vídeo de clientes ficam escondidos até existirem os vídeos reais; mude para true para voltar.
+export const VIDEOS_VISIVEIS = false;
 
 export const VIDEOS_CLIENTES: { mp4: string; capa: string; nome: string; cargo: string }[] = [
   { mp4: '', capa: '', nome: '', cargo: '' },
