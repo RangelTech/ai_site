@@ -69,5 +69,5 @@ export const FAQ: { p: string; r: string }[] = [
   { p: 'O que a garantia cobre?', r: 'Tudo. Nos primeiros 7 dias, se você achar que não vale, pede o reembolso integral, sem explicar o motivo.' },
   { p: 'Posso pagar parcelado?', r: 'Sim. Pix ou cartão em até 12 vezes, no checkout. Para empresas, por contrato, do jeito que fizer sentido: boleto, cartão ou o que combinarmos.' },
   { p: 'Vou ganhar dinheiro garantido?', r: 'Ninguém sério garante isso. Eu garanto o caminho, as ferramentas e eu do seu lado até o seu projeto estar no ar. O que você vende depois é o que você constrói.' },
-  { p: 'Vocês fazem o projeto da minha empresa?', r: 'Fazemos. Você me conta o problema, a gente coloca a solução no papel antes de começar e eu monto dentro da sua própria estrutura, sem depender de serviço de terceiros.' },
+  { p: 'Vocês fazem o projeto da minha empresa?', r: 'Fazemos. Você me conta o problema, a gente coloca a solução no papel antes de começar e eu monto dentro da sua própria estrutura, sem depender de serviço de terceiros. Na maioria dos casos o projeto se paga com o custo que você deixa de ter: a tarefa que ocupava uma pessoa passa a rodar sozinha.' },
 ];

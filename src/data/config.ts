@@ -79,7 +79,7 @@ export const NUMEROS = { empresas: 50, artigos: 150, projetos: 20, anosIA: 12, a
 // Quiz de qualificação (spec SITE_V2, seções 10 e 16.5). Uma pergunta por tela.
 export const QUIZ = {
   situacoes: [
-    { id: 'empresa', label: 'Tenho uma empresa', sub: 'e um problema que ninguém resolveu' },
+    { id: 'empresa', label: 'Tenho uma empresa', sub: 'e gasto com gente o que a IA faz mais barato' },
     { id: 'empregado', label: 'Estou empregado', sub: 'e quero mais do que o salário' },
     { id: 'desempregado', label: 'Estou desempregado', sub: 'e preciso de uma saída real' },
     { id: 'autonomo', label: 'Sou autônomo', sub: 'e troco hora por dinheiro' },
@@ -90,6 +90,7 @@ export const QUIZ = {
       { id: 'vendas', label: 'Vender mais, com menos gente' },
       { id: 'sistema', label: 'Sistema velho travando a operação' },
       { id: 'dados', label: 'Dado espalhado, decisão no escuro' },
+      { id: 'custo', label: 'Cortar custo: tarefa cara que a IA faz melhor' },
       { id: 'outro', label: 'Outro problema' },
     ],
     pessoa: [

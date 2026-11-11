@@ -202,7 +202,8 @@ html:not(.js) [data-reveal] { opacity: 1 !important; transform: none !important;
 
 /* ---------- Custo de continuar como está ---------- */
 .custo { display: grid; gap: var(--s2); }
-@media (min-width: 820px) { .custo { grid-template-columns: repeat(3, 1fr); gap: var(--s3); } }
+@media (min-width: 640px) { .custo { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .custo { grid-template-columns: repeat(4, 1fr); gap: var(--s3); } }
 .custo li { padding: clamp(22px, 3vw, 32px); display: grid; gap: 8px; }
 .custo b { font-family: var(--f-display); font-weight: 800; font-size: clamp(30px, 4.4vw, 44px); letter-spacing: -0.04em; line-height: 1; color: var(--hot); }
 .custo p { color: #c4d2e8; font-size: 17px; line-height: 1.45; }
