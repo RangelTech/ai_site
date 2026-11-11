@@ -3,7 +3,7 @@
 export const SITE = {
   url: 'https://ai.rangeltech.net',
   nome: 'Lucas Rangel',
-  titulo: 'Lucas Rangel | Qual é o seu problema? Eu resolvo com você.',
+  titulo: 'Lucas Rangel | Qual é o seu problema? Eu resolvo para você.',
   descricao:
     'Não é curso. É Lucas Rangel, 20 anos em tecnologia e 12 em inteligência artificial, do seu lado, resolvendo o problema que trava a sua vida ou a sua empresa. Pelo WhatsApp ou cara a cara. Garantia de 7 dias.',
 };
