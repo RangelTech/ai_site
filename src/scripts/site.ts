@@ -210,6 +210,30 @@ document.addEventListener('click', (e) => {
   }, { passive: true });
 })();
 
+/* ---------- Modal "o que fizemos na empresa" (logos da faixa) ---------- */
+(function modais() {
+  const dlg = document.querySelector<HTMLDialogElement>('[data-modal]');
+  const dados = document.getElementById('areas-data');
+  if (!dlg || !dados || typeof dlg.showModal !== 'function') return;
+  const areas: Record<string, { titulo: string; texto: string; feitos: string[] }> = JSON.parse(dados.textContent || '{}');
+  const q = <T extends HTMLElement>(s: string) => dlg.querySelector<T>(s)!;
+  let origem: HTMLElement | null = null;
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-empresa]');
+    if (!b) return;
+    const a = areas[b.dataset.empresa!];
+    if (!a) return;
+    origem = b;
+    q('[data-modal-titulo]').textContent = a.titulo;
+    q('[data-modal-texto]').textContent = a.texto;
+    q('[data-modal-feitos]').replaceChildren(...a.feitos.map((f) => Object.assign(document.createElement('li'), { textContent: f })));
+    dlg.showModal();
+    track('empresa_aberta', { empresa: b.dataset.empresa! });
+  });
+  dlg.addEventListener('click', (e) => { if (e.target === dlg || (e.target as HTMLElement).closest('[data-modal-close]') || (e.target as HTMLElement).closest('[data-quiz]')) dlg.close(); });
+  dlg.addEventListener('close', () => { if (origem?.closest('.marquee')) origem.blur(); else origem?.focus(); });
+})();
+
 /* ---------- Projetos: ver todos ---------- */
 (function projetos() {
   const root = document.querySelector<HTMLElement>('[data-projects]');

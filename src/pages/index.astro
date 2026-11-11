@@ -8,6 +8,7 @@ import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { PROJETOS, FAQ } from '../data/content';
 import { QUIZ, VAGAS, PRECOS, VIDEO, TRES_D } from '../data/config';
+import { EMPRESAS_INFO } from '../data/empresas_info';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS } from '../lib/mes';
 import { carregarProva } from '../lib/prova';
 
@@ -50,30 +51,29 @@ const PASSOS = [
     </div>
   </section>
 
-  <!-- 2. Quem sou eu: cena esfregada pela rolagem (vídeo quando chegar; fotos até lá) -->
+  <!-- 2. Quem sou eu: foto (ou vídeo, quando chegar) que aproxima conforme a rolagem, com as frases ao lado -->
   <section class="sec cena" id="sobre" data-sec="sobre" data-hue="1" data-cena>
-    <div class="cena__pin" data-cena-pin>
-      <div class="cena__media" data-cena-media>
-        <Image src={lucas} widths={[720, 1080, 1600]} sizes="100vw" format="webp" quality={70} alt="Lucas Rangel" loading="lazy" />
+    <div class="wrap cena__grid">
+      <div class="cena__card" data-cena-media>
+        <Image src={lucas} widths={[600, 900, 1400]} sizes="(min-width: 960px) 46vw, 92vw" format="webp" quality={72} alt="Lucas Rangel" loading="lazy" />
         <canvas data-cena-canvas hidden></canvas>
         <div class="cena__shade"></div>
+        <div class="cena__tag"><b>Lucas Rangel</b><span>Fundador da Rangel Tech</span></div>
+        {VIDEO.mp4 && <a class="btn btn--ghost btn--sm cena__play" href={VIDEO.mp4} data-track="video_play">Assistir com som</a>}
       </div>
-      <div class="cena__caps">
-        {VIDEO.legendas.map((l, i) => <p class="cena__cap display" data-cena-cap={i}>{l}</p>)}
+      <div class="cena__text">
+        <span class="eyebrow" data-reveal>Quem sou eu</span>
+        <h2 class="display h2" data-reveal>Prazer, <em class="hot">Lucas Rangel.</em></h2>
+        <ul class="cena__caps">
+          {VIDEO.legendas.map((l, i) => <li class="cena__cap" data-cena-cap={i} data-reveal>{l}</li>)}
+        </ul>
+        <p class="lead" data-reveal>Eu não vendo teoria. Eu abro a tela, você conta o problema, e a gente resolve. Prompt por prompt, decisão por decisão, até estar no ar.</p>
+        <ul class="stats" data-reveal>
+          <li><b>20</b><span>anos em tecnologia</span></li>
+          <li><b>12</b><span>só com inteligência artificial</span></li>
+          <li><b>4</b><span>setores: varejo, finanças, indústria, educação</span></li>
+        </ul>
       </div>
-      {VIDEO.mp4 && <a class="btn btn--ghost cena__play" href={VIDEO.mp4} data-track="video_play">Assistir com som</a>}
-    </div>
-    <div class="wrap cena__text">
-      <div class="sec__head" data-reveal>
-        <span class="eyebrow">Quem sou eu</span>
-        <h2 class="display h2">Prazer, <em class="hot">Lucas Rangel.</em></h2>
-        <p class="lead">Eu não vendo teoria. Eu abro a tela, você conta o problema, e a gente resolve. Prompt por prompt, decisão por decisão, até estar no ar.</p>
-      </div>
-      <ul class="stats" data-reveal>
-        <li><b>20</b><span>anos em tecnologia</span></li>
-        <li><b>12</b><span>só com inteligência artificial</span></li>
-        <li><b>4</b><span>setores: varejo, finanças, indústria, educação</span></li>
-      </ul>
     </div>
   </section>
 
@@ -232,9 +232,10 @@ const PASSOS = [
       {prova.logos.length > 0 && (
         <div class="proof" data-reveal>
           <h3 class="proof__title">Empresas que já confiaram no nosso trabalho</h3>
-          <div class="marquee" aria-hidden="true">
+          <p class="proof__hint">Toque num logo para ver o que a gente fez lá.</p>
+          <div class="marquee">
             <div class="marquee__track">
-              {[...prova.logos, ...prova.logos].map((l) => <img class="logo" src={`/logos/${l.arquivo}`} alt={l.nome} loading="lazy" decoding="async" style={l.altura && l.altura !== 30 ? `height:${l.altura}px` : undefined} />)}
+              {[...prova.logos, ...prova.logos].map((l) => { const slug = l.arquivo.replace(/\.[a-z]+$/, '').replace(/\.w$/, ''); const info = EMPRESAS_INFO[slug]; const img = <img class="logo" src={`/logos/${l.arquivo}`} alt={l.nome} loading="lazy" decoding="async" style={l.altura && l.altura !== 30 ? `height:${l.altura}px` : undefined} />; return info ? <button type="button" class="logo-btn" data-empresa={slug} aria-label={`O que fizemos na ${l.nome}`}>{img}<span class="logo-btn__nome">{l.nome}</span></button> : img; })}
             </div>
           </div>
         </div>
@@ -311,5 +312,16 @@ const PASSOS = [
     </div>
   </section>
 
+  <dialog class="modal" data-modal aria-labelledby="modal-titulo">
+    <div class="modal__card glass glass--m">
+      <button type="button" class="modal__x" data-modal-close aria-label="Fechar"><Fragment set:html={ICON.x} /></button>
+      <h3 id="modal-titulo" data-modal-titulo></h3>
+      <p class="modal__texto" data-modal-texto></p>
+      <h4>O que a gente entregou</h4>
+      <ul class="modal__feitos" data-modal-feitos></ul>
+      <button type="button" class="btn btn--hot" data-quiz data-situacao="empresa" data-track="modal_empresa">Quero algo parecido na minha empresa</button>
+    </div>
+  </dialog>
+  <script type="application/json" id="areas-data" set:html={JSON.stringify(EMPRESAS_INFO)} />
   <Quiz />
 </Base>

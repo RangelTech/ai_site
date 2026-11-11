@@ -89,18 +89,14 @@ if (!reduce && !lite) {
   });
 })();
 
-/* ---------- cena de "quem sou eu": fixa a tela e esfrega o vídeo (ou aproxima a foto) com as legendas ---------- */
+/* ---------- cena de "quem sou eu": a foto (ou os quadros do vídeo) aproxima conforme a rolagem; sem travar a tela ---------- */
 (function cena() {
   const sec = document.querySelector<HTMLElement>('[data-cena]');
   if (!sec) return;
-  const pin = sec.querySelector<HTMLElement>('[data-cena-pin]')!;
   const media = sec.querySelector<HTMLElement>('[data-cena-media]')!;
   const img = media.querySelector('img')!;
   const canvas = sec.querySelector<HTMLCanvasElement>('[data-cena-canvas]')!;
-  const caps = [...sec.querySelectorAll<HTMLElement>('[data-cena-cap]')];
-  if (reduce) { caps.forEach((c) => (c.style.opacity = '1')); sec.classList.add('cena--static'); return; }
-
-  // sequência de quadros (quando o vídeo existir)
+  if (reduce) return;
   const V = RT.video || { quadros: 0 };
   const mob = innerWidth < 760;
   const nq = V.quadros ? (mob ? Math.ceil(V.quadros / 2) : V.quadros) : 0;
@@ -131,15 +127,8 @@ if (!reduce && !lite) {
     ctx.drawImage(im, (cw - w) / 2, (ch - hh) / 2, w, hh);
   };
   addEventListener('resize', () => { if (nq) { dimensiona(); ultimo = -1; desenha(0); } });
-
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + Math.round(innerHeight * (caps.length + 0.6)), pin: pin, scrub: 0.6, anticipatePin: 1, onUpdate: (st) => desenha(st.progress) },
-  });
-  if (!nq) tl.fromTo(img, { scale: 1.18, yPercent: -4 }, { scale: 1, yPercent: 2, ease: 'none', duration: caps.length + 0.6 }, 0);
-  caps.forEach((c, k) => {
-    tl.fromTo(c, { opacity: 0, y: 40, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.35, ease: 'power2.out' }, k + 0.15);
-    if (k < caps.length - 1) tl.to(c, { opacity: 0, y: -30, filter: 'blur(6px)', duration: 0.3, ease: 'power2.in' }, k + 0.85);
-  });
+  // a foto chega com zoom e vai abrindo enquanto o cartão atravessa a tela
+  gsap.fromTo(img, { scale: 1.32, yPercent: -3 }, { scale: 1, yPercent: 2, ease: 'none', scrollTrigger: { trigger: media, start: 'top 95%', end: 'bottom 15%', scrub: 0.8, onUpdate: (st) => desenha(st.progress) } });
 })();
 
 /* ---------- cena 3D (carrega depois, só onde vale) ---------- */
