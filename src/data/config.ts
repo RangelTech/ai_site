@@ -52,7 +52,7 @@ export const CHECKOUT = {
   acompanhamento: 'https://pay.cakto.com.br/qddg2xq',
 };
 
-export const PRECOS = { individual: 5000, acompanhamento: 1000 };
+export const PRECOS = { individual: 5000, acompanhamento: 997 };
 // Preço âncora (riscado, "de") mostrado acima do preço cobrado. O cobrado continua o de PRECOS (é o do checkout da Cakto).
 export const PRECOS_DE = { individual: 6997, acompanhamento: 1497 };
 
@@ -133,7 +133,7 @@ export const QUIZ = {
   ],
   formato: [
     { id: 'cara_a_cara', label: 'Cara a cara comigo', sub: '3 encontros por semana por vídeo + WhatsApp. Antes, uma call de 30 min.' },
-    { id: 'whatsapp', label: 'Pelo WhatsApp', sub: 'Você manda, eu destravo. No seu ritmo, sem reunião marcada.' },
+    { id: 'whatsapp', label: 'Pelo WhatsApp', sub: '2 meses. Você manda o problema, eu resolvo. No seu ritmo, sem reunião marcada.' },
   ],
   porte: [
     { id: 'so_eu', label: 'Só eu' },

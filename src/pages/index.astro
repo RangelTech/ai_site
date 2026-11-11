@@ -143,15 +143,15 @@ const PASSOS = [
           <p class="plan__for">Você manda o problema pelo WhatsApp e eu resolvo: conecto no seu computador, subo o que precisa e te mostro. No seu ritmo, sem reunião marcada.</p>
           <div class="price__de"><s>de {brl(PRECOS_DE.acompanhamento)}</s><span class="price__off">-{off(PRECOS_DE.acompanhamento, PRECOS.acompanhamento)}%</span></div>
           <div class="price"><small>por</small> {brl(PRECOS.acompanhamento)}</div>
-          <p class="plan__pay">Compra online, direto aqui. Pix ou cartão em até 12 vezes.</p>
+          <p class="plan__pay"><b>2 meses</b> comigo no WhatsApp. Compra online, direto aqui. Pix ou cartão em até 12 vezes.</p>
           <ul class="offer__list">
             <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
             <li><Fragment set:html={ICON.check} /><span>Eu faço por você: conecto, subo, corrijo e te mostro o que fiz</span></li>
             <li><Fragment set:html={ICON.check} /><span>Eu destravo cada dúvida e cada erro, no mesmo dia</span></li>
             <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontro por vídeo</span></li>
           </ul>
-          <p class="plan__future"><b>Daqui a 90 dias:</b> o que você estava adiando está no ar.</p>
-          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>3 meses grátis do Segundo Cérebro, plano Light</b><p>O meu assistente de IA no seu computador. Na assinatura anual dos planos sem máquina virtual; depois dos 3 meses, valor normal. <a href="https://brain.rangeltech.net" target="_blank" rel="noopener">Ver os planos</a>.</p></div>
+          <p class="plan__future"><b>Em 2 meses:</b> o que você estava adiando está no ar.</p>
+          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>2 meses grátis do Segundo Cérebro, plano Light</b><p>O meu assistente de IA no seu computador. Na assinatura anual dos planos sem máquina virtual; depois dos 2 meses, valor normal. <a href="https://brain.rangeltech.net" target="_blank" rel="noopener">Ver os planos</a>.</p></div>
           <div class="seats seats--m">
             <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''} />)}</div>
             <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> O grupo é pequeno de propósito.</p>
@@ -180,11 +180,12 @@ const PASSOS = [
       </div>
       <div class="cmp glass glass--m" data-reveal role="table" aria-label="Lado a lado">
         <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">WhatsApp<br /><s class="cmp__de">{brl(PRECOS_DE.acompanhamento)}</s> <b>{brl(PRECOS.acompanhamento)}</b></span><span role="columnheader" class="hi">Cara a cara<br /><s class="cmp__de">{brl(PRECOS_DE.individual)}</s> <b>{brl(PRECOS.individual)}</b></span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Duração</span><span role="cell">2 meses</span><span role="cell" class="hi">Combinada na call, conforme o escopo</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Pelo WhatsApp, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo + WhatsApp</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu faço por você, pelo WhatsApp</span><span role="cell" class="hi">Eu faço com você, na tela, 3 vezes por semana</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Eu conecto e subo para você</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Segundo Cérebro: 3 meses grátis</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Plano Light</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Plano Max, configurado por mim</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Segundo Cérebro grátis</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />2 meses, plano Light</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />3 meses, plano Max, configurado por mim</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
       </div>
