@@ -27,7 +27,7 @@ if (!reduce && !lite) {
       const el = document.getElementById(id);
       if (!el) return;
       e.preventDefault();
-      lenis!.scrollTo(el, { offset: -72, duration: 1.1 });
+      lenis!.scrollTo(el, { offset: -92, duration: 1.1 });
     }),
   );
 }
@@ -131,21 +131,7 @@ if (!reduce && !lite) {
   gsap.fromTo(img, { scale: 1.32, yPercent: -3 }, { scale: 1, yPercent: 2, ease: 'none', scrollTrigger: { trigger: media, start: 'top 95%', end: 'bottom 15%', scrub: 0.8, onUpdate: (st) => desenha(st.progress) } });
 })();
 
-/* ---------- cena 3D (carrega depois, só onde vale) ---------- */
-(function tresD() {
-  const box = document.querySelector<HTMLElement>('[data-cena3d]');
-  if (!box || box.dataset.cena3d !== '1' || reduce || lite) return;
-  const nav: any = navigator;
-  const fraco = (nav.deviceMemory && nav.deviceMemory < 4) || (nav.hardwareConcurrency && nav.hardwareConcurrency < 4) || nav.connection?.saveData;
-  const temWebGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
-  if (fraco || !temWebGL) return;
-  const io = new IntersectionObserver(([en]) => {
-    if (!en.isIntersecting) return;
-    io.disconnect();
-    const ok = () => import('./cena3d').then((m) => m.montar(box, gsap, ScrollTrigger)).catch(() => {});
-    if ('requestIdleCallback' in window) (window as any).requestIdleCallback(ok, { timeout: 2500 }); else setTimeout(ok, 600);
-  }, { rootMargin: '600px' });
-  io.observe(box);
-})();
+/* ---------- cérebro vivo (hero, como funciona, chamada final) ---------- */
+import('./cerebro').then((m) => m.montarTodos()).catch(() => {});
 
 addEventListener('load', () => ScrollTrigger.refresh());

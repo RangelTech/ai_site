@@ -91,7 +91,7 @@ with sync_playwright() as p:
         pg.screenshot(path=f"{OUT}/d_{s}.jpg", quality=65, type="jpeg")
     # cena 3D carregou?
     pg.evaluate("document.querySelector('[data-sec=como]').scrollIntoView({block:'center'})"); pg.wait_for_timeout(3500)
-    ok(pg.evaluate("!document.querySelector('[data-cena3d-canvas]').hidden"), "cena 3D ligada no desktop (canvas visível)")
+    ok(pg.evaluate("document.querySelectorAll('canvas[data-cerebro]').length >= 3 && document.querySelector('canvas[data-cerebro=hero]').width > 100"), "cérebro montado (hero, como, final)")
     pg.screenshot(path=f"{OUT}/d_3d.jpg", quality=70, type="jpeg")
     ok(pg.evaluate("document.querySelectorAll('.map .pt').length") > 50, "mapa com pontos vindos da prova")
     ctx.close()

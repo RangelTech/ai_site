@@ -79,6 +79,13 @@ const ld = {
 
     <main id="conteudo"><slot /></main>
 
+    {!legal && (
+      <div class="ctabar" data-ctabar>
+        <span class="ctabar__t"><b data-vagas-curta></b> este mês · garantia de 7 dias</span>
+        <button type="button" class="btn btn--hot btn--sm" data-quiz data-track="quiz_barra">Resolver meu problema</button>
+      </div>
+    )}
+
     <footer class="footer">
       <div class="wrap">
         <nav class="footer__links" aria-label="Rodapé">

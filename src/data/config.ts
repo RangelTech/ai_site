@@ -64,7 +64,17 @@ export const VIDEO = {
 };
 
 // Cena 3D (seção "como funciona"). false desliga sem novo código de página; o aparelho fraco desliga sozinho.
-export const TRES_D = { ligado: true };
+export const TRES_D = { ligado: false }; // substituido pelo cerebro (src/scripts/cerebro.ts)
+
+// Depoimentos em vídeo (3 espaços). Preencha `mp4` (vertical, 30 a 60 s) e `capa` (imagem) quando os vídeos existirem; vazio = espaço reservado.
+export const VIDEOS_CLIENTES: { mp4: string; capa: string; nome: string; cargo: string }[] = [
+  { mp4: '', capa: '', nome: '', cargo: '' },
+  { mp4: '', capa: '', nome: '', cargo: '' },
+  { mp4: '', capa: '', nome: '', cargo: '' },
+];
+
+// Números de autoridade (os mesmos do portfólio lucas.rangeltech.net).
+export const NUMEROS = { empresas: 50, artigos: 150, projetos: 20, anosIA: 12, anosTec: 20, kaggle: 31 };
 
 // Quiz de qualificação (spec SITE_V2, seções 10 e 16.5). Uma pergunta por tela.
 export const QUIZ = {

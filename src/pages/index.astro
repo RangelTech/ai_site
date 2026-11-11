@@ -7,7 +7,7 @@ import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { PROJETOS, FAQ } from '../data/content';
-import { QUIZ, VAGAS, PRECOS, VIDEO, TRES_D, LINKS } from '../data/config';
+import { QUIZ, VAGAS, PRECOS, VIDEO, LINKS, VIDEOS_CLIENTES, NUMEROS } from '../data/config';
 import { EMPRESAS_INFO } from '../data/empresas_info';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS } from '../lib/mes';
 import { carregarProva } from '../lib/prova';
@@ -42,12 +42,16 @@ const PASSOS = [
         </div>
         <p class="hero__trust" data-reveal><Fragment set:html={ICON.shield} /><span>Garantia de 7 dias. <b data-vagas-curta>{fraseVagasCurta(restantes)}</b> para o cara a cara este mês.</span></p>
       </div>
-      <aside class="hero__proof glass glass--m" data-reveal aria-label="Números">
-        <div class="hp"><b data-count={n.mentorados}>{n.mentorados}</b><span>pessoas acompanhadas</span></div>
-        <div class="hp"><b data-count={n.estados}>{n.estados}</b><span>estados do Brasil</span></div>
-        <div class="hp"><b data-count={n.empresas}>{n.empresas}</b><span>empresas atendidas</span></div>
-        <div class="hp hp--y"><b>12</b><span>anos só com IA</span></div>
-      </aside>
+      <div class="hero__brain" data-reveal aria-hidden="true">
+        <canvas data-cerebro="hero"></canvas>
+        <div class="hero__brainlabel"><i></i>inteligência artificial trabalhando</div>
+      </div>
+      <ul class="hero__nums" data-reveal aria-label="Números">
+        <li><b data-count={NUMEROS.empresas}>{NUMEROS.empresas}</b><span>empresas atendidas</span></li>
+        <li><b data-count={n.mentorados}>{n.mentorados}</b><span>pessoas acompanhadas em {n.estados} estados</span></li>
+        <li><b>{NUMEROS.artigos}+</b><span>artigos técnicos publicados</span></li>
+        <li><b data-count={NUMEROS.anosIA}>{NUMEROS.anosIA}</b><span>anos só com IA, {NUMEROS.anosTec} em tecnologia</span></li>
+      </ul>
     </div>
   </section>
 
@@ -73,7 +77,7 @@ const PASSOS = [
           <ul class="dominio__lista">
             <li>Agentes de IA que operam sistemas</li><li>Visão computacional</li><li>Previsão de demanda e de vendas</li><li>Voz: transcrição e fala</li><li>Imagem e vídeo gerados</li><li>Modelos próprios no seu servidor</li><li>Dados: do lago ao painel</li><li>Risco, preço e recomendação</li>
           </ul>
-          <p class="dominio__p">Laboratório próprio: eu testo modelos, placas de vídeo e ferramentas, meço custo e resultado, e publico tudo. <a href={LINKS.github} target="_blank" rel="noopener">GitHub</a>, <a href={LINKS.kaggle} target="_blank" rel="noopener">Kaggle</a> e <a href={LINKS.portfolio} target="_blank" rel="noopener">portfólio</a>.</p>
+          <p class="dominio__p">Laboratório próprio: eu testo modelos, placas de vídeo e ferramentas, meço custo e resultado, e publico tudo: {NUMEROS.artigos}+ artigos, {NUMEROS.kaggle} conjuntos de dados no Kaggle. <a href={LINKS.github} target="_blank" rel="noopener">GitHub</a>, <a href={LINKS.kaggle} target="_blank" rel="noopener">Kaggle</a> e <a href={LINKS.portfolio} target="_blank" rel="noopener">portfólio</a>.</p>
         </div>
         <ul class="stats" data-reveal>
           <li><b>20</b><span>anos em tecnologia</span></li>
@@ -195,18 +199,10 @@ const PASSOS = [
         <button type="button" class="btn btn--hot" data-quiz data-track="como_quiz" data-reveal>Começar pelo passo 1</button>
       </div>
       <div class="como__scene" aria-hidden="true">
-        <div class="como__box" data-cena3d={TRES_D.ligado ? '1' : '0'}>
-        <svg class="como__poster" data-cena3d-poster viewBox="0 0 400 320" fill="none">
-          <g stroke="#5eb0ff" stroke-opacity=".55">{Array.from({ length: 16 }).map((_, i) => <rect x={30 + (i % 4) * 22} y={120 + Math.floor(i / 4) * 22} width="16" height="16" rx="3" fill="#0b1426" />)}</g>
-          <path d="M126 160 H165" stroke="#5eb0ff" stroke-dasharray="4 4" /><path d="M235 160 H274" stroke="#5eb0ff" stroke-dasharray="4 4" />
-          <circle cx="200" cy="160" r="34" stroke="#FF4B32" stroke-width="1.5" /><circle cx="200" cy="160" r="12" fill="#FF4B32" />
-          <polygon points="200,118 236,139 236,181 200,202 164,181 164,139" stroke="#FF4B32" stroke-opacity=".5" />
-          <rect x="276" y="112" width="96" height="96" rx="10" stroke="#5eb0ff" /><rect x="288" y="128" width="72" height="8" rx="4" fill="#5eb0ff" fill-opacity=".5" /><rect x="288" y="146" width="48" height="8" rx="4" fill="#5eb0ff" fill-opacity=".35" /><rect x="288" y="164" width="60" height="26" rx="6" fill="#FF4B32" fill-opacity=".8" />
-          <text x="62" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">DADOS</text><text x="193" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">IA</text><text x="308" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">TELA</text>
-        </svg>
-        <canvas data-cena3d-canvas hidden></canvas>
+        <div class="como__box"><canvas data-cerebro="como"></canvas>
+          <div class="como__tags"><span>dados</span><span class="hot">IA</span><span>tela</span></div>
         </div>
-        <p class="como__legend">A arquitetura que eu monto para você: o seu dado, a IA e a tela. Dentro da sua própria estrutura.</p>
+        <p class="como__legend">O cérebro do sistema que eu monto para você: o seu dado entra, a IA decide, a tela mostra. Dentro da sua própria estrutura.</p>
       </div>
     </div>
   </section>
@@ -221,13 +217,29 @@ const PASSOS = [
           <p class="lead" style="margin-top:16px">Os pontos azuis são pessoas que eu acompanho ou já acompanhei. Os laranja, empresas que já atendi. Toque em um estado para ver os números.</p>
           <div class="counters">
             <div class="counter"><b data-count={n.mentorados}>{n.mentorados}</b><span>mentorados em {n.estados} estados</span></div>
-            <div class="counter counter--emp"><b data-count={n.empresas}>{n.empresas}</b><span>empresas atendidas</span></div>
+            <div class="counter counter--emp"><b data-count={n.empresas}>{n.empresas}</b><span>empresas no mapa</span></div>
           </div>
         </div>
         <div data-reveal><BrazilMap pontos={prova.mapa} /></div>
       </div>
+      <div class="vids" style="margin-top:var(--s6)">
+        <div class="sec__head" data-reveal style="margin-bottom:var(--s3)"><span class="eyebrow">Quem já resolveu</span><h3 class="display h3">Eles contam <em class="hot">com a própria voz.</em></h3></div>
+        <div class="vids__grid">
+          {VIDEOS_CLIENTES.map((v, i) => v.mp4 ? (
+            <figure class="vid" data-reveal>
+              <video src={v.mp4} poster={v.capa || undefined} controls playsinline preload="none"></video>
+              <figcaption><b>{v.nome}</b><span>{v.cargo}</span></figcaption>
+            </figure>
+          ) : (
+            <figure class="vid vid--vazio" data-reveal aria-hidden="true">
+              <div class="vid__play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+              <figcaption><b>Depoimento {i + 1}</b><span>em vídeo, em breve</span></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
       {prova.depoimentos.length > 0 && (
-        <div class="quotes" style="margin-top:var(--s6)">
+        <div class="quotes" style="margin-top:var(--s4)">
           {prova.depoimentos.map((d) => (
             <figure class="quote glass glass--m" data-reveal>
               <blockquote>“{d.texto}”</blockquote>
@@ -311,6 +323,7 @@ const PASSOS = [
   <section class="sec" data-sec="final" data-hue="0">
     <div class="wrap">
       <div class="final glass" data-reveal>
+        <canvas class="final__brain" data-cerebro="final" aria-hidden="true"></canvas>
         <h2 class="display h2">Você já sabe qual é o seu problema. <em class="hot">Falta só decidir quem vai resolver.</em></h2>
         <p class="lead">Dois minutos de perguntas e eu te digo o melhor jeito de resolver.</p>
         <button type="button" class="btn btn--hot btn--xl" data-quiz data-track="final_quiz">Começar agora</button>

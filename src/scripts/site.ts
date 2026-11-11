@@ -180,6 +180,18 @@ document.addEventListener('click', (e) => {
   document.querySelectorAll<HTMLElement>('[data-dots-m] i').forEach((e, i, todos) => e.classList.toggle('taken', i < todos.length - m));
 })();
 
+/* ---------- Barra fixa de ação: aparece depois do hero, some sobre os cartões de preço ---------- */
+(function barra() {
+  const b = document.querySelector<HTMLElement>('[data-ctabar]');
+  const hero = document.querySelector('#topo');
+  if (!b || !hero) return;
+  let passou = false, nosPlanos = false;
+  const atualiza = () => b.classList.toggle('on', passou && !nosPlanos);
+  new IntersectionObserver(([en]) => { passou = !en.isIntersecting; atualiza(); }, { threshold: 0 }).observe(hero);
+  const planos = document.querySelector('#caminhos');
+  if (planos) new IntersectionObserver(([en]) => { nosPlanos = en.isIntersecting; atualiza(); }, { threshold: 0, rootMargin: '-30% 0px -30% 0px' }).observe(planos);
+})();
+
 /* ---------- Tempo em cada seção e profundidade de rolagem ---------- */
 (function medir() {
   const secs = [...document.querySelectorAll<HTMLElement>('[data-sec]')];
