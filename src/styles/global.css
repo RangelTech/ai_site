@@ -227,6 +227,10 @@ html:not(.js) [data-reveal] { opacity: 1 !important; transform: none !important;
 .offer__list li.off svg { color: #71849f; }
 .plan__future { font-size: 15px; color: #e3ebf8; padding: 12px 14px; border-radius: 14px; background: rgba(94, 176, 255, 0.1); border: 1px solid rgba(94, 176, 255, 0.25); }
 .plan__future b { color: var(--cyan-h); }
+.plan__bonus { display: grid; gap: 6px; padding: 14px 16px; border-radius: var(--r-m); background: linear-gradient(150deg, rgba(255, 75, 50, 0.16), rgba(255, 75, 50, 0.06)); border: 1px solid rgba(255, 75, 50, 0.5); }
+.plan__bonus-tag { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hot); }
+.plan__bonus b { font-size: 16px; letter-spacing: -0.015em; color: #fff; line-height: 1.25; }
+.plan__bonus p { font-size: 13.5px; color: #e3ebf8; line-height: 1.45; }
 .seats { display: grid; gap: 10px; padding: 14px 16px; border-radius: var(--r-m); background: rgba(255, 75, 50, 0.09); border: 1px solid rgba(255, 75, 50, 0.4); }
 .seats__dots { display: flex; gap: 8px; }
 .seats__dots i { flex: 1; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); }

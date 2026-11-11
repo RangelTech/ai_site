@@ -80,7 +80,7 @@ with sync_playwright() as p:
         ok(s in secs, f"seção {s} presente")
     ok(not pg.query_selector("[data-fab]"), "sem botão flutuante do WhatsApp")
     ok("ficticio" not in pg.content().lower() and "fictício" not in pg.content().lower(), "nada de 'fictício' no HTML")
-    ok(pg.locator("text=bônus").count() == 0 and "Bônus" not in pg.content(), "sem bônus na página")
+    ok("R$ 391" not in pg.content() and "habilidades técnicas" not in pg.content(), "sem o bônus antigo de curso")
     ok(pg.locator("text=R$ 294").count() == 0, "sem o produto de R$ 294")
     h = pg.evaluate("document.body.scrollHeight")
     for y in range(0, h, 500):

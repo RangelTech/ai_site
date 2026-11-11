@@ -44,11 +44,10 @@ const PASSOS = [
       </div>
       <div class="hero__brain" data-reveal aria-hidden="true">
         <canvas data-cerebro="hero"></canvas>
-        <div class="hero__brainlabel"><i></i>inteligência artificial trabalhando</div>
       </div>
       <ul class="hero__nums" data-reveal aria-label="Números">
+        <li><b data-count={n.mentorados + NUMEROS.empresas}>{n.mentorados + NUMEROS.empresas}</b><span>problemas resolvidos</span></li>
         <li><b data-count={NUMEROS.empresas}>{NUMEROS.empresas}</b><span>empresas atendidas</span></li>
-        <li><b data-count={n.mentorados}>{n.mentorados}</b><span>pessoas acompanhadas em {n.estados} estados</span></li>
         <li><b>{NUMEROS.artigos}+</b><span>artigos técnicos publicados</span></li>
         <li><b data-count={NUMEROS.anosIA}>{NUMEROS.anosIA}</b><span>anos só com IA, {NUMEROS.anosTec} em tecnologia</span></li>
       </ul>
@@ -126,6 +125,7 @@ const PASSOS = [
             <li><Fragment set:html={ICON.check} /><span>WhatsApp comigo e com a minha equipe, todo dia</span></li>
           </ul>
           <p class="plan__future"><b>Daqui a 90 dias:</b> o seu projeto no ar e você sabendo operar.</p>
+          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>3 meses grátis do Segundo Cérebro, plano Max</b><p>O meu assistente de IA que lê arquivos, roda comandos e cria sites e documentos. Eu mesmo configuro tudo para você, 100%. Na assinatura anual, sem máquina virtual; depois dos 3 meses, valor normal.</p></div>
           <div class="seats">
             <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''} />)}</div>
             <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
@@ -179,6 +179,7 @@ const PASSOS = [
         <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu destravo cada dúvida</span><span role="cell" class="hi">Eu construo junto e digo o próximo passo</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Você monta, eu te guio</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Segundo Cérebro: 3 meses grátis, configurado por mim</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
       </div>
