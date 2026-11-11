@@ -144,7 +144,7 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
     const url = r.destino?.url || '';
     const cab: Record<string, [string, string, string]> = {
       cara_a_cara: ['cara a cara', 'Marcar minha call de 30 minutos', 'Antes de qualquer pagamento, a gente conversa por vídeo: você me conta o problema, eu te mostro como trabalho e fechamos o escopo. Escolha um horário na minha agenda.'],
-      whatsapp: ['pelo WhatsApp', 'Quero começar pelo WhatsApp', 'Você entra no grupo hoje, manda o problema e eu destravo. Pix ou cartão em até 12 vezes. Garantia de 7 dias: não resolveu, devolvo.'],
+      whatsapp: ['pelo WhatsApp', 'Quero começar pelo WhatsApp', 'Você entra hoje, manda o problema e eu resolvo com você: conecto, subo e te mostro. Pix ou cartão em até 12 vezes. Garantia de 7 dias: não resolveu, devolvo.'],
       empresa: ['com um projeto para a sua empresa', 'Falar com o Lucas agora', 'Eu leio o que você escreveu e volto com o próximo passo. O escopo vai para o papel antes de começar.'],
       frio: ['no seu tempo', 'Entendi, me avisa quando for a hora', 'Sem pressa. Eu te mando por e-mail, nos próximos dias, o que eu faria no seu lugar. Quando quiser resolver, é só voltar aqui.'],
     };

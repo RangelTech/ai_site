@@ -33,7 +33,7 @@ const PASSOS = [
       <div class="hero__copy">
         <p class="eyebrow" data-reveal>Lucas Rangel · 20 anos em tecnologia, 12 em inteligência artificial</p>
         <h1 class="display h1" data-split>Qual é o seu problema? <em class="hot">Eu resolvo com você.</em></h1>
-        <p class="lead" data-reveal>Não é curso. Não é vídeo gravado. É eu, do seu lado, com 12 anos de inteligência artificial aplicada, resolvendo o que está travando a sua vida ou a sua empresa.</p>
+        <p class="lead" data-reveal>Não é curso. Não é vídeo gravado. É eu, com 12 anos de inteligência artificial aplicada, resolvendo o que está travando a sua vida ou a sua empresa. Se você quiser, eu faço por você.</p>
         <p class="hero__ask" data-reveal>Me diz onde você está hoje:</p>
         <div class="situ" data-reveal role="group" aria-label="Qual é a sua situação hoje?">
           {QUIZ.situacoes.map((s) => (
@@ -70,7 +70,7 @@ const PASSOS = [
         <ul class="cena__caps">
           {VIDEO.legendas.map((l, i) => <li class="cena__cap" data-cena-cap={i} data-reveal>{l}</li>)}
         </ul>
-        <p class="lead" data-reveal>Eu não vendo teoria. Eu abro a tela, você conta o problema, e a gente resolve. Prompt por prompt, decisão por decisão, até estar no ar.</p>
+        <p class="lead" data-reveal>Meu papel é resolver, não dar aula. Eu abro a tela, conecto no seu computador, subo o sistema e te mostro como ele funciona. Você aprende no caminho, mas o problema é meu até estar resolvido.</p>
         <div class="dominio" data-reveal>
           <p class="dominio__t">Inteligência artificial não é só chat. É o que eu entrego há 12 anos:</p>
           <ul class="dominio__lista">
@@ -109,23 +109,23 @@ const PASSOS = [
       <div class="sec__head" data-reveal>
         <span class="eyebrow">Mentorias</span>
         <h2 class="display h2">Três jeitos de eu <em class="hot">resolver o seu problema.</em></h2>
-        <p class="lead">Nos três, você traz o problema e eu entro de verdade. O que muda é quanto de mim você tem.</p>
+        <p class="lead">Nos três eu faço por você: conecto, construo, subo e te mostro. O que muda é quanto de mim você tem e por onde a gente fala.</p>
       </div>
       <div class="plans">
         <article class="plan plan--hi glass" id="individual" data-sec="individual" data-reveal>
           <span class="plan__badge">Mais completa</span>
           <h3 class="plan__name">Cara a cara</h3>
-          <p class="plan__for">3 encontros por semana por vídeo, só nós dois, mais o WhatsApp todo dia.</p>
+          <p class="plan__for">3 encontros por semana por vídeo, só nós dois, mais o WhatsApp todo dia. Eu conecto no seu computador, subo e te mostro.</p>
           <div class="price">{brl(PRECOS.individual)}</div>
           <p class="plan__pay">Antes de pagar, uma call de 30 minutos: você me conta o problema, eu te mostro como trabalho e a gente fecha o escopo.</p>
           <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Você traz o problema, eu abro a tela e a gente resolve junto até estar funcionando</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Você traz o problema, eu construo com você na tela até estar funcionando. Se quiser, eu faço por você</span></li>
             <li><Fragment set:html={ICON.check} /><span>Montamos contas e ambiente juntos, na tela</span></li>
             <li><Fragment set:html={ICON.check} /><span>Modelos dos projetos que eu uso nos meus clientes</span></li>
             <li><Fragment set:html={ICON.check} /><span>WhatsApp comigo e com a minha equipe, todo dia</span></li>
           </ul>
           <p class="plan__future"><b>Daqui a 90 dias:</b> o seu projeto no ar e você sabendo operar.</p>
-          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>3 meses grátis do Segundo Cérebro, plano Max</b><p>O meu assistente de IA que lê arquivos, roda comandos e cria sites e documentos. Eu mesmo configuro tudo para você, 100%. Na assinatura anual, sem máquina virtual; depois dos 3 meses, valor normal.</p></div>
+          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>3 meses grátis do Segundo Cérebro, plano Max</b><p>O meu assistente de IA que lê arquivos, roda comandos e cria sites e documentos. Eu mesmo configuro tudo para você, 100%. Na assinatura anual dos planos sem máquina virtual; depois dos 3 meses, valor normal. <a href="https://brain.rangeltech.net" target="_blank" rel="noopener">Ver os planos</a>.</p></div>
           <div class="seats">
             <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''} />)}</div>
             <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
@@ -137,16 +137,17 @@ const PASSOS = [
         </article>
         <article class="plan glass" id="acompanhamento" data-sec="acompanhamento" data-reveal>
           <h3 class="plan__name">Pelo WhatsApp</h3>
-          <p class="plan__for">Você manda o problema, a dúvida, o erro. Eu respondo e destravo, no seu ritmo, sem reunião marcada.</p>
+          <p class="plan__for">Você manda o problema pelo WhatsApp e eu resolvo: conecto no seu computador, subo o que precisa e te mostro. No seu ritmo, sem reunião marcada.</p>
           <div class="price">{brl(PRECOS.acompanhamento)}</div>
           <p class="plan__pay">Compra online, direto aqui. Pix ou cartão em até 12 vezes.</p>
           <ul class="offer__list">
             <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Eu destravo cada dúvida e cada erro</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Você monta o ambiente, eu te guio</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu faço por você: conecto, subo, corrijo e te mostro o que fiz</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu destravo cada dúvida e cada erro, no mesmo dia</span></li>
             <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontro por vídeo</span></li>
           </ul>
-          <p class="plan__future"><b>Daqui a 90 dias:</b> você já construiu o que estava adiando.</p>
+          <p class="plan__future"><b>Daqui a 90 dias:</b> o que você estava adiando está no ar.</p>
+          <div class="plan__bonus"><span class="plan__bonus-tag">Bônus de quem entra agora</span><b>3 meses grátis do Segundo Cérebro, plano Light</b><p>O meu assistente de IA no seu computador. Na assinatura anual dos planos sem máquina virtual; depois dos 3 meses, valor normal. <a href="https://brain.rangeltech.net" target="_blank" rel="noopener">Ver os planos</a>.</p></div>
           <div class="seats seats--m">
             <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''} />)}</div>
             <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> O grupo é pequeno de propósito.</p>
@@ -158,12 +159,12 @@ const PASSOS = [
         </article>
         <article class="plan plan--b2b glass" id="empresa" data-sec="b2b" data-reveal>
           <h3 class="plan__name">Para a sua empresa</h3>
-          <p class="plan__for">Atendimento, vendas, sistema velho, dado espalhado. Eu monto a solução dentro da sua própria estrutura, sem depender de serviço de terceiros.</p>
+          <p class="plan__for">Tem um problema na sua empresa que ninguém resolveu? Atendimento que não dá conta, venda que depende de gente, sistema velho que trava a operação, dado espalhado sem decisão. Eu entrego a solução pronta, rodando dentro da sua própria estrutura, sem depender de serviço de terceiros.</p>
           <div class="price price--s">Sob proposta</div>
           <p class="plan__pay">A gente coloca no papel antes de começar: o que entra, prazo e investimento.</p>
           <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Projeto específico para o seu problema</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Rodando no seu ambiente, do protótipo à produção</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Software sob medida, atendimento automático ou força de vendas inteligente</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Rodando no seu ambiente, do protótipo à produção, com a sua equipe sabendo operar</span></li>
             <li><Fragment set:html={ICON.check} /><span>Eu e a minha equipe, com contrato</span></li>
           </ul>
           <p class="plan__future"><b>Daqui a 90 dias:</b> o problema que ninguém resolvia, resolvido.</p>
@@ -176,10 +177,10 @@ const PASSOS = [
       <div class="cmp glass glass--m" data-reveal role="table" aria-label="Lado a lado">
         <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">WhatsApp<br /><b>{brl(PRECOS.acompanhamento)}</b></span><span role="columnheader" class="hi">Cara a cara<br /><b>{brl(PRECOS.individual)}</b></span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Pelo WhatsApp, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo + WhatsApp</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu destravo cada dúvida</span><span role="cell" class="hi">Eu construo junto e digo o próximo passo</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Você monta, eu te guio</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu faço por você, pelo WhatsApp</span><span role="cell" class="hi">Eu faço com você, na tela, 3 vezes por semana</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Eu conecto e subo para você</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Segundo Cérebro: 3 meses grátis, configurado por mim</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Segundo Cérebro: 3 meses grátis</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Plano Light</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Plano Max, configurado por mim</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
       </div>

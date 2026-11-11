@@ -60,10 +60,10 @@ export const PROJETOS: Projeto[] = [
 ];
 
 export const FAQ: { p: string; r: string }[] = [
-  { p: 'Isso é curso?', r: 'Não. Curso te entrega aula. Aqui você me entrega o problema e a gente resolve. Eu abro a tela, você acompanha, e no fim está funcionando e você sabe operar.' },
+  { p: 'Isso é curso?', r: 'Não. Curso te entrega aula. Aqui você me entrega o problema e eu resolvo: conecto no seu computador, construo, subo e te mostro. Você aprende no caminho, mas o meu papel é resolver, não dar aula.' },
   { p: 'Preciso saber programar?', r: 'Não. O que você precisa é de alguém que saiba qual técnica resolve o seu problema (agente, visão computacional, previsão, modelo próprio), monte a arquitetura certa e corrija quando sai errado. Isso sou eu do seu lado.' },
   { p: 'Você trabalha só com chat e prompts?', r: 'Não. Chat é a parte mais visível. Em 12 anos eu entreguei visão computacional, previsão de demanda, motores de risco e de preço, voz, imagem e modelos próprios rodando no servidor do cliente. O que entra no seu projeto é o que resolve o seu problema.' },
-  { p: 'Qual a diferença entre o WhatsApp e o cara a cara?', r: 'Pelo WhatsApp você manda o problema, a dúvida, o erro, e eu respondo e destravo, no seu ritmo. Cara a cara, eu te vejo três vezes por semana por vídeo, só nós dois, e a gente constrói junto na tela, além do WhatsApp todo dia.' },
+  { p: 'Qual a diferença entre o WhatsApp e o cara a cara?', r: 'Nos dois eu faço por você. Pelo WhatsApp você manda o problema e eu resolvo no seu ritmo: conecto, subo, corrijo e te mostro. Cara a cara, além do WhatsApp, eu te vejo três vezes por semana por vídeo, só nós dois, e a gente constrói junto na tela.' },
   { p: 'Como é a call de 30 minutos?', r: 'É antes de qualquer pagamento. Você me conta o problema, eu te mostro como trabalho e o que dá para resolver, e a gente fecha o escopo. Se fizer sentido para nós dois, eu te mando o link para começar.' },
   { p: 'E se eu não tiver tempo?', r: 'Se você não tem tempo, é porque está fazendo na mão o que a IA faria em minutos. O caminho pelo WhatsApp foi feito para quem tem pouco tempo: você avança quando pode, e eu destravo quando você trava.' },
   { p: 'O que a garantia cobre?', r: 'Tudo. Nos primeiros 7 dias, se você achar que não vale, pede o reembolso integral, sem explicar o motivo.' },
