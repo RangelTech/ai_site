@@ -115,6 +115,14 @@ export const QUIZ = {
     { id: 'mais10000', label: 'Mais de R$ 10.000', valor: 20000 },
     { id: 'naosei', label: 'Não sei dizer', valor: 0 },
   ],
+  // empresa: quanto custa hoje a pessoa ou o processo que ela quer automatizar (salário + encargos, por mês)
+  custoEmpresa: [
+    { id: 'ate3000', label: 'Até R$ 3.000 por mês', valor: 3000 },
+    { id: '3000a6000', label: 'De R$ 3.000 a R$ 6.000', valor: 6000 },
+    { id: '6000a12000', label: 'De R$ 6.000 a R$ 12.000', valor: 12000 },
+    { id: 'mais12000', label: 'Mais de R$ 12.000', valor: 20000 },
+    { id: 'naosei', label: 'Não sei dizer', valor: 0 },
+  ],
   prazo: [
     { id: 'semana', label: 'Esta semana' },
     { id: '30dias', label: 'Nos próximos 30 dias' },

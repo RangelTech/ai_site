@@ -2,7 +2,7 @@
 // resultado calculado pelo back-end (com regra local de reserva, para nunca perder o lead se a API cair).
 
 type Opc = { id: string; label: string; sub?: string; valor?: number };
-type Dados = { quiz: any; checkout: string; numero: string; vagas: number };
+type Dados = { quiz: any; checkout: string; numero: string; vagas: number; precos: { individual: number; acompanhamento: number } };
 type Resp = Record<string, string>;
 
 const dlg = document.querySelector<HTMLDialogElement>('[data-quiz-dialog]');
@@ -37,7 +37,8 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
   };
 
   // ---------- telas ----------
-  type Tela = { id: string; titulo: string; sub?: string; tipo: 'opcoes' | 'feedback' | 'contato' | 'texto' | 'formato' | 'resultado'; opcoes?: () => Opc[]; placeholder?: string; obrig?: boolean };
+  type Tela = { id: string; titulo: string | (() => string); sub?: string | (() => string); tipo: 'opcoes' | 'feedback' | 'contato' | 'texto' | 'formato' | 'resultado'; opcoes?: () => Opc[]; placeholder?: string; obrig?: boolean };
+  const txt = (v: string | (() => string) | undefined) => (typeof v === 'function' ? v() : v || '');
   const empresa = () => resp.situacao === 'empresa';
   const TELAS: Tela[] = [
     { id: 'situacao', titulo: 'Me diz onde você está hoje.', tipo: 'opcoes', opcoes: () => Q.situacoes },
@@ -46,7 +47,7 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
     { id: 'contato', titulo: 'Para eu te responder, me diz quem você é.', sub: 'Eu mesmo leio cada resposta.', tipo: 'contato' },
     { id: 'problema', titulo: 'Em uma frase: qual é o problema, ou o que você quer construir?', sub: 'Pode ser do seu jeito. É isso que eu vou ler antes de falar com você.', tipo: 'texto', placeholder: 'Ex.: quero um sistema que responda os meus clientes no WhatsApp sozinho', obrig: true },
     { id: 'tentou', titulo: 'O que você já tentou e por que não deu certo?', sub: 'Curso, freelancer, fazer sozinho, ferramenta pronta...', tipo: 'texto', placeholder: 'Ex.: fiz dois cursos e travei na hora de colocar no ar' },
-    { id: 'custo', titulo: 'Quanto esse problema te custa por mês, ou te faz deixar de ganhar?', sub: 'Um chute honesto basta.', tipo: 'opcoes', opcoes: () => Q.custo },
+    { id: 'custo', titulo: () => (empresa() ? 'Quanto custa hoje a pessoa ou o processo que você quer automatizar?' : 'Quanto esse problema te custa por mês, ou te faz deixar de ganhar?'), sub: () => (empresa() ? 'Salário mais encargos, por mês. Um chute honesto basta.' : 'Um chute honesto basta.'), tipo: 'opcoes', opcoes: () => (empresa() ? Q.custoEmpresa : Q.custo) },
     { id: 'prazo', titulo: 'Quando você quer ter isso resolvido?', tipo: 'opcoes', opcoes: () => Q.prazo },
     { id: 'formato', titulo: 'Como você prefere que eu resolva com você?', tipo: 'formato', opcoes: () => Q.formato },
     { id: 'resultado', titulo: '', tipo: 'resultado' },
@@ -97,17 +98,17 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
     back.hidden = i === 0 || t.tipo === 'resultado';
     let html = '';
     if (t.tipo === 'opcoes') {
-      html = `<h2 class="quiz__t display">${h(t.titulo)}</h2>${t.sub ? `<p class="quiz__sub">${h(t.sub)}</p>` : ''}<div class="quiz__opts">` +
+      html = `<h2 class="quiz__t display">${h(txt(t.titulo))}</h2>${txt(t.sub) ? `<p class="quiz__sub">${h(txt(t.sub))}</p>` : ''}<div class="quiz__opts">` +
         t.opcoes!().map((o) => `<button type="button" class="quiz__opt${resp[t.id] === o.id ? ' on' : ''}" data-opt="${o.id}"><b>${h(o.label)}</b>${o.sub ? `<span>${h(o.sub)}</span>` : ''}</button>`).join('') + '</div>';
     } else if (t.tipo === 'formato') {
-      html = `<h2 class="quiz__t display">${h(t.titulo)}</h2><div class="quiz__opts quiz__opts--2">` +
+      html = `<h2 class="quiz__t display">${h(txt(t.titulo))}</h2><div class="quiz__opts quiz__opts--2">` +
         t.opcoes!().map((o) => `<button type="button" class="quiz__opt quiz__opt--big${resp[t.id] === o.id ? ' on' : ''}" data-opt="${o.id}"><b>${h(o.label)}</b><span>${h(o.sub || '')}</span></button>`).join('') +
         `</div><label class="quiz__chk"><input type="checkbox" data-compromisso ${resp.compromisso === 'sim' ? 'checked' : ''}/><span>Se eu te mostrar o caminho, você está pronto para começar?</span></label>`;
     } else if (t.tipo === 'feedback') {
       const fb = Q.feedback[resp.situacao] || Q.feedback.empregado;
       html = `<p class="quiz__fb-tag">Entendi.</p><h2 class="quiz__t quiz__t--fb display">${h(fb)}</h2><button type="button" class="btn btn--hot btn--block" data-next>Continuar</button>`;
     } else if (t.tipo === 'contato') {
-      html = `<h2 class="quiz__t display">${h(t.titulo)}</h2><p class="quiz__sub">${h(t.sub || '')}</p><form class="quiz__form" data-form novalidate>
+      html = `<h2 class="quiz__t display">${h(txt(t.titulo))}</h2><p class="quiz__sub">${h(txt(t.sub))}</p><form class="quiz__form" data-form novalidate>
         <label><span>Seu nome</span><input name="nome" autocomplete="name" required maxlength="80" value="${h(resp.nome || '')}" /></label>
         <label><span>Seu WhatsApp</span><input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(62) 9 9999-9999" value="${h(resp.whatsapp || '')}" /></label>
         <label><span>Seu e-mail</span><input name="email" type="email" inputmode="email" autocomplete="email" required placeholder="voce@email.com" value="${h(resp.email || '')}" /></label>
@@ -117,7 +118,7 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
         <p class="quiz__lgpd">Ao continuar você aceita receber contato por WhatsApp e e-mail sobre esta conversa. <a href="/privacidade" target="_blank">Política de privacidade</a>.</p>
       </form>`;
     } else if (t.tipo === 'texto') {
-      html = `<h2 class="quiz__t display">${h(t.titulo)}</h2>${t.sub ? `<p class="quiz__sub">${h(t.sub)}</p>` : ''}<form class="quiz__form" data-form novalidate>
+      html = `<h2 class="quiz__t display">${h(txt(t.titulo))}</h2>${txt(t.sub) ? `<p class="quiz__sub">${h(txt(t.sub))}</p>` : ''}<form class="quiz__form" data-form novalidate>
         <textarea name="${t.id}" rows="4" maxlength="600" placeholder="${h(t.placeholder || '')}" ${t.obrig ? 'required' : ''}>${h(resp[t.id] || '')}</textarea>
         <p class="quiz__err" data-err hidden></p>
         <button type="submit" class="btn btn--hot btn--block" data-submit>Continuar</button>${t.obrig ? '' : '<button type="button" class="quiz__skip" data-skip>Pular</button>'}
@@ -138,8 +139,18 @@ if (dlg && dadosEl && typeof dlg.showModal === 'function') {
 
   const mostrarResultado = (r: any) => {
     const nome = (resp.nome || '').split(' ')[0];
-    const custo = (Q.custo as Opc[]).find((c) => c.id === resp.custo);
-    const custoTxt = custo && custo.valor ? `Isso está te custando até <b>R$ ${custo.valor.toLocaleString('pt-BR')} por mês</b>, ou <b>R$ ${(custo.valor * 12).toLocaleString('pt-BR')} por ano</b>.` : '';
+    const brl = (v: number) => 'R$ ' + v.toLocaleString('pt-BR');
+    const custo = ([...(Q.custo as Opc[]), ...(Q.custoEmpresa as Opc[])]).find((c) => c.id === resp.custo);
+    let custoTxt = '';
+    if (custo && custo.valor) {
+      const mes = custo.valor, ano = mes * 12;
+      if (empresa()) custoTxt = `Essa tarefa custa até <b>${brl(mes)} por mês</b>: <b>${brl(ano)} por ano</b>, todo ano. Um projeto de IA que custe menos que isso se paga no primeiro ano. Do segundo em diante, é só economia.`;
+      else {
+        const preco = r.resultado === 'cara_a_cara' ? D.precos.individual : D.precos.acompanhamento;
+        const meses = Math.max(1, Math.ceil(preco / mes));
+        custoTxt = `Isso está te custando até <b>${brl(mes)} por mês</b>, ou <b>${brl(ano)} por ano</b>. ${r.resultado === 'frio' ? '' : `Resolvido, a mentoria se paga em <b>${meses} ${meses === 1 ? 'mês' : 'meses'}</b>.`}`;
+      }
+    }
     const tipo = r.destino?.tipo;
     const url = r.destino?.url || '';
     const cab: Record<string, [string, string, string]> = {

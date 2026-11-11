@@ -109,9 +109,10 @@ with sync_playwright() as p:
             pg.wait_for_selector("textarea[name=problema]"); pg.fill("textarea[name=problema]", "Atendimento não dá conta dos pedidos"); pg.click("[data-submit]")
             pg.wait_for_selector(".quiz__opt[data-opt='11a50']"); pg.click(".quiz__opt[data-opt='11a50']")
             pg.wait_for_selector(".quiz__opt[data-opt=sim]"); pg.click(".quiz__opt[data-opt=sim]")
-            pg.wait_for_selector(".quiz__opt[data-opt='2000a10000']"); pg.click(".quiz__opt[data-opt='2000a10000']")
+            pg.wait_for_selector(".quiz__opt[data-opt='6000a12000']"); pg.click(".quiz__opt[data-opt='6000a12000']")
             pg.wait_for_selector(".quiz__opt[data-opt='30dias']"); pg.click(".quiz__opt[data-opt='30dias']")
             pg.wait_for_selector(".quiz__q", timeout=8000)
+            ok("por ano" in pg.inner_text("dialog[open] .quiz__body") and "144.000" in pg.inner_text("dialog[open] .quiz__body"), "empresa: conta anual no resultado")
         else:
             quiz_pessoa(pg, "cara_a_cara" if destino == "agenda" else "whatsapp", "pesquisando" if destino == "obrigado" else "30dias")
         pg.wait_for_timeout(300)
