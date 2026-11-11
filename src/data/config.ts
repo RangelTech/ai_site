@@ -53,6 +53,8 @@ export const CHECKOUT = {
 };
 
 export const PRECOS = { individual: 5000, acompanhamento: 1000 };
+// Preço âncora (riscado, "de") mostrado acima do preço cobrado. O cobrado continua o de PRECOS (é o do checkout da Cakto).
+export const PRECOS_DE = { individual: 6997, acompanhamento: 1497 };
 
 // Vídeo de "quem sou eu" (60 s). Até o arquivo chegar, a cena usa as fotos. Ver public/video/LEIA-ME.md.
 export const VIDEO = {

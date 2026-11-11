@@ -7,7 +7,7 @@ import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
 import { PROJETOS, FAQ } from '../data/content';
-import { QUIZ, VAGAS, PRECOS, VIDEO, LINKS, VIDEOS_CLIENTES, NUMEROS } from '../data/config';
+import { QUIZ, VAGAS, PRECOS, PRECOS_DE, VIDEO, LINKS, VIDEOS_CLIENTES, NUMEROS } from '../data/config';
 import { EMPRESAS_INFO } from '../data/empresas_info';
 import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS } from '../lib/mes';
 import { carregarProva } from '../lib/prova';
@@ -17,6 +17,7 @@ const n = prova.numeros;
 const restantes = vagasRestantes();
 const mRestantes = mentoradosRestantes();
 const brl = (v: number) => 'R$ ' + v.toLocaleString('pt-BR');
+const off = (de: number, por: number) => Math.round((1 - por / de) * 100);
 const destaques = PROJETOS.filter((p) => p.destaque).sort((a, b) => a.destaque! - b.destaque!);
 const extras = PROJETOS.filter((p) => !p.destaque);
 const iniciais = (s: string) => s.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').filter(Boolean).map((x) => x[0]).join('').slice(0, 2).toUpperCase();
@@ -117,7 +118,8 @@ const PASSOS = [
           <span class="plan__badge">Mais completa</span>
           <h3 class="plan__name">Cara a cara</h3>
           <p class="plan__for">3 encontros por semana por vídeo, só nós dois, mais o WhatsApp todo dia. Eu conecto no seu computador, subo e te mostro.</p>
-          <div class="price">{brl(PRECOS.individual)}</div>
+          <div class="price__de"><s>de {brl(PRECOS_DE.individual)}</s><span class="price__off">-{off(PRECOS_DE.individual, PRECOS.individual)}%</span></div>
+          <div class="price"><small>por</small> {brl(PRECOS.individual)}</div>
           <p class="plan__pay">Antes de pagar, uma call de 30 minutos: você me conta o problema, eu te mostro como trabalho e a gente fecha o escopo.</p>
           <ul class="offer__list">
             <li><Fragment set:html={ICON.check} /><span>Você traz o problema, eu construo com você na tela até estar funcionando. Se quiser, eu faço por você</span></li>
@@ -139,7 +141,8 @@ const PASSOS = [
         <article class="plan glass" id="acompanhamento" data-sec="acompanhamento" data-reveal>
           <h3 class="plan__name">Pelo WhatsApp</h3>
           <p class="plan__for">Você manda o problema pelo WhatsApp e eu resolvo: conecto no seu computador, subo o que precisa e te mostro. No seu ritmo, sem reunião marcada.</p>
-          <div class="price">{brl(PRECOS.acompanhamento)}</div>
+          <div class="price__de"><s>de {brl(PRECOS_DE.acompanhamento)}</s><span class="price__off">-{off(PRECOS_DE.acompanhamento, PRECOS.acompanhamento)}%</span></div>
+          <div class="price"><small>por</small> {brl(PRECOS.acompanhamento)}</div>
           <p class="plan__pay">Compra online, direto aqui. Pix ou cartão em até 12 vezes.</p>
           <ul class="offer__list">
             <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
@@ -176,7 +179,7 @@ const PASSOS = [
         </article>
       </div>
       <div class="cmp glass glass--m" data-reveal role="table" aria-label="Lado a lado">
-        <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">WhatsApp<br /><b>{brl(PRECOS.acompanhamento)}</b></span><span role="columnheader" class="hi">Cara a cara<br /><b>{brl(PRECOS.individual)}</b></span></div>
+        <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">WhatsApp<br /><s class="cmp__de">{brl(PRECOS_DE.acompanhamento)}</s> <b>{brl(PRECOS.acompanhamento)}</b></span><span role="columnheader" class="hi">Cara a cara<br /><s class="cmp__de">{brl(PRECOS_DE.individual)}</s> <b>{brl(PRECOS.individual)}</b></span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Pelo WhatsApp, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo + WhatsApp</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu faço por você, pelo WhatsApp</span><span role="cell" class="hi">Eu faço com você, na tela, 3 vezes por semana</span></div>
         <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Eu conecto e subo para você</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
