@@ -2,347 +2,314 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import BrazilMap from '../components/BrazilMap.astro';
+import Quiz from '../components/Quiz.astro';
 import lucas from '../assets/lucas.jpg';
 import { ICON } from '../lib/icons';
 import { MOTIFS } from '../lib/motifs';
-import { LOGOS, PROJETOS, GRUPOS, FAQ, DEPOIMENTOS } from '../data/content';
-import { AREAS } from '../data/areas';
-import { EMPRESAS_INFO } from '../data/empresas_info';
-const DADOS_MODAL = { ...AREAS, ...Object.fromEntries(Object.entries(EMPRESAS_INFO).map(([k, v]) => ['emp:' + k, v])) };
-import { waHref, VAGAS, BONUS, LINKS, CHECKOUT } from '../data/config';
-import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS, fimDoMes, fraseFaltam } from '../lib/mes';
-import mentorados from '../data/mentorados_ficticios.json';
-import empresasMapa from '../data/empresas.json';
+import { PROJETOS, FAQ } from '../data/content';
+import { QUIZ, VAGAS, PRECOS, VIDEO, TRES_D } from '../data/config';
+import { vagasRestantes, fraseVagas, fraseVagasCurta, mentoradosRestantes, fraseMentorados, TOTAL_MENTORADOS } from '../lib/mes';
+import { carregarProva } from '../lib/prova';
 
-const totalMap = mentorados.pontos.length;
-const totalEmpMap = empresasMapa.empresas.length;
-const estadosMap = new Set(mentorados.pontos.map((p: any) => p.uf)).size;
+const prova = await carregarProva();
+const n = prova.numeros;
 const restantes = vagasRestantes();
 const mRestantes = mentoradosRestantes();
-const fim = fimDoMes();
-const totalBonus = BONUS.itens.reduce((a, b) => a + b.valor, 0);
-const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR');
-const visiveis = PROJETOS.filter((p) => p.destaque).sort((a, b) => a.destaque! - b.destaque!);
+const brl = (v: number) => 'R$ ' + v.toLocaleString('pt-BR');
+const destaques = PROJETOS.filter((p) => p.destaque).sort((a, b) => a.destaque! - b.destaque!);
 const extras = PROJETOS.filter((p) => !p.destaque);
-const listaProjetos = [...visiveis, ...extras];
-const iniciais = (n: string) => n.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').map((s) => s[0]).join('').slice(0, 2);
+const iniciais = (s: string) => s.replace(/[^A-Za-zÀ-ú ]/g, '').split(' ').filter(Boolean).map((x) => x[0]).join('').slice(0, 2).toUpperCase();
+const PASSOS = [
+  { n: '01', t: 'Você me conta o problema', d: 'O quiz leva dois minutos. No fim, eu já sei de onde você está falando.' },
+  { n: '02', t: 'A gente fecha o escopo', d: 'Na call de 30 minutos ou na primeira conversa: o que entra, o que não entra, em quanto tempo.' },
+  { n: '03', t: 'Eu resolvo com você', d: 'Na tela, prompt por prompt, decisão por decisão, até estar no ar e você sabendo operar.' },
+];
 ---
 <Base>
-  <!-- 1. Hero -->
-  <section class="hero" id="topo" data-sec="hero">
+  <!-- 1. Hero: a promessa e a primeira pergunta do quiz -->
+  <section class="hero" id="topo" data-sec="hero" data-hue="0">
     <div class="wrap hero__grid">
-      <div>
-        <span class="eyebrow reveal">Lucas Rangel, especialista em IA</span>
-        <h1 class="display h1 reveal" style="--d:80ms">Transforme IA em <em class="serif valor">dinheiro de verdade.</em></h1>
-        <p class="lead reveal" style="--d:160ms">Eu resolvo o problema da sua empresa com IA. Ou ensino você a construir o seu próprio produto.</p>
-        <div class="hero__cta reveal" style="--d:240ms">
-          <a class="btn btn--primary" data-wa="hero" data-track="whatsapp_hero" href={waHref('hero')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo no WhatsApp</a>
-          <a class="btn btn--ghost" href="#mentorias" data-track="ver_mentorias">Ver as mentorias</a>
+      <div class="hero__copy">
+        <p class="eyebrow" data-reveal>Lucas Rangel · 20 anos em tecnologia, 12 em inteligência artificial</p>
+        <h1 class="display h1" data-split>Qual é o seu problema? <em class="hot">Eu resolvo com você.</em></h1>
+        <p class="lead" data-reveal>Não é curso. Não é vídeo gravado. É eu, do seu lado, usando IA para resolver o que está travando a sua vida ou a sua empresa.</p>
+        <p class="hero__ask" data-reveal>Me diz onde você está hoje:</p>
+        <div class="situ" data-reveal role="group" aria-label="Qual é a sua situação hoje?">
+          {QUIZ.situacoes.map((s) => (
+            <button type="button" class="situ__b" data-quiz data-situacao={s.id} data-track={`hero_${s.id}`}><b>{s.label}</b><span>{s.sub}</span><i set:html={ICON.chevron} /></button>
+          ))}
         </div>
-        <p class="hero__guarantee reveal" style="--d:320ms"><Fragment set:html={ICON.shield} />Garantia de 7 dias. Não gostou, devolvo tudo.</p>
+        <p class="hero__trust" data-reveal><Fragment set:html={ICON.shield} /><span>Garantia de 7 dias. <b data-vagas-curta>{fraseVagasCurta(restantes)}</b> para o cara a cara este mês.</span></p>
       </div>
-      <figure class="portrait glass reveal" style="--d:200ms">
-        <div class="portrait__img">
-          <Image src={lucas} widths={[420, 640, 840]} sizes="(min-width: 960px) 420px, 90vw" format="webp" quality={72} alt="Lucas Rangel, especialista em inteligência artificial" loading="eager" fetchpriority="high" />
-          <span class="portrait__chip">20 anos em tecnologia</span>
-          <figcaption class="portrait__cap"><b>Lucas Rangel</b><span>Especialista em inteligência artificial</span></figcaption>
-        </div>
-      </figure>
+      <aside class="hero__proof glass glass--m" data-reveal aria-label="Números">
+        <div class="hp"><b data-count={n.mentorados}>{n.mentorados}</b><span>pessoas acompanhadas</span></div>
+        <div class="hp"><b data-count={n.estados}>{n.estados}</b><span>estados do Brasil</span></div>
+        <div class="hp"><b data-count={n.empresas}>{n.empresas}</b><span>empresas atendidas</span></div>
+        <div class="hp hp--y"><b>12</b><span>anos só com IA</span></div>
+      </aside>
     </div>
   </section>
 
-  <!-- 2. Faixa de empresas -->
-  <section class="proof" data-sec="empresas" aria-labelledby="t-empresas">
-    <h2 class="proof__title" id="t-empresas">Empresas que já confiaram no nosso trabalho</h2>
-    <div class="marquee" role="group" aria-label="Logos das empresas">
-      <div class="marquee__track">
-        {[0, 1].map((rep) =>
-          LOGOS.map((l) => (
-            <button type="button" class="logo-btn" data-empresa={l.slug.replace(/\.w$/, '')} aria-label={`Ver o projeto: ${l.nome}`} tabindex={rep === 1 ? -1 : undefined} aria-hidden={rep === 1 ? 'true' : undefined}>
-              <img class="logo" src={`/logos/${l.slug}.${l.ext}`} alt="" style={l.h ? `height:${l.h}px` : undefined} loading="lazy" decoding="async" />
-              <span class="logo-btn__nome">{l.nome}</span>
-            </button>
-          )),
-        )}
+  <!-- 2. Quem sou eu: cena esfregada pela rolagem (vídeo quando chegar; fotos até lá) -->
+  <section class="sec cena" id="sobre" data-sec="sobre" data-hue="1" data-cena>
+    <div class="cena__pin" data-cena-pin>
+      <div class="cena__media" data-cena-media>
+        <Image src={lucas} widths={[720, 1080, 1600]} sizes="100vw" format="webp" quality={70} alt="Lucas Rangel" loading="lazy" />
+        <canvas data-cena-canvas hidden></canvas>
+        <div class="cena__shade"></div>
       </div>
+      <div class="cena__caps">
+        {VIDEO.legendas.map((l, i) => <p class="cena__cap display" data-cena-cap={i}>{l}</p>)}
+      </div>
+      {VIDEO.mp4 && <a class="btn btn--ghost cena__play" href={VIDEO.mp4} data-track="video_play">Assistir com som</a>}
+    </div>
+    <div class="wrap cena__text">
+      <div class="sec__head" data-reveal>
+        <span class="eyebrow">Quem sou eu</span>
+        <h2 class="display h2">Prazer, <em class="hot">Lucas Rangel.</em></h2>
+        <p class="lead">Eu não vendo teoria. Eu abro a tela, você conta o problema, e a gente resolve. Prompt por prompt, decisão por decisão, até estar no ar.</p>
+      </div>
+      <ul class="stats" data-reveal>
+        <li><b>20</b><span>anos em tecnologia</span></li>
+        <li><b>12</b><span>só com inteligência artificial</span></li>
+        <li><b>4</b><span>setores: varejo, finanças, indústria, educação</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- 3. Para quem é -->
-  <section class="sec" data-sec="para-quem-e" aria-labelledby="t-quem">
+  <!-- 3. Quanto custa continuar como está -->
+  <section class="sec" id="custo" data-sec="custo" data-hue="2">
     <div class="wrap">
-      <div class="sec__head reveal"><span class="eyebrow">Para quem é</span><h2 class="display h2" id="t-quem">Isso é para você <em class="serif">se...</em></h2></div>
-      <div class="who">
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">01</span><div><h3>Você tem uma empresa e um problema que ninguém resolveu.</h3><p>Atendimento que não dá conta, planilha que ninguém aguenta, dado espalhado. Eu resolvo com IA, do dado até a tela.</p></div></div>
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">02</span><div><h3>Você quer construir o seu próprio produto.</h3><p>Um sistema, um SaaS, uma automação para revender. Eu te ensino a tirar do papel e colocar no ar.</p></div></div>
-        <div class="who__row reveal"><span class="who__n" aria-hidden="true">03</span><div><h3>Você quer viver de IA.</h3><p>Sair do salário e vender serviço para empresa. Eu mostro as ferramentas e como cobrar por elas.</p></div></div>
+      <div class="sec__head" data-reveal>
+        <span class="eyebrow">Enquanto você adia</span>
+        <h2 class="display h2">Quanto custa continuar <em class="hot">como está?</em></h2>
+      </div>
+      <ul class="custo" data-reveal>
+        <li class="glass glass--m"><b>Horas</b><p>por semana fazendo na mão o que a IA faria em minutos.</p></li>
+        <li class="glass glass--m"><b>Salário</b><p>que não sobe porque você faz o mesmo que todo mundo.</p></li>
+        <li class="glass glass--m"><b>Clientes</b><p>que vão embora porque o seu atendimento não acompanha.</p></li>
+      </ul>
+      <p class="custo__fecho display" data-reveal>Isso não melhora sozinho. <em class="hot">Melhora quando alguém resolve.</em></p>
+    </div>
+  </section>
+
+  <!-- 4. Os três caminhos -->
+  <section class="sec" id="caminhos" data-sec="caminhos" data-hue="3">
+    <div class="wrap">
+      <div class="sec__head" data-reveal>
+        <span class="eyebrow">Mentorias</span>
+        <h2 class="display h2">Três jeitos de eu <em class="hot">resolver o seu problema.</em></h2>
+        <p class="lead">Nos três, você traz o problema e eu entro de verdade. O que muda é quanto de mim você tem.</p>
+      </div>
+      <div class="plans">
+        <article class="plan plan--hi glass" id="individual" data-sec="individual" data-reveal>
+          <span class="plan__badge">Mais completa</span>
+          <h3 class="plan__name">Cara a cara</h3>
+          <p class="plan__for">3 encontros por semana por vídeo, só nós dois, mais o WhatsApp todo dia.</p>
+          <div class="price">{brl(PRECOS.individual)}</div>
+          <p class="plan__pay">Antes de pagar, uma call de 30 minutos: você me conta o problema, eu te mostro como trabalho e a gente fecha o escopo.</p>
+          <ul class="offer__list">
+            <li><Fragment set:html={ICON.check} /><span>Você traz o problema, eu abro a tela e a gente resolve junto até estar funcionando</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Montamos contas e ambiente juntos, na tela</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Modelos dos projetos que eu uso nos meus clientes</span></li>
+            <li><Fragment set:html={ICON.check} /><span>WhatsApp comigo e com a minha equipe, todo dia</span></li>
+          </ul>
+          <p class="plan__future"><b>Daqui a 90 dias:</b> o seu projeto no ar e você sabendo operar.</p>
+          <div class="seats">
+            <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''} />)}</div>
+            <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
+          </div>
+          <div class="plan__cta">
+            <button type="button" class="btn btn--hot btn--block" data-quiz data-formato="cara_a_cara" data-track="plano_individual">Quero resolver cara a cara</button>
+            <span class="plan__g"><Fragment set:html={ICON.shield} /> Garantia de 7 dias</span>
+          </div>
+        </article>
+        <article class="plan glass" id="acompanhamento" data-sec="acompanhamento" data-reveal>
+          <h3 class="plan__name">Pelo WhatsApp</h3>
+          <p class="plan__for">Você manda o problema, a dúvida, o erro. Eu respondo e destravo, no seu ritmo, sem reunião marcada.</p>
+          <div class="price">{brl(PRECOS.acompanhamento)}</div>
+          <p class="plan__pay">Compra online, direto aqui. Pix ou cartão em até 12 vezes.</p>
+          <ul class="offer__list">
+            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu destravo cada dúvida e cada erro</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Você monta o ambiente, eu te guio</span></li>
+            <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontro por vídeo</span></li>
+          </ul>
+          <p class="plan__future"><b>Daqui a 90 dias:</b> você já construiu o que estava adiando.</p>
+          <div class="seats seats--m">
+            <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''} />)}</div>
+            <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> O grupo é pequeno de propósito.</p>
+          </div>
+          <div class="plan__cta">
+            <button type="button" class="btn btn--hot btn--block" data-quiz data-formato="whatsapp" data-track="plano_acompanhamento">Quero começar pelo WhatsApp</button>
+            <span class="plan__g"><Fragment set:html={ICON.shield} /> Garantia de 7 dias</span>
+          </div>
+        </article>
+        <article class="plan plan--b2b glass" id="empresa" data-sec="b2b" data-reveal>
+          <h3 class="plan__name">Para a sua empresa</h3>
+          <p class="plan__for">Atendimento, vendas, sistema velho, dado espalhado. Eu monto a solução dentro da sua própria estrutura, sem depender de serviço de terceiros.</p>
+          <div class="price price--s">Sob proposta</div>
+          <p class="plan__pay">A gente coloca no papel antes de começar: o que entra, prazo e investimento.</p>
+          <ul class="offer__list">
+            <li><Fragment set:html={ICON.check} /><span>Projeto específico para o seu problema</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Rodando no seu ambiente, do protótipo à produção</span></li>
+            <li><Fragment set:html={ICON.check} /><span>Eu e a minha equipe, com contrato</span></li>
+          </ul>
+          <p class="plan__future"><b>Daqui a 90 dias:</b> o problema que ninguém resolvia, resolvido.</p>
+          <div class="plan__cta">
+            <button type="button" class="btn btn--hot btn--block" data-quiz data-situacao="empresa" data-track="plano_empresa">Quero uma proposta</button>
+            <span class="plan__g"><Fragment set:html={ICON.shield} /> Escopo fechado antes de começar</span>
+          </div>
+        </article>
+      </div>
+      <div class="cmp glass glass--m" data-reveal role="table" aria-label="Lado a lado">
+        <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">WhatsApp<br /><b>{brl(PRECOS.acompanhamento)}</b></span><span role="columnheader" class="hi">Cara a cara<br /><b>{brl(PRECOS.individual)}</b></span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Pelo WhatsApp, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo + WhatsApp</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu destravo cada dúvida</span><span role="cell" class="hi">Eu construo junto e digo o próximo passo</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Você monta, eu te guio</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
+        <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
       </div>
     </div>
   </section>
 
-  <!-- 11. Projetos -->
-  <section class="sec" id="projetos" data-sec="projetos" aria-labelledby="t-proj">
+  <!-- 5. Como funciona (com a cena 3D) -->
+  <section class="sec" id="como" data-sec="como" data-hue="4">
+    <div class="wrap como">
+      <div class="como__text">
+        <div class="sec__head" data-reveal>
+          <span class="eyebrow">Como funciona</span>
+          <h2 class="display h2">Do problema ao <em class="hot">sistema no ar.</em></h2>
+        </div>
+        <ol class="passos">
+          {PASSOS.map((p) => <li data-reveal><span class="passos__n">{p.n}</span><div><h3>{p.t}</h3><p>{p.d}</p></div></li>)}
+        </ol>
+        <button type="button" class="btn btn--hot" data-quiz data-track="como_quiz" data-reveal>Começar pelo passo 1</button>
+      </div>
+      <div class="como__scene" aria-hidden="true">
+        <div class="como__box" data-cena3d={TRES_D.ligado ? '1' : '0'}>
+        <svg class="como__poster" data-cena3d-poster viewBox="0 0 400 320" fill="none">
+          <g stroke="#5eb0ff" stroke-opacity=".55">{Array.from({ length: 16 }).map((_, i) => <rect x={30 + (i % 4) * 22} y={120 + Math.floor(i / 4) * 22} width="16" height="16" rx="3" fill="#0b1426" />)}</g>
+          <path d="M126 160 H165" stroke="#5eb0ff" stroke-dasharray="4 4" /><path d="M235 160 H274" stroke="#5eb0ff" stroke-dasharray="4 4" />
+          <circle cx="200" cy="160" r="34" stroke="#FF4B32" stroke-width="1.5" /><circle cx="200" cy="160" r="12" fill="#FF4B32" />
+          <polygon points="200,118 236,139 236,181 200,202 164,181 164,139" stroke="#FF4B32" stroke-opacity=".5" />
+          <rect x="276" y="112" width="96" height="96" rx="10" stroke="#5eb0ff" /><rect x="288" y="128" width="72" height="8" rx="4" fill="#5eb0ff" fill-opacity=".5" /><rect x="288" y="146" width="48" height="8" rx="4" fill="#5eb0ff" fill-opacity=".35" /><rect x="288" y="164" width="60" height="26" rx="6" fill="#FF4B32" fill-opacity=".8" />
+          <text x="62" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">DADOS</text><text x="193" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">IA</text><text x="308" y="240" fill="#8fa3c2" font-size="12" font-family="Inter, sans-serif">TELA</text>
+        </svg>
+        <canvas data-cena3d-canvas hidden></canvas>
+        </div>
+        <p class="como__legend">A arquitetura que eu monto para você: o seu dado, a IA e a tela. Dentro da sua própria estrutura.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Prova: mapa, depoimentos, empresas -->
+  <section class="sec" id="prova" data-sec="prova" data-hue="5">
+    <div class="wrap">
+      <div class="mapsec">
+        <div data-reveal>
+          <span class="eyebrow">Pelo Brasil</span>
+          <h2 class="display h2" style="margin-top:16px">Mentorados e empresas <em class="hot">pelo Brasil.</em></h2>
+          <p class="lead" style="margin-top:16px">Os pontos azuis são pessoas que eu acompanho ou já acompanhei. Os laranja, empresas que já atendi. Toque em um estado para ver os números.</p>
+          <div class="counters">
+            <div class="counter"><b data-count={n.mentorados}>{n.mentorados}</b><span>mentorados em {n.estados} estados</span></div>
+            <div class="counter counter--emp"><b data-count={n.empresas}>{n.empresas}</b><span>empresas atendidas</span></div>
+          </div>
+        </div>
+        <div data-reveal><BrazilMap pontos={prova.mapa} /></div>
+      </div>
+      {prova.depoimentos.length > 0 && (
+        <div class="quotes" style="margin-top:var(--s6)">
+          {prova.depoimentos.map((d) => (
+            <figure class="quote glass glass--m" data-reveal>
+              <blockquote>“{d.texto}”</blockquote>
+              <figcaption class="who-is">{d.foto ? <img class="avatar" src={d.foto} alt="" loading="lazy" /> : <span class="avatar">{iniciais(d.nome)}</span>}<div><b>{d.nome}</b><span>{d.cargo}</span></div></figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+      {prova.logos.length > 0 && (
+        <div class="proof" data-reveal>
+          <h3 class="proof__title">Empresas que já confiaram no nosso trabalho</h3>
+          <div class="marquee" aria-hidden="true">
+            <div class="marquee__track">
+              {[...prova.logos, ...prova.logos].map((l) => <img class="logo" src={`/logos/${l.arquivo}`} alt={l.nome} loading="lazy" decoding="async" style={l.altura && l.altura !== 30 ? `height:${l.altura}px` : undefined} />)}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- 7. O que eu já resolvi -->
+  <section class="sec" id="resolvi" data-sec="projetos" data-hue="6">
     <div class="wrap" data-projects>
-      <div class="sec__head reveal"><span class="eyebrow">Projetos</span><h2 class="display h2" id="t-proj">O que a gente <em class="serif">já construiu.</em></h2><p class="lead">Projetos de clientes e projetos próprios. Sem nome de cliente, porque contrato é contrato.</p></div>
-      <div class="filters" data-filters hidden style="margin-bottom:24px">
-        <button type="button" class="chip" data-g="todos" aria-pressed="true">Todos</button>
-        {Object.entries(GRUPOS).map(([g, nome]) => <button type="button" class="chip" data-g={g} aria-pressed="false">{nome}</button>)}
+      <div class="sec__head" data-reveal>
+        <span class="eyebrow">Projetos</span>
+        <h2 class="display h2">O que eu <em class="hot">já resolvi.</em></h2>
+        <p class="lead">Projetos de clientes e projetos próprios. Sem nome de cliente, porque contrato é contrato.</p>
       </div>
       <div class="projects">
-        {listaProjetos.map((p, i) => (
-          <article class="project glass glass--m reveal" style={`--d:${(i % 6) * 70}ms`} data-grupo={p.grupo} data-extra={p.destaque ? '0' : '1'}>
-            {p.img ? <div class="project__art project__art--img"><img src={`/img/projetos/${p.img}.webp`} alt={p.titulo} loading="lazy" decoding="async" width="1000" height="500" /></div> : <div class="project__art" set:html={MOTIFS[p.motif]} />}
+        {[...destaques, ...extras].map((p, i) => (
+          <article class="project glass glass--m" data-extra={p.destaque ? '0' : '1'} hidden={!p.destaque} data-reveal>
+            {p.img ? <div class="project__art project__art--img"><img src={`/img/projetos/${p.img}.webp`} alt="" loading="lazy" decoding="async" /></div> : <div class="project__art" set:html={MOTIFS[p.motif]} />}
             <div class="project__body">
-              <span class="project__tag">{GRUPOS[p.grupo]}</span>
-              <h3>{p.titulo}</h3>
-              <p>{p.frase}</p>
-              {p.link && <a class="project__link" href={p.link.href} target="_blank" rel="noopener" data-track={`projeto_${i}`}>{p.link.rotulo}<Fragment set:html={ICON.arrowUpRight} /></a>}
+              {p.problema ? (
+                <>
+                  <span class="project__tag">O problema</span>
+                  <p class="project__prob">{p.problema}</p>
+                  <h3>{p.titulo}</h3>
+                  <p class="project__res"><b>Resultado:</b> {p.resultado}</p>
+                </>
+              ) : (
+                <>
+                  <h3>{p.titulo}</h3>
+                  <p>{p.frase}</p>
+                </>
+              )}
+              {p.link && <a class="project__link" href={p.link.href} target="_blank" rel="noopener">{p.link.rotulo} <Fragment set:html={ICON.chevron} /></a>}
             </div>
           </article>
         ))}
       </div>
-      <div class="more">
-        <button type="button" class="btn btn--ghost" data-more aria-expanded="false">Ver todos os projetos</button>
-      </div>
+      <div class="more"><button type="button" class="btn btn--ghost" data-more aria-expanded="false">Ver todos os projetos</button></div>
     </div>
   </section>
 
-  <!-- 4. B2B -->
-  <section class="sec" id="empresas" data-sec="b2b" aria-labelledby="t-b2b">
+  <!-- 8. Garantia, perguntas e chamada final -->
+  <section class="sec" id="garantia" data-sec="garantia" data-hue="7" style="padding-bottom:0">
     <div class="wrap">
-      <div class="b2b glass reveal">
+      <div class="guar glass" data-reveal>
+        <div class="seal"><div><b>7</b><span>dias</span></div></div>
         <div>
-          <span class="eyebrow">Para empresas</span>
-          <h2 class="display h2" id="t-b2b" style="margin-top:16px">Você traz o problema. Eu <em class="serif">resolvo.</em></h2>
-          <p class="lead" style="margin-top:24px">Aqui eu não ensino: eu faço. Assumo o projeto do começo ao fim, com a minha equipe, e você fala direto comigo.</p>
-          <p style="margin-top:16px">O limite é a sua imaginação e o seu investimento.</p>
-          <p class="b2b__proof">Projetos de IA e dados para varejo, finanças, indústria, educação, saúde e agronegócio.</p>
-          <div class="b2b__cta"><a class="btn btn--primary" data-wa="b2b" data-track="whatsapp_b2b" href={waHref('b2b')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Contar o meu problema para o Lucas</a></div>
-        </div>
-        <div class="b2b__side">
-          <h3>O que eu faço</h3>
-          <p class="b2b__hint">Toque em um tema para ver o que a gente já entregou.</p>
-          <div class="skills">
-            {[
-              ['Inteligência artificial', [['Agentes de IA', 'agentes'], ['Visão computacional', 'visao'], ['IA própria, sem restrições', 'propria'], ['Clonagem de voz e deepfake', 'voz'], ['Imagem e vídeo por IA', 'imagemia']]],
-              ['Dados e sistemas', [['Engenharia de dados e BI', 'dados'], ['Previsão de demanda', 'previsao'], ['ERP e SaaS sob medida', 'erp'], ['Clonar sistema obsoleto em tecnologia nova', 'clonar'], ['Automação de processos', 'automacao']]],
-              ['Mundo físico', [['Sensorização e prototipagem eletrônica', 'sensores'], ['Câmeras inteligentes', 'cameras'], ['Da foto ao modelo 3D', 'modelo3d']]],
-            ].map(([t, itens]) => (
-              <div class="skills__g"><span>{t}</span><ul class="chips">{(itens as string[][]).map(([rotulo, k]) => <li><button type="button" class="chip chip--btn" data-info={k}>{rotulo}</button></li>)}</ul></div>
-            ))}
-          </div>
-          <h3>Setores</h3>
-          <ul class="chips">
-            {[['Varejo', 'varejo'], ['Finanças', 'financas'], ['Indústria', 'industria'], ['Educação', 'educacao'], ['Saúde', 'saude'], ['Agronegócio', 'agro'], ['Logística', 'logistica']].map(([rotulo, k]) => <li><button type="button" class="chip chip--btn" data-info={k}>{rotulo}</button></li>)}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 12. Sobre -->
-  <section class="sec" id="sobre" data-sec="sobre" aria-labelledby="t-sobre">
-    <div class="wrap">
-      <div class="about glass reveal">
-        <figure class="about__photo">
-          <Image src={lucas} widths={[320, 560, 800]} sizes="(min-width: 960px) 340px, 90vw" format="webp" quality={74} alt="Lucas Rangel, fundador da Rangel Tech" loading="lazy" />
-          <figcaption><b>Lucas Rangel</b><span>Fundador da Rangel Tech</span></figcaption>
-        </figure>
-        <div class="about__body">
-          <span class="eyebrow">Sobre</span>
-          <h2 class="display h2" id="t-sobre" style="margin-top:12px">Prazer, <em class="serif">Lucas Rangel.</em></h2>
-          <p class="about__lead">Especialista em inteligência artificial. Eu coloco IA para trabalhar dentro de empresas, e ensino quem quer fazer o mesmo.</p>
-          <p>São 20 anos de tecnologia, e 12 deles só com inteligência artificial. Nesse tempo eu entreguei agentes de IA, visão computacional, plataformas de dados e sistemas inteiros para varejo, finanças, indústria e educação, em empresas que você reconhece na faixa lá em cima.</p>
-          <p>A <b>Rangel Tech</b> é a minha consultoria de IA, em Goiânia. Eu e a minha equipe projetamos, construímos e colocamos no ar soluções sob medida, rodando no ambiente do cliente, do primeiro protótipo à produção.</p>
-          <p>Inteligência artificial não é só chat: é visão, previsão, voz, imagem, dados. Por isso mantenho um laboratório próprio: eu testo modelos, placas de vídeo e ferramentas na prática, meço custo e resultado e publico tudo, com código e dado, no GitHub, no Kaggle e no portfólio. É por isso que eu sei o que funciona antes de recomendar.</p>
-          <ul class="stats">
-            <li><b>20 anos</b><span>em tecnologia, 12 só com IA</span></li>
-            <li><b>{totalEmpMap}</b><span>empresas atendidas</span></li>
-            <li><b>3</b><span>formações: mecatrônica, dados e IA</span></li>
-          </ul>
-          <p class="about__edu">Engenharia Mecatrônica · Análise e Desenvolvimento de Sistemas · especialização em Engenharia de Dados · especialização em Machine Learning e Inteligência Artificial</p>
-          <div class="links">
-            <a class="chip" href={LINKS.portfolio} target="_blank" rel="noopener" data-track="link_portfolio">Portfólio e artigos<Fragment set:html={ICON.arrowUpRight} /></a>
-            <a class="chip" href={LINKS.github} target="_blank" rel="noopener" data-track="link_github">GitHub<Fragment set:html={ICON.arrowUpRight} /></a>
-            <a class="chip" href={LINKS.kaggle} target="_blank" rel="noopener" data-track="link_kaggle">Kaggle<Fragment set:html={ICON.arrowUpRight} /></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. Mapa -->
-  <section class="sec" data-sec="mapa" aria-labelledby="t-mapa">
-    <div class="wrap mapsec">
-      <div class="reveal">
-        <span class="eyebrow">Pelo Brasil</span>
-        <h2 class="display h2" id="t-mapa" style="margin-top:16px">Mentorados e empresas <em class="serif">pelo Brasil.</em></h2>
-        <p class="lead" style="margin-top:24px">Os pontos azuis são pessoas que eu acompanho ou já acompanhei. Os laranja são empresas que já atendi. Toque em um estado para ver os números.</p>
-        <div class="counters"><div class="counter"><b>{totalMap}</b><span>mentorados em {estadosMap} estados</span></div><div class="counter counter--emp"><b>{totalEmpMap}</b><span>empresas atendidas</span></div></div>
-      </div>
-      <div class="reveal" style="--d:120ms"><BrazilMap /></div>
-    </div>
-  </section>
-
-  <!-- 10. Depoimentos -->
-  <section class="sec" data-sec="depoimentos" aria-labelledby="t-dep">
-    <div class="wrap">
-      <div class="sec__head reveal"><span class="eyebrow">Depoimentos</span><h2 class="display h2" id="t-dep">Quem já <em class="serif">passou por aqui.</em></h2></div>
-      <div class="quotes">
-        {DEPOIMENTOS.map((d, i) => (
-          <figure class="quote glass glass--m reveal" style={`--d:${i * 110}ms`}>
-            <blockquote>{d.texto}</blockquote>
-            <figcaption class="who-is"><span class="avatar" aria-hidden="true">{iniciais(d.nome)}</span><div><b>{d.nome}</b><span>{d.arroba} · {d.cidade}<br />{d.produto}</span></div></figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Mentorias: dois planos, bônus com valor e vagas -->
-  <section class="sec" id="mentorias" data-sec="mentorias" aria-labelledby="t-cmp">
-    <div class="wrap">
-      <div class="sec__head reveal"><span class="eyebrow">Mentorias</span><h2 class="display h2" id="t-cmp">Duas formas de <em class="serif">aprender comigo.</em></h2><p class="lead">As duas são individuais. O que muda é quanto do meu tempo você tem.</p></div>
-      <div class="plans">
-        <article class="plan plan--hi glass reveal" id="individual" data-sec="individual">
-          <span class="plan__badge">Mais completa</span>
-          <h3 class="plan__name">Mentoria individual</h3>
-          <p class="plan__for">Para quem quer construir rápido, com alguém do lado.</p>
-          <div class="price">R$ 5.000</div>
-          <p class="small muted">Pacote fechado. A gente conversa antes e combina a forma de pagamento.</p>
-          <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span><b>Três encontros por semana por vídeo</b>, só nós dois: cerca de 12 por mês</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Eu guio o seu projeto e digo o próximo passo toda semana</span></li>
-            <li><Fragment set:html={ICON.check} /><span>A gente monta as contas e o ambiente juntos, na tela, do zero</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Os modelos de projeto que eu uso nos meus clientes</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe entre um encontro e outro</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Tudo o que está na mentoria com acompanhamento</span></li>
-          </ul>
-          <div class="seats">
-            <div class="seats__dots" data-dots aria-hidden="true">{Array.from({ length: VAGAS.total }).map((_, i) => <i class={i < VAGAS.total - restantes ? 'taken' : ''}></i>)}</div>
-            <p><b data-vagas-frase>{fraseVagas(restantes)}.</b> Atendo no máximo {VAGAS.total} alunos ao mesmo tempo, para dar atenção de verdade.</p>
-          </div>
-          <div class="plan__cta">
-            <a class="btn btn--primary btn--block" data-wa="individual" data-track="whatsapp_individual" href={waHref('individual')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />{CHECKOUT.individual ? 'Conversar comigo' : 'Quero a mentoria individual'}</a>
-            {CHECKOUT.individual && <a class="btn btn--ghost btn--block" data-track="checkout_individual" href={CHECKOUT.individual} rel="noopener">Já conversei, quero essa vaga</a>}
-          </div>
-        </article>
-
-        <article class="plan glass reveal" id="acompanhamento" data-sec="acompanhamento">
-          <h3 class="plan__name">Mentoria com acompanhamento</h3>
-          <p class="plan__for">Para quem quer aprender no próprio ritmo, sem reunião marcada.</p>
-          <div class="price">R$ 1.000</div>
-          <p class="small muted">{CHECKOUT.acompanhamento ? 'Compra online, direto aqui. Se preferir, tire as dúvidas comigo no WhatsApp antes.' : 'Pacote fechado. A gente conversa antes e combina a forma de pagamento.'}</p>
-          <ul class="offer__list">
-            <li><Fragment set:html={ICON.check} /><span>Grupo no WhatsApp comigo e com a minha equipe</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Resposta para cada travada, com print, áudio ou o erro colado</span></li>
-            <li><Fragment set:html={ICON.check} /><span>Você aprende no seu ritmo, sem horário marcado</span></li>
-            <li><Fragment set:html={ICON.check} /><span>A minha área do aluno e as habilidades técnicas, de bônus</span></li>
-            <li class="off"><Fragment set:html={ICON.x} /><span>Sem encontros por vídeo</span></li>
-            <li class="off"><Fragment set:html={ICON.x} /><span>Sem acompanhamento semanal do seu projeto</span></li>
-            <li class="off"><Fragment set:html={ICON.x} /><span>Sem os modelos de projeto dos meus clientes</span></li>
-          </ul>
-          <div class="seats seats--m">
-            <div class="seats__dots seats__dots--m" data-dots-m aria-hidden="true">{Array.from({ length: TOTAL_MENTORADOS }).map((_, i) => <i class={i < TOTAL_MENTORADOS - mRestantes ? 'taken' : ''}></i>)}</div>
-            <p><b data-mentorados-frase>{fraseMentorados(mRestantes)}.</b> Atendo no máximo {TOTAL_MENTORADOS} mentorados ao mesmo tempo, para responder cada dúvida.</p>
-          </div>
-          <p class="small muted plan__up">Quer me ver por vídeo toda semana? <a href="#individual">Veja a mentoria individual</a>.</p>
-          <div class="plan__cta">
-            {CHECKOUT.acompanhamento && <a class="btn btn--primary btn--block" data-track="checkout_acompanhamento" href={CHECKOUT.acompanhamento} rel="noopener">Quero entrar agora</a>}
-            <a class="btn btn--ghost btn--block" data-wa="acompanhamento" data-track="whatsapp_acompanhamento" href={waHref('acompanhamento')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />{CHECKOUT.acompanhamento ? 'Tirar dúvidas no WhatsApp' : 'Entrar no acompanhamento'}</a>
-          </div>
-        </article>
-      </div>
-
-      <div class="cmp glass reveal" role="table" aria-label="Comparativo das duas mentorias">
-        <div class="cmp__row cmp__head" role="row"><span role="columnheader">Lado a lado</span><span role="columnheader">Acompanhamento<br /><b>R$ 1.000</b></span><span role="columnheader" class="hi">Individual<br /><b>R$ 5.000</b></span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Como a gente fala</span><span role="cell">Por mensagem, no seu horário</span><span role="cell" class="hi">3 encontros por semana por vídeo</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Seu projeto</span><span role="cell">Eu destravo cada dúvida</span><span role="cell" class="hi">Eu guio e digo o próximo passo toda semana</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Contas e ambiente</span><span role="cell">Você monta, eu te ajudo</span><span role="cell" class="hi">Montamos juntos, na tela</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Modelos de projeto dos meus clientes</span><span role="cell" class="no">Não incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Grupo no WhatsApp com a minha equipe</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Bônus e garantia de 7 dias</span><span role="cell" class="yes"><Fragment set:html={ICON.check} />Incluso</span><span role="cell" class="hi yes"><Fragment set:html={ICON.check} />Incluso</span></div>
-        <div class="cmp__row" role="row"><span role="rowheader">Vagas ao mesmo tempo</span><span role="cell">{TOTAL_MENTORADOS}</span><span role="cell" class="hi">{VAGAS.total}</span></div>
-      </div>
-
-      <div class="bonusbar glass reveal">
-        <div>
-          <span class="bonusbar__tag">Bônus nas duas mentorias</span>
-          <h3>Você leva {brl(totalBonus)} em bônus, sem pagar nada a mais.</h3>
-          <p class="bonusbar__total">Somando o valor avulso de cada item, são <s>{brl(totalBonus)}</s> <b>de graça</b> para quem entrar agora.</p>
-        </div>
-        <div>
-          <ul class="bonusbar__list">
-            {BONUS.itens.map((b) => <li><span>{b.nome}</span><span><s>{brl(b.valor)}</s><em>grátis</em></span></li>)}
-          </ul>
-          <p class="bonusbar__prazo"><i></i><span>Bônus por tempo limitado: vale só até <span data-fim-texto>{fim.texto}</span>. <b data-fim-faltam>{fraseFaltam(fim.faltam)}</b></span></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. Garantia -->
-  <section class="sec" style="padding-top:0" data-sec="garantia" aria-labelledby="t-garantia">
-    <div class="wrap">
-      <div class="guar glass reveal">
-        <div class="seal" aria-hidden="true"><div><b>7</b><span>dias</span></div></div>
-        <div>
-          <h2 class="display h2" id="t-garantia">Não gostou? Eu <em class="serif valor">devolvo tudo.</em></h2>
-          <p>Você tem 7 dias depois do pagamento para pedir o dinheiro de volta, sem explicar o motivo. Manda uma mensagem no WhatsApp e eu devolvo o valor inteiro. O risco fica comigo.</p>
+          <h2 class="display h2">Não resolveu? Eu <em class="hot">devolvo tudo.</em></h2>
+          <p>Nos primeiros 7 dias, se você achar que não vale, pede o reembolso integral, sem explicar o motivo. O risco é meu, não seu.</p>
           <a class="link" href="/reembolso">Ler a política de reembolso</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 13. Para quem não é -->
-  <section class="sec" style="padding-top:0" data-sec="nao-e" aria-labelledby="t-nao">
+  <section class="sec" id="perguntas" data-sec="perguntas" data-hue="7">
     <div class="wrap">
-      <div class="sec__head reveal"><h2 class="display h2" id="t-nao">Não é para você <em class="serif">se...</em></h2></div>
-      <ul class="not">
-        <li class="reveal"><Fragment set:html={ICON.x} /><span>Você procura um curso gravado para assistir e esquecer. Aqui você põe a mão no projeto.</span></li>
-        <li class="reveal" style="--d:80ms"><Fragment set:html={ICON.x} /><span>Você só quer um emprego. Eu ensino a vender o próprio trabalho.</span></li>
-        <li class="reveal" style="--d:160ms"><Fragment set:html={ICON.x} /><span>Você quer continuar exatamente onde está. Aqui é para quem já decidiu mudar de vida.</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 14. Perguntas -->
-  <section class="sec" id="perguntas" data-sec="perguntas" aria-labelledby="t-faq">
-    <div class="wrap">
-      <div class="sec__head reveal"><span class="eyebrow">Perguntas</span><h2 class="display h2" id="t-faq">Perguntas <em class="serif">frequentes.</em></h2></div>
-      <div class="faq">
-        {FAQ.map((f, i) => (
-          <details class="reveal" style={`--d:${i * 40}ms`}>
-            <summary>{f.p}<Fragment set:html={ICON.chevron} /></summary>
-            <div class="ans">{f.r}</div>
-          </details>
-        ))}
+      <div class="sec__head" data-reveal><span class="eyebrow">Perguntas</span><h2 class="display h2">Perguntas <em class="hot">frequentes.</em></h2></div>
+      <div class="faq" data-reveal>
+        {FAQ.map((f) => <details><summary>{f.p}<Fragment set:html={ICON.chevron} /></summary><div class="ans">{f.r}</div></details>)}
       </div>
     </div>
   </section>
 
-  <!-- 15. Chamada final -->
-  <section class="sec" data-sec="final" aria-labelledby="t-final">
+  <section class="sec" data-sec="final" data-hue="0">
     <div class="wrap">
-      <div class="final glass reveal">
-        <h2 class="display h2" id="t-final">Vamos transformar a sua ideia em <em class="serif valor">dinheiro?</em></h2>
-        <p class="lead">Eu respondo pessoalmente. Me conta o que você quer construir ou qual problema quer resolver.</p>
-        <p class="scarce"><i></i><span class="scarce__t">Mentoria individual: <span data-vagas-curta>{fraseVagasCurta(restantes)}</span>. Acompanhamento: <span data-mentorados-curta>restam {mRestantes} vagas</span>.</span></p>
-        <a class="btn btn--primary" data-wa="final" data-track="whatsapp_final" href={waHref('final')} target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Falar comigo agora</a>
-        <p class="final__seal"><Fragment set:html={ICON.shield} />Garantia de 7 dias</p>
+      <div class="final glass" data-reveal>
+        <h2 class="display h2">Você já sabe qual é o seu problema. <em class="hot">Falta só decidir quem vai resolver.</em></h2>
+        <p class="lead">Dois minutos de perguntas e eu te digo o melhor jeito de resolver.</p>
+        <button type="button" class="btn btn--hot btn--xl" data-quiz data-track="final_quiz">Começar agora</button>
+        <p class="final__seal"><Fragment set:html={ICON.shield} /><span><span data-vagas-curta>{fraseVagasCurta(restantes)}</span> este mês. Garantia de 7 dias.</span></p>
       </div>
     </div>
   </section>
-  <dialog class="modal" data-modal aria-labelledby="modal-titulo">
-    <div class="modal__card glass">
-      <button type="button" class="modal__x" data-modal-close aria-label="Fechar"><Fragment set:html={ICON.x} /></button>
-      <h3 id="modal-titulo" data-modal-titulo></h3>
-      <p class="modal__texto" data-modal-texto></p>
-      <h4>O que a gente já entregou</h4>
-      <ul class="modal__feitos" data-modal-feitos></ul>
-      <a class="btn btn--primary btn--block" data-modal-wa target="_blank" rel="noopener"><Fragment set:html={ICON.message} />Conversar sobre isso</a>
-    </div>
-  </dialog>
-  <script type="application/json" id="areas-data" set:html={JSON.stringify(DADOS_MODAL)} />
+
+  <Quiz />
 </Base>

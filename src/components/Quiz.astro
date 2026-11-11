@@ -1,0 +1,24 @@
+---
+// Quiz de qualificação em tela cheia. O conteúdo das telas é montado em src/scripts/quiz.ts a partir de QUIZ (config.ts).
+import { QUIZ, CHECKOUT, WHATSAPP, VAGAS } from '../data/config';
+import { ICON } from '../lib/icons';
+const dados = { quiz: QUIZ, checkout: CHECKOUT.acompanhamento, numero: WHATSAPP.numero, vagas: VAGAS.total };
+---
+<dialog class="quiz" data-quiz-dialog aria-label="Qual é o seu problema?">
+  <div class="quiz__card">
+    <div class="quiz__top">
+      <div class="quiz__prog" aria-hidden="true"><i data-quiz-bar></i></div>
+      <span class="quiz__step" data-quiz-step aria-live="polite"></span>
+      <button type="button" class="quiz__x" data-quiz-close aria-label="Fechar"><Fragment set:html={ICON.x} /></button>
+    </div>
+    <div class="quiz__body" data-quiz-body></div>
+    <div class="quiz__nav">
+      <button type="button" class="quiz__back" data-quiz-back hidden>Voltar</button>
+      <span class="quiz__trust"><Fragment set:html={ICON.shield} /> Garantia de 7 dias</span>
+    </div>
+  </div>
+</dialog>
+<script type="application/json" id="quiz-data" set:html={JSON.stringify(dados)} />
+<script>
+  import '../scripts/quiz.ts';
+</script>
